@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: 
+Disallow:
 
-Sitemap: http://www.zeyus.com/sitemap.xml 
+Sitemap: http://www.zeyus.com/sitemap.xml
