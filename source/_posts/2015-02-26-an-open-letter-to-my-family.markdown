@@ -15,7 +15,9 @@ I tried to make it as clear as possible - to no effect - that I wasn't taking a 
 
 Unfortunately, the doctrines you have put all your effort into believing, make you cut me off, for essentially what boils down to a disagreement in beliefs. So what? I'm still the same person I was 2 months ago, 2 years ago, 20 years ago. I haven't killed anyone, I haven't abused you, I haven't done anything worthy of being kicked out of the family.
 
-It's kind of funny that originally the JWs were so critical of the catholic practice of ex-communication, saying that it's unbiblical (citing scriptural proof), yet now they do the same, except it's even worse, because the JWs make it to be a complete exile from family and friends (and cite scriptural proof for it).
+It's kind of funny that originally the JWs were so critical of the catholic practice of ex-communication, saying that it's unbiblical (citing scriptural proof), yet now they do the same, except it's even worse, because the JWs make it to be a complete exile from family and friends (and cite scriptural proof for it). See image:
+
+![excommunication denounced by jehovah's witnesses](/images/xc.jpg)
 
 It just blows me away that you're so wrapped up in this cult you can't see what you're actually doing.
 
