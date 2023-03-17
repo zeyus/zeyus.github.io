@@ -18,7 +18,7 @@ const config = {
 		  strict: true
 		}),
 		paths: {
-			base: dev ? '' : '/zeyus.github.io',
+			base: dev ? '' : '/zeyus.com',
 		},
 		output: {
 			preloadStrategy: 'preload-mjs',
