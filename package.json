@@ -1,0 +1,49 @@
+{
+	"name": "zeyus",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "npm run prepare && vite build",
+		"prepare": "npm run smui-theme-light && npm run smui-theme-dark && npm run site-light && npm run site-dark",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test:unit": "vitest",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write .",
+		"site-light": "sass --no-source-map -I src/theme -I node_modules src/site.scss static/site.css",
+		"site-dark": "sass --no-source-map -I src/theme/dark -I node_modules src/site.scss static/site-dark.css",
+		"smui-theme-light": "smui-theme compile static/smui.css -i src/theme",
+		"smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark",
+		"gh-pages": "npm run build && npx gh-pages -d build"
+	},
+	"devDependencies": {
+		"@material/typography": "^14.0.0",
+		"@smui/button": "^7.0.0-beta.0",
+		"@smui/card": "^7.0.0-beta.0",
+		"@smui/paper": "^7.0.0-beta.0",
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-static": "^2.0.1",
+		"@sveltejs/kit": "^1.5.0",
+		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/parser": "^5.45.0",
+		"eslint": "^8.28.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-svelte3": "^4.0.0",
+		"gh-pages": "^5.0.0",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.8.1",
+		"smui-theme": "^7.0.0-beta.0",
+		"svelte": "^3.54.0",
+		"svelte-check": "^3.0.1",
+		"tslib": "^2.4.1",
+		"typescript": "^4.9.3",
+		"vite": "^4.0.0",
+		"vitest": "^0.25.3"
+	},
+	"type": "module",
+	"dependencies": {
+		"svelte-spa-router": "^3.3.0"
+	}
+}
