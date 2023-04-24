@@ -1,0 +1,1 @@
+import{S as s,i as n,s as o}from"../chunks/index.edaf9815.mjs";import{t as a}from"../chunks/store.37975706.mjs";function r(t){return a.set("projects"),[]}class u extends s{constructor(e){super(),n(this,e,r,null,o,{})}}export{u as default};
