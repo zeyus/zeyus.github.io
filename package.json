@@ -44,6 +44,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"svelte-spa-router": "^3.3.0"
+		"svelte-spa-router": "^3.3.0",
+		"vidstack": "^0.4.5"
 	}
 }
