@@ -16,7 +16,7 @@
 		"site-dark": "sass --no-source-map -I src/theme/dark -I node_modules src/site.scss static/site-dark.css",
 		"smui-theme-light": "smui-theme compile static/smui.css -i src/theme",
 		"smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark",
-		"gh-pages": "npm run build && npx touch build/.nojekyll && npx gh-pages -d build"
+		"gh-pages": "npm run build && npx touch build/.nojekyll && npx gh-pages -d build -t true"
 	},
 	"devDependencies": {
 		"@material/typography": "^14.0.0",
@@ -45,6 +45,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"ansi_up": "^5.2.1",
 		"svelte-spa-router": "^3.3.0",
 		"vidstack": "^0.4.5"
 	}
