@@ -105,14 +105,20 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
 
     </script>
     <style>
+        @font-face {
+            font-family: 'HackNerdFont';
+            src: url('/HackNerdFont-Regular.woff2') format('woff2');
+        }
         .terminal {
             background-color: #000;
             color: #fff;
             padding: 10px;
             overflow: auto;
             height: 100%;
-            font-family: 'Courier New', monospace;
-            font-size: 1rem;
+            /* use HackNerdFont-Regular.woff in static folder */
+            font-family: 'HackNerdFont', monospace;
+            font-size: 0.9rem;
+            line-height: 1.0rem;
         }
         
         .terminal-line {
@@ -122,11 +128,15 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }
         .terminal pre {
             margin: 0;
-            font-family: 'Courier New', monospace;
+            font-family: 'HackNerdFont', monospace;
+            font-size: 0.9rem;
+            line-height: 1.0rem;
         }
         .prompt {
             color: #00ff00;
-            font-family: 'Courier New', monospace;
+            font-family: 'HackNerdFont', monospace;
+            font-size: 0.9rem;
+            line-height: 1.1rem;
         }
         .cursor {
             display: inline-block;
