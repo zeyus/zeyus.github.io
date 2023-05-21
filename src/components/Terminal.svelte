@@ -10,7 +10,28 @@
         text: string;
         type: 'input' | 'output' | 'error';
     };
-    let lines: Line[] = [];
+    let lines: Line[] = [
+        { text: `            __________                                 
+         .'----------\`.                              
+         | .--------. |                             
+         | |########| |       __________              
+         | |########| |      /__________\             
+.--------| \`--------' |------|    --=-- |-------------.
+|        \`----,-.-----'      |o ======  |             | 
+|       ______|_|_______     |__________|             | 
+|      /  %%%%%%%%%%%%  \\                             | 
+|     /  %%%%%%%%%%%%%%  \\                            | 
+|     ^^^^^^^^^^^^^^^^^^^^                            | 
++-----------------------------------------------------+`, type: 'output' },
+        { text: '\n', type: 'output' },
+        { text: `WARNING:  Unauthorized access to this system is
+forbidden and will be prosecuted by law. By accessing
+this system, you agree that your actions may be
+monitored if unauthorized usage is suspected.`, type: 'output' },
+        { text: '\n', type: 'output' },
+        { text: 'Type "help" for a list of commands.', type: 'output' },
+        { text: '\n', type: 'output' },
+    ];
     let currentInput = '';
     let terminalDiv: HTMLDivElement;
     
@@ -89,7 +110,7 @@
             color: #fff;
             padding: 10px;
             overflow: auto;
-            height: 400px;
+            height: 100%;
             font-family: 'Courier New', monospace;
             font-size: 1rem;
         }
