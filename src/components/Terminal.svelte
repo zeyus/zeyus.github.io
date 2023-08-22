@@ -111,12 +111,13 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         /* background-color: #000; */
         border: 2px inset #999999;
         color: #fff;
-        padding: 10px;
+        padding: 1rem;
         overflow-y: scroll;
         max-height: 27rem;
         height: 27rem;
         width: 100%;
         position: relative;
+        background-color: #030303;
         /* use HackNerdFont-Regular.woff in static folder */
         font-family: 'HackNerdFont', monospace;
         font-size: 0.9rem;
