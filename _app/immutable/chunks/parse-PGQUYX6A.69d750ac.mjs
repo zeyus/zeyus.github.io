@@ -1,0 +1,2 @@
+import{d as r,u as h}from"./register-C7DORXC6.e162c789.mjs";var u=/,/g,o="-->",f=class extends r{parse(s,e){var a,i;if(s==="")this.a&&(this.d.push(this.a),(i=(a=this.f).onCue)==null||i.call(a,this.a),this.a=null),this.k=0;else if(this.k===2)this.a.text+=(this.a.text?`
+`:"")+s;else if(s.includes(o)){const t=this.o(s,e);t&&(this.a=new h(t[0],t[1],t[2].join(" ")),this.a.id=this.t,this.k=2)}this.t=s}o(s,e){return super.o(s.replace(u,"."),e)}};function T(){return new f}export{f as SRTParser,T as default};
