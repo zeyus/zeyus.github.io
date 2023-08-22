@@ -101,84 +101,86 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     // For typing out the intro
     const intro = "echo 👋\\x1b[31mHello\\x1b[0m👋\\n🌍\\x1b[32mWorld\\x1b[0m🌍"
     typeInput(intro);
+</script>
+<style>
+    @font-face {
+        font-family: 'HackNerdFont';
+        src: url('/HackNerdFont-Regular.woff2') format('woff2');
+    }
+    .terminal {
+        /* background-color: #000; */
+        border: 2px inset #999999;
+        color: #fff;
+        padding: 10px;
+        overflow-y: scroll;
+        max-height: 27rem;
+        height: 27rem;
+        width: 100%;
+        position: relative;
+        /* use HackNerdFont-Regular.woff in static folder */
+        font-family: 'HackNerdFont', monospace;
+        font-size: 0.9rem;
+        line-height: 1.0rem;
+    }
     
-
-    </script>
-    <style>
-        @font-face {
-            font-family: 'HackNerdFont';
-            src: url('/HackNerdFont-Regular.woff2') format('woff2');
+    .terminal-line {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .terminal pre {
+        margin: 0;
+        font-family: 'HackNerdFont', monospace;
+        font-size: 0.9rem;
+        line-height: 1.0rem;
+    }
+    .prompt {
+        color: #00ff00;
+        font-family: 'HackNerdFont', monospace;
+        font-size: 0.9rem;
+        line-height: 1.1rem;
+    }
+    .cursor {
+        display: inline-block;
+        width: 7px;
+        height: 1rem;
+        background-color: #00ff00;
+        animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+        0% {
+            opacity: 1;
         }
-        .terminal {
-            background-color: #000;
-            color: #fff;
-            padding: 10px;
-            overflow: auto;
-            height: 100%;
-            /* use HackNerdFont-Regular.woff in static folder */
-            font-family: 'HackNerdFont', monospace;
-            font-size: 0.9rem;
-            line-height: 1.0rem;
+        49% {
+            opacity: 1;
         }
-        
-        .terminal-line {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+        50% {
+            opacity: 0;
         }
-        .terminal pre {
-            margin: 0;
-            font-family: 'HackNerdFont', monospace;
-            font-size: 0.9rem;
-            line-height: 1.0rem;
+        99% {
+            opacity: 0;
         }
-        .prompt {
-            color: #00ff00;
-            font-family: 'HackNerdFont', monospace;
-            font-size: 0.9rem;
-            line-height: 1.1rem;
+        100% {
+            opacity: 1;
         }
-        .cursor {
-            display: inline-block;
-            width: 7px;
-            height: 1rem;
-            background-color: #00ff00;
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink {
-            0% {
-                opacity: 1;
-            }
-            49% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0;
-            }
-            99% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-    </style>
-    <div bind:this={terminalDiv} class="terminal">
-        {#each lines as line}
-            <div class="terminal-line">
-                {#if line.type === 'output'}
-                    <pre class={line.type}>{@html line.text}</pre>
-                {:else if line.type === 'error'}
-                    <pre class={line.type}>{line.text}</pre>
-                {:else}
-                    <span class="prompt">{@html shellprompt}</span><pre class={line.type}>{line.text}</pre>
-                {/if}
-            </div>
-        {/each}
+    }
+</style>
+<div bind:this={terminalDiv} class="terminal">
+    {#each lines as line}
         <div class="terminal-line">
-            <span class="prompt">{@html shellprompt}</span><pre class="input">{currentInput}</pre><span class="cursor"></span>
+            {#if line.type === 'output'}
+                <pre class={line.type}>{@html line.text}</pre>
+            {:else if line.type === 'error'}
+                <pre class={line.type}>{line.text}</pre>
+            {:else}
+                <span class="prompt">{@html shellprompt}</span><pre class={line.type}>{line.text}</pre>
+            {/if}
         </div>
+    {/each}
+    <div class="terminal-line">
+        <span class="prompt">{@html shellprompt}</span><pre class="input">{currentInput}</pre><span class="cursor"></span>
     </div>
+</div>
 <svelte:window
     on:keydown={handleInput}
 />
