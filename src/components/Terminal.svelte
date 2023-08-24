@@ -53,6 +53,27 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
 
     }
 
+    function handleVirtualInput(e: Event) {
+        const input = e.target as HTMLInputElement;
+        currentInput = input.value;
+    }
+
+    function handleVirtualKeyUp(e: KeyboardEvent) {
+        if (e.key === 'Enter') {
+            const touchdevice = document.getElementById('touchinput');
+            if (touchdevice) {
+                touchdevice.blur();
+            }
+            lines = [...lines, { text: currentInput, type: 'input' }];
+            handleCommand(currentInput);
+            currentInput = '';
+            // Scroll to bottom after a slight delay
+            setTimeout(() => {
+                terminalDiv.scrollTop = terminalDiv.scrollHeight;
+            }, 0);
+        }
+    }
+
     function typeInput(input: string, delay: number = 25) {
         for (let i = 0; i < input.length; i++) {
             setTimeout(() => {
@@ -97,12 +118,21 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                 break;
         }
     }
-
+    
     // Add handler for touch devices:
     // Focus on hidden input if touch happens anywhere on the terminal
-    function handleTouch() {
-        const touchdevice = document.getElementById('touchdevice');
-        touchdevice.focus();
+    function handleVirtualKeyboard() {
+        var handleTerminalTouch = (event: TouchEvent) => {
+            const touchdevice = document.getElementById('touchinput');
+            if (touchdevice) {
+                touchdevice.focus();
+            }
+        }
+    
+        var termWrap = document.getElementById('terminal-wrapper');
+        if (termWrap) {
+            termWrap.addEventListener('touchend', handleTerminalTouch);
+        }
     }
 
     // For typing out the intro
@@ -155,6 +185,14 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         background-color: #00ff00;
         animation: blink 1.5s infinite;
     }
+    #touchinput {
+        position: absolute;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+        border: none;
+        outline: none;
+    }
     @keyframes blink {
         0% {
             opacity: 1;
@@ -173,7 +211,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }
     }
 </style>
-<div bind:this={terminalDiv} class="terminal" on:touchstart={handleTouch}>
+<div bind:this={terminalDiv} class="terminal" id="#terminal-wrapper" on:load={handleVirtualKeyboard}>
     {#each lines as line}
         <div class="terminal-line">
             {#if line.type === 'output'}
@@ -186,7 +224,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         </div>
     {/each}
     <div class="terminal-line">
-        <span class="prompt">{@html shellprompt}</span><input type="hidden" name="mobileinput" id="touchdevice" /><pre class="input">{currentInput}</pre><span class="cursor"></span>
+        <span class="prompt">{@html shellprompt}</span><input on:keyup={handleVirtualKeyUp} on:input={handleVirtualInput} type="text" name="mobileinput" id="touchinput" /><pre class="input">{currentInput}</pre><span class="cursor"></span>
     </div>
 </div>
 <svelte:window
