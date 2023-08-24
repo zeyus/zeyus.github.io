@@ -98,6 +98,13 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }
     }
 
+    // Add handler for touch devices:
+    // Focus on hidden input if touch happens anywhere on the terminal
+    function handleTouch() {
+        const touchdevice = document.getElementById('touchdevice');
+        touchdevice.focus();
+    }
+
     // For typing out the intro
     const intro = "echo 👋\\x1b[31mHello\\x1b[0m👋\\n🌍\\x1b[32mWorld\\x1b[0m🌍"
     typeInput(intro);
@@ -166,7 +173,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }
     }
 </style>
-<div bind:this={terminalDiv} class="terminal">
+<div bind:this={terminalDiv} class="terminal" on:touchstart={handleTouch}>
     {#each lines as line}
         <div class="terminal-line">
             {#if line.type === 'output'}
@@ -179,7 +186,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         </div>
     {/each}
     <div class="terminal-line">
-        <span class="prompt">{@html shellprompt}</span><pre class="input">{currentInput}</pre><span class="cursor"></span>
+        <span class="prompt">{@html shellprompt}</span><input type="hidden" name="mobileinput" id="touchdevice" /><pre class="input">{currentInput}</pre><span class="cursor"></span>
     </div>
 </div>
 <svelte:window
