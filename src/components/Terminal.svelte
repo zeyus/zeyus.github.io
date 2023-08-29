@@ -33,14 +33,19 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         { text: '\n', type: 'output' },
     ];
     let currentInput = '';
+    let inputElementValue = '';
     let terminalDiv: HTMLDivElement;
     
     // For handling input
     function handleInput(e: KeyboardEvent) {
+        e.preventDefault();
+        const touchdevice = document.getElementById('touchinput') as HTMLTextAreaElement;
         if (e.key === 'Enter') {
             lines = [...lines, { text: currentInput, type: 'input' }];
             handleCommand(currentInput);
             currentInput = '';
+            touchdevice.value = '';
+            inputElementValue = '';
             // Scroll to bottom after a slight delay
             setTimeout(() => {
                 terminalDiv.scrollTop = terminalDiv.scrollHeight;
@@ -50,27 +55,14 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         } else if (e.key.length === 1) {
             currentInput += e.key;
         }
-
     }
 
     function handleVirtualInput(e: Event) {
-        const input = e.target as HTMLInputElement;
+        const input = e.target as HTMLTextAreaElement;
         currentInput = input.value;
-    }
-
-    function handleVirtualKeyUp(e: KeyboardEvent) {
-        if (e.key === 'Enter') {
-            const touchdevice = document.getElementById('touchinput');
-            if (touchdevice) {
-                touchdevice.blur();
-            }
-            lines = [...lines, { text: currentInput, type: 'input' }];
-            handleCommand(currentInput);
-            currentInput = '';
-            // Scroll to bottom after a slight delay
-            setTimeout(() => {
-                terminalDiv.scrollTop = terminalDiv.scrollHeight;
-            }, 0);
+        // if \r or \n is in the input, handle it as an enter
+        if (currentInput.includes('\r') || currentInput.includes('\n')) {
+            handleInput(new KeyboardEvent('keydown', { key: 'Enter' }));
         }
     }
 
@@ -121,17 +113,11 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     
     // Add handler for touch devices:
     // Focus on hidden input if touch happens anywhere on the terminal
-    function handleVirtualKeyboard() {
-        var handleTerminalTouch = (event: TouchEvent) => {
-            const touchdevice = document.getElementById('touchinput');
-            if (touchdevice) {
-                touchdevice.focus();
-            }
-        }
-    
-        var termWrap = document.getElementById('terminal-wrapper');
-        if (termWrap) {
-            termWrap.addEventListener('touchend', handleTerminalTouch);
+    var handleTerminalTouch = (event: TouchEvent) => {
+        event.preventDefault();
+        const touchdevice = document.getElementById('touchinput');
+        if (touchdevice) {
+            touchdevice.focus();
         }
     }
 
@@ -187,11 +173,10 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     }
     #touchinput {
         position: absolute;
-        visibility: hidden;
-        width: 0;
-        height: 0;
-        border: none;
-        outline: none;
+        left: -9999px;
+        clip: rect(1px,1px,1px,1px);
+        width: 10px;
+        height: 10px;
     }
     @keyframes blink {
         0% {
@@ -211,7 +196,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }
     }
 </style>
-<div bind:this={terminalDiv} class="terminal" id="#terminal-wrapper" on:load={handleVirtualKeyboard}>
+<div bind:this={terminalDiv} class="terminal" id="terminal-wrapper" on:touchend={handleTerminalTouch}>
     {#each lines as line}
         <div class="terminal-line">
             {#if line.type === 'output'}
@@ -224,7 +209,16 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         </div>
     {/each}
     <div class="terminal-line">
-        <span class="prompt">{@html shellprompt}</span><input on:keyup={handleVirtualKeyUp} on:input={handleVirtualInput} type="text" name="mobileinput" id="touchinput" /><pre class="input">{currentInput}</pre><span class="cursor"></span>
+        <span class="prompt">{@html shellprompt}</span>
+        <textarea 
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            on:input={handleVirtualInput}
+            name="mobileinput"
+            id="touchinput" />
+        <pre class="input">{currentInput}</pre><span class="cursor"></span>
     </div>
 </div>
 <svelte:window
