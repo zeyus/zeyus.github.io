@@ -1,7 +1,5 @@
 <script lang="ts">
-    import {
-        default as AnsiUp
-    } from 'ansi_up';
+    import { AnsiUp } from 'ansi_up';
 
     const ansi_up = new AnsiUp();
     const shellprompt = "anon@zeyus&gt;";
