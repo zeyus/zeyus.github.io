@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@eslint/object-schema": "^2.1.4",
 		"@floating-ui/dom": "^1.5.4",
 		"ansi_up": "^6.0.2",
 		"flowbite": "^2.2.1",
