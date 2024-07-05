@@ -1,1 +1,0 @@
-import{s as o}from"./scheduler.BbNELZ2a.mjs";import{S as s,i as r}from"./index.Dhnsn7wg.mjs";import{t as n}from"./store.B0dzGu0u.mjs";function a(e){return n.set("projects"),[]}class l extends s{constructor(t){super(),r(this,t,a,null,o,{})}}const c=Object.freeze(Object.defineProperty({__proto__:null,default:l},Symbol.toStringTag,{value:"Module"}));export{l as P,c as _};
