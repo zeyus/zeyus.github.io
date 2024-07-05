@@ -20,6 +20,10 @@
 			path: cleanPath
 		});
 	}
+	menuItems.push({
+		name: 'vault',
+		path: '/vault'
+	});
 </script>
 
 <Navbar let:hidden let:toggle>
