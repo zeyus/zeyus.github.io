@@ -5,7 +5,7 @@
     title.set('home');
 </script>
 
-<P class="mb-0">Hi, I'm zeyus:</P>
+<P class="mb-0 mt-4">Hi, I'm zeyus:</P>
 <P>
     <List class="list-disc list-inside ml-3">
         <Li>Cognitive Scientist</Li>

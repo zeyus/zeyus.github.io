@@ -2,10 +2,7 @@
 	import { page } from '$app/stores';
 	import { title } from '$lib/store.ts';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
-	import { DarkMode } from 'flowbite-svelte';
-  import { Img } from 'flowbite-svelte';
-	let darkmodebtn =
-		'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-lg z-50';
+  	import { Img } from 'flowbite-svelte';
 
 	let menuItems: { name: string; path: string }[] = [];
 	let currentPage: string = $page.url.pathname;
@@ -26,7 +23,7 @@
 	});
 </script>
 
-<Navbar let:hidden let:toggle>
+<Navbar let:hidden let:toggle class="mb-4">
 	<NavBrand href="/">
 		<Img srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
@@ -38,7 +35,6 @@
 		{#each menuItems as item}
 			<NavLi href={item.path} active={currentPage === item.path}>{item.name}</NavLi>
 		{/each}
-    <NavLi><DarkMode btnClass={darkmodebtn} /></NavLi>
 	</NavUl>
   
 </Navbar>

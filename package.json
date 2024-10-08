@@ -50,6 +50,7 @@
 		"ansi_up": "^6.0.2",
 		"flowbite": "^2.4.1",
 		"flowbite-svelte": "^0.46.13",
+		"flowbite-svelte-icons": "^1.6.1",
 		"svelte-spa-router": "^4.0.1",
 		"tailwind-merge": "^2.3.0",
 		"vidstack": "^0.6.15"
