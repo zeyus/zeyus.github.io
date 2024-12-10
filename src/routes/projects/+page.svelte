@@ -15,7 +15,15 @@
         {
             name: "Python3BlueBox",
             description: "A old-school hacking tool, remade for the modern age. Generate MF (Multi-frequency) tones to control phone systems, just like in the movies.",
+            link: "https://pypi.org/project/mfbluebox/",
             source: "https://github.com/zeyus/Python3BlueBox"
+        },
+        {
+            name: "Long YouTube Videos UserScript",
+            description: "A <a href=\"https://violentmonkey.github.io/\">Violentmonkey</a> / <a href=\"https://www.tampermonkey.net/\">Tampermonkey</a> / <a href=\"https://www.greasespot.net/\">Greasemonkey</a> userscript to hide YouTube shorts and highlight videos over a specified length.",
+            link: "https://gist.github.com/zeyus/dae59e6a4d709bdb8a041a45634450cc/raw/YTLongForm.user.js",
+            source: "https://gist.github.com/zeyus/dae59e6a4d709bdb8a041a45634450cc",
+            linkText: "Install"
         },
         {
             name: "terminal-s (forked)",
@@ -66,11 +74,11 @@
     {#each projects as project}
         <Card class="mt-4">
             <h5 class="mb-2 text-2xl font-bold text-white">{project.name}</h5>
-            <P class="mb-3 font-normal leading-tight">{project.description}</P>
+            <P class="mb-3 font-normal leading-tight">{@html project.description}</P>
             <ButtonGroup>
                 {#if project.link}
                     <Button color="primary" class="w-50" href={project.link}>
-                        <span>View</span>
+                        <span>{project.linkText ? project.linkText : 'Link'}</span>
                         <ArrowRightOutline class="ml-2" />
                     </Button>
                 {/if}
