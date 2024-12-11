@@ -210,12 +210,11 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         <span class="prompt">{@html shellprompt}</span>
         <textarea 
             autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
             spellcheck="false"
+            autocapitalize="off"
             on:input={handleVirtualInput}
             name="mobileinput"
-            id="touchinput" />
+            id="touchinput"></textarea>
         <pre class="input">{currentInput}</pre><span class="cursor"></span>
     </div>
 </div>
