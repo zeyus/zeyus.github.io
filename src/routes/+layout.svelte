@@ -15,12 +15,12 @@
 <div class="container mx-auto px-4 mb-5 pb-16">
 <slot />
 </div>
-<Footer class="bg-gray-900 pb-3 sticky start-0 z-20 w-full border-t shadow border-gray-400">
+<Footer class="bg-gray-900 pb-3 sticky start-0 z-20 w-full border-t shadow border-gray-700 dark:border-gray-700">
     <div class="container mx-auto">
         <div class="sm:flex sm:items-center sm:justify-between">
             <FooterCopyright href="/" by="zeyus" year={year} copyrightMessage="(source code available under MIT license)" />
 
-            <FooterLinkGroup ulClass="flex flex-wrap items-center mt-5 text-sm">
+            <FooterLinkGroup ulClass="flex flex-wrap items-center my-3 text-sm">
                 <FooterIcon href="https://github.com/zeyus/zeyus.github.io">
                     <CodeOutline class="w-6 h-6" />
                 </FooterIcon>

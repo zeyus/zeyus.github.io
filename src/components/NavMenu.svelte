@@ -5,9 +5,8 @@
   	import { Img } from 'flowbite-svelte';
 
 	let menuItems: { name: string; path: string }[] = [];
-	let currentPage: string = $page.url.pathname;
 
-	const modules = import.meta.glob('../routes/**/+page.svelte');
+	const modules = import.meta.glob('../routes/**/+page.[sm][vd]*');
 	for (const path in modules) {
 		const name = path.split('/').slice(-2)[0];
 		const cleanName = name === 'routes' ? 'home' : name;
@@ -17,24 +16,35 @@
 			path: cleanPath
 		});
 	}
-	menuItems.push({
-		name: 'vault',
-		path: '/vault'
-	});
+	// menuItems.push({
+	// 	name: 'vault',
+	// 	path: '/vault'
+	// });
+	$: activeUrl = $page.url.pathname;
 </script>
 
-<Navbar let:hidden let:toggle class="mb-4">
+<Navbar let:hidden let:toggle class="mb-4 border-b shadow border-gray-700 dark:border-gray-700">
 	<NavBrand href="/">
 		<Img srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
-		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+		<span id="nav-title" class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
 			>{$title}</span
 		>
 	</NavBrand>
 	<NavHamburger on:click={toggle} />
-	<NavUl {hidden}>
+	<NavUl {hidden} {activeUrl}>
 		{#each menuItems as item}
-			<NavLi href={item.path} active={currentPage === item.path}>{item.name}</NavLi>
+			<NavLi href={item.path} activeClass="active">{item.name}</NavLi>
 		{/each}
 	</NavUl>
   
 </Navbar>
+<style>
+    @font-face {
+        font-family: 'Mechanical Bold';
+        src: url('/MechanicalBold-oOmA.woff2') format('woff2');
+    }
+	#nav-title {
+		font-family: 'Mechanical Bold', serif;
+	}
+
+</style>

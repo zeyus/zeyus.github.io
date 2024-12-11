@@ -4,6 +4,7 @@
 
     import { ButtonGroup, Button, Card, P, A } from "flowbite-svelte";
     import { ArrowRightOutline, GithubSolid } from 'flowbite-svelte-icons';
+	import { link } from "svelte-spa-router";
 
     let projects = [
         {
@@ -16,6 +17,7 @@
             name: "Python3BlueBox",
             description: "A old-school hacking tool, remade for the modern age. Generate MF (Multi-frequency) tones to control phone systems, just like in the movies.",
             link: "https://pypi.org/project/mfbluebox/",
+            linkText: "PyPi",
             source: "https://github.com/zeyus/Python3BlueBox"
         },
         {
@@ -33,7 +35,7 @@
         {
             name: "Treasure Hunt",
             description: "A serverless geo-location based step-by-step treasure hunt / quiz. You can only get the next question when you're close to the location.",
-            link: "http://zeyus.com/sveltekit-treasure-hunt/",
+            link: "https://zeyus.com/sveltekit-treasure-hunt/",
             source: "https://github.com/zeyus/sveltekit-treasure-hunt"
         },
         {
@@ -45,6 +47,7 @@
             name: "AdAway Revival for Android (fork for Android 4.1 to 13)",
             description: "AdAway is an open-source ad blocker for Android using the hosts file. This fork is for Android 4.1 to 13, which are not officially supported by AdAway.",
             link: "https://github.com/zeyus/AdAway/releases",
+            linkText: "Releases",
             source: "https://github.com/zeyus/AdAway"
         },
         {
@@ -57,35 +60,41 @@
             name: "ukulele (fork), a discord music bot",
             description: "Play soundcloud, youtube, etc links in a discord call, customizable and working with later APIs.",
             link: "https://github.com/zeyus?tab=packages&repo_name=ukulele",
+            linkText: "Docker Image",
             source: "https://github.com/zeyus/ukulele"
         },
         {
             name: "GPU Prisoner's Dilemma Agent-Based Model (ABM)",
             description: "A (3D, using FLAMEGPU2) 2D ABM simulation executed on the GPU. This ABM models interactions of 'games' between agents, specifically the Prisoner's Dilemma game, in which participants can either cooperate or defect, resulting in a payoff, depending on the combination of decisions.",
             link: "https://github.com/zeyus/FLAMEGPU2-Prisoners-Dilemma-ABM/releases",
+            linkText: "Releases",
             source: "https://github.com/zeyus/FLAMEGPU2-Prisoners-Dilemma-ABM"
+        },
+        {
+            name: "WIP Novel social paradigm",
+            description: "Current development of a novel paradigm for studying the brain during simultaneous cooperative and competitive tasks. It is targeted at joint action, social interaction, and social cognition research, and will be combined with EEG hyperscanning and neuro-/bio-feedback.",
+            link: "https://zeyus.com/RiseTogether/",
+            source: "https://github.com/zeyus/RiseTogether"
         }
     ];
 
 </script>
 
 <P class="mb-0 mt-4">Here are some of my projects:</P>
-<div class="card-columns grid md:grid-cols-2 xl:grid-cols-3">
+<div class="columns-2md columns-3xl">
     {#each projects as project}
-        <Card class="mt-4">
+        <Card class="w-full mt-4">
             <h5 class="mb-2 text-2xl font-bold text-white">{project.name}</h5>
-            <P class="mb-3 font-normal leading-tight">{@html project.description}</P>
+            <p class="mx-2 mb-5 text-gray-300 font-normal leading-tight">{@html project.description}</p>
             <ButtonGroup>
                 {#if project.link}
                     <Button color="primary" class="w-50" href={project.link}>
-                        <span>{project.linkText ? project.linkText : 'Link'}</span>
-                        <ArrowRightOutline class="ml-2" />
+                        <span>{project.linkText ? project.linkText : 'Go'}</span>
                     </Button>
                 {/if}
                 <Button color="alternative" class="w-50" href={project.source}>
                     <GithubSolid class="mr-2" />
                     <span>Source</span>
-                    <ArrowRightOutline class="ml-2" />
                 </Button>
             </ButtonGroup>
         </Card>

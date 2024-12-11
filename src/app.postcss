@@ -1,14 +1,23 @@
-/* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Mechanical Bold';
+  src: url('/MechanicalBold-oOmA.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Clear Sans';
+  src: url('/ClearSans-OP0p.woff2') format('woff2');
+}
 
 p {
   margin-bottom: 1.5rem;
 }
 
 html {
-    min-height: 100vh; /* Look, it's not fixed anymore! */
+    min-height: 100vh; 
     display: flex;
     flex-direction: column;
 }
@@ -17,6 +26,60 @@ body {
   flex-grow: 1;
 }
 
+html, body {
+  font-family: 'Clear Sans', sans-serif;
+  font-kerning: normal;
+  letter-spacing: 0.005rem;
+}
+
+.font-bold, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Mechanical Bold', serif;
+  font-weight: normal;
+}
+
 footer {
   top: 100vh;
+}
+
+/* add external icon to external links */
+body a[href^="http"]:not(footer a):not(a[href^="https://zeyus.com/"])::after {
+  content: "↗";
+  font-size: 0.5rem;
+  top: -0.2rem;
+  margin-left: 0.2rem;
+  position: relative;
+  font-variant-emoji: unicode;
+}
+
+article {
+  h1 {
+    font-size: 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  h4 {
+    font-size: 1.1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+  h5 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  h6 {
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
 }
