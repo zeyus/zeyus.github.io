@@ -81,10 +81,10 @@
 </script>
 
 <P class="mb-0 mt-4">Here are some of my projects:</P>
-<div class="columns-2md columns-3xl">
+<div class="sm:columns-2 xl:columns-3">
     {#each projects as project}
         <Card class="w-full mt-4">
-            <h5 class="mb-2 text-2xl font-bold text-white">{project.name}</h5>
+            <h5 class="truncate whitespace-normal mb-2 text-2xl font-bold text-white">{project.name}</h5>
             <p class="mx-2 mb-5 text-gray-300 font-normal leading-tight">{@html project.description}</p>
             <ButtonGroup>
                 {#if project.link}
