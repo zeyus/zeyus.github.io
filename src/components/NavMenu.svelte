@@ -6,7 +6,8 @@
 
 	let menuItems: { name: string; path: string }[] = [];
 
-	const modules = import.meta.glob('../routes/**/+page.[sm][vd]*');
+	// only get top level routes
+	const modules = import.meta.glob('../routes/*/+page.[sm][vd]*');
 	for (const path in modules) {
 		const name = path.split('/').slice(-2)[0];
 		const cleanName = name === 'routes' ? 'home' : name;
@@ -16,6 +17,7 @@
 			path: cleanPath
 		});
 	}
+	let navContainerClass = 'flex-nowrap';
 	// menuItems.push({
 	// 	name: 'vault',
 	// 	path: '/vault'
@@ -23,14 +25,16 @@
 	$: activeUrl = $page.url.pathname;
 </script>
 
-<Navbar let:hidden let:toggle class="mb-4 border-b shadow border-gray-700 dark:border-gray-700">
+<Navbar let:hidden let:toggle {navContainerClass} fluid={true} class="mb-4 whitespace-nowrap border-b shadow border-gray-700 dark:border-gray-700">
 	<NavBrand href="/">
 		<Img srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
-		<span id="nav-title" class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-			>{$title}</span
-		>
+		<div class="min-w-16 w-8/12">
+			<div id="nav-title" class="truncate text-xl font-semibold dark:text-white"
+				>{$title}</div
+			>
+		</div>
 	</NavBrand>
-	<NavHamburger on:click={toggle} />
+	<NavHamburger size="lg" class="whitespace-nowrap" on:click={toggle} />
 	<NavUl {hidden} {activeUrl}>
 		{#each menuItems as item}
 			<NavLi href={item.path} activeClass="active">{item.name}</NavLi>
