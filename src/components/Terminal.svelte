@@ -111,7 +111,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     
     // Add handler for touch devices:
     // Focus on hidden input if touch happens anywhere on the terminal
-    var handleTerminalTouch = (event: TouchEvent) => {
+    const handleTerminalTouch = (event: TouchEvent) => {
         event.preventDefault();
         const touchdevice = document.getElementById('touchinput');
         if (touchdevice) {
