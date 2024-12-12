@@ -1,5 +1,6 @@
 <script lang="ts">
     import { AnsiUp } from 'ansi_up';
+    import BaudRate from './serial/BaudRate.svelte';
 
     const ansi_up = new AnsiUp();
     const shellprompt = "anon@zeyus&gt;";
@@ -54,7 +55,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
             currentInput += e.key;
         }
     }
-
+    
     function handleVirtualInput(e: Event) {
         const input = e.target as HTMLTextAreaElement;
         currentInput = input.value;
@@ -111,12 +112,17 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     
     // Add handler for touch devices:
     // Focus on hidden input if touch happens anywhere on the terminal
-    var handleTerminalTouch = (event: TouchEvent) => {
+    const handleTerminalTouch = (event: TouchEvent) => {
         event.preventDefault();
         const touchdevice = document.getElementById('touchinput');
         if (touchdevice) {
             touchdevice.focus();
         }
+    }
+
+    let baudRate = 9600;
+    function changeBaud(baud: number) {
+        baudRate = baud;
     }
 
     // For typing out the intro
@@ -194,6 +200,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }
     }
 </style>
+<BaudRate {changeBaud} {baudRate} />
 <div bind:this={terminalDiv} class="terminal" id="terminal-wrapper" on:touchend={handleTerminalTouch}>
     {#each lines as line}
         <div class="terminal-line">
