@@ -9,12 +9,15 @@
 
 	// only get top level routes
 	const modules = import.meta.glob('../routes/*/+page.[sm][vd]*');
+	menuItems.push({
+		name: 'home',
+		path: '/'
+	});
 	for (const path in modules) {
 		const name = path.split('/').slice(-2)[0];
-		const cleanName = name === 'routes' ? 'home' : name;
 		const cleanPath = '/' + (name === 'routes' ? '' : name);
 		menuItems.push({
-			name: cleanName,
+			name: name,
 			path: cleanPath
 		});
 	}
@@ -31,7 +34,10 @@
 	let slideParams = { delay: 50, duration: 150, easing: sineIn };
 
 	$: hidden = hideNav;
-	$: activeUrl = $page.url.pathname;
+	// in this case the active url should only be the first part of the url (or  / if it's the home page)
+	$: activeUrl = '/' + $page.url.pathname.split('/')[1] || '';
+
+	console.log(activeUrl);
 </script>
 <div id="fixedNavWrapper" class="relative">
 	<Navbar let:NavContainer fluid={true} navContainerClass="mt-0 flex-nowrap pt-0 content-center" class="px-2 py-0 pt-0 mt-0 sm:px-4 h-11 sm:h-14 fixed w-full z-20 top-0 start-0 whitespace-nowrap border-b shadow border-gray-700 dark:border-gray-700">
@@ -42,7 +48,7 @@
 					>{$title}</span
 				>
 			</NavBrand>
-			<NavHamburger onClick={() => onHamburgerClick()} class="md:hidden col-end-8 col-span-1" />
+			<NavHamburger onClick={() => onHamburgerClick()} class="md:hidden col-end-8 col-span-1 bg-primary-600 dark:bg-primary-600 text-white rounded-none" />
 			<NavUl
 			    {activeUrl}
 			    {slideParams}

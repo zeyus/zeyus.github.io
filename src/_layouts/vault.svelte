@@ -6,7 +6,7 @@
 <script lang="ts">
     import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
     import type { HTMLImgAttributes } from 'svelte/elements';
-    import { BarsOutline } from "flowbite-svelte-icons";
+    import { BarsOutline, ChevronRightOutline } from "flowbite-svelte-icons";
     import { title as t } from "$lib/store.ts";
     import { onMount } from 'svelte';
     import PostSidebar from "../components/PostSidebar.svelte";
@@ -115,8 +115,8 @@
 <svelte:window bind:innerWidth={width} />
 <Button
     on:click={() => (drawerHidden = false)} 
-    class="focus:outline-none fixed start-0 top-20 whitespace-normal focus:ring-2 p-1.5 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 my-0 mx-2 xl:hidden">
-    <BarsOutline class="w-6 h-6" />
+    class="focus:outline-none fixed start-0 top-24 whitespace-normal focus:ring-2 p-0 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 my-0 rounded-none mx-0 xl:hidden">
+    <ChevronRightOutline class="w-8 h-8" />
 </Button>
 <Drawer
 	transitionType="fly"
@@ -142,11 +142,7 @@
             <Img src={feature_image.src} caption={feature_image.alt} alt={feature_image.alt} imgClass="rounded-lg object-cover w-full" size="max-w-full w-full h-96" figClass="max-w-full" />
         {/if}
 
-        <!-- {#if gallery_position === "start"}
-
-        {/if} -->
-
-        <P class="date">on: { date }</P>
+        <P class="date">Published on: { date }</P>
 
         <slot />
 

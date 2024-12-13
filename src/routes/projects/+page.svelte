@@ -86,10 +86,10 @@
 
 </script>
 
-<P class="mb-0 mt-4">Here are some of my projects:</P>
-<div class="sm:columns-2 xl:columns-3">
+<P class="mb-0 mt-4 block mb-4">Here are some of my projects:</P>
+<div class="columns-1 sm:columns-2 xl:columns-3 w-full">
     {#each projects as project}
-        <Card class="w-full mt-4 break-inside-avoid-column">
+        <Card class="w-full mb-4 break-inside-avoid-column mx-auto sm:mx-0 max-w-lg">
             <h5 class="truncate whitespace-normal mb-2 text-2xl font-bold text-white">{project.name}</h5>
             <p class="mx-2 mb-5 text-gray-300 font-normal leading-tight">{@html project.description}</p>
             <ButtonGroup>
