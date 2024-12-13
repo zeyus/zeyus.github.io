@@ -94,6 +94,7 @@ const defaultOptions: Options = {
 };
 
 export function buildSiteContents(builder: Builder, options: Options, dest: string) {
+	builder.prerendered.pages.
     builder.prerendered.pages.forEach(page => {
         console.log(page);
     });

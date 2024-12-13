@@ -1,7 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
-//import { pageContentsWrapAdapter } from "./src/_lib/wrap-adapter";
+//import wa from "./src/_lib/wrap-adapter.js";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -9,13 +9,13 @@ const config = {
 	// for more information about preprocessors
 	extensions: ['.svelte', '.md'],
 	preprocess: [
+		vitePreprocess({ script: true }),
 		mdsvex({
 			extensions: ['.md'],
 			layout: {
-				_: "./src/_layouts/vault.svelte"
-			},
-		}),
-		vitePreprocess({ script: true }),
+				_: './src/_layouts/vault.svelte'
+			}
+		})
 	],
 
 	kit: {
