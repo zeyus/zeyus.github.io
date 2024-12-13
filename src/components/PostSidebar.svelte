@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { Sidebar, SidebarBrand, SidebarCta, SidebarDropdownItem, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
-    const posts = import.meta.glob('../routes/vault/*/**/+page.md');
+    const posts = import.meta.glob('../routes/_vault/*/**/+page.md');
 
     let sidebarItems: { name: string; path: string }[] = [];
     
@@ -9,7 +9,7 @@
         
         const name = path.split('/').slice(-2)[0];
         console.log(name);
-        const cleanPath = '/vault/' + name;
+        const cleanPath = '/_vault/' + name;
         sidebarItems.push({
             name: name,
             path: cleanPath
@@ -17,8 +17,8 @@
     }
 
     const site = {
-        name: 'vault: posts',
-        href: '/vault',
+        name: '_vault: posts',
+        href: '/_vault',
         img: '/favicon.png'
     }
 

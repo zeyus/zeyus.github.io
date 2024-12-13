@@ -7,7 +7,7 @@ feature_image:
 gallery:
   position: end
   images:
-    - src: /vault/sauna/01.jpg
+    - src: "/vault/sauna/01.jpg"
       alt: Sauna Plan
     - src: /vault/sauna/02.jpg
       alt: First delivry
