@@ -27,7 +27,7 @@
         images = gallery.images;
     }
 
-    t.set("vault: " + title);
+    t.set("_vault: " + title);
 
     // make date human readable
     let d: Date = new Date(date);
@@ -115,8 +115,8 @@
 <svelte:window bind:innerWidth={width} />
 <Button
     on:click={() => (drawerHidden = false)} 
-    class="focus:outline-none fixed start-0 top-24 whitespace-normal focus:ring-2 p-0 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 my-0 rounded-none mx-0 xl:hidden">
-    <ChevronRightOutline class="w-8 h-8" />
+    class="focus:outline-none fixed start-0 top-1/2 whitespace-normal focus:ring-2 p-0 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 my-0 rounded-none mx-0 xl:hidden">
+    <ChevronRightOutline class="w-6 h-8" />
 </Button>
 <Drawer
 	transitionType="fly"
@@ -124,16 +124,18 @@
 	{transitionParams}
 	bind:hidden={drawerHidden}
 	bind:activateClickOutside
-    divClass="overflow-y-auto z-50 p-0 bg-white dark:bg-transparent"
-    leftOffset="top-20 start-0 bottom-16"
+    divClass="overflow fixed-y-auto my-auto flex flex-row z-50 p-0 bg-white dark:bg-transparent top-32 bottom-32"
+    leftOffset="my-auto start-0 min-h-max"
 	width="w-64"
-	class="overflow-auto pb-32"
+	class="overflow-auto my-auto start-0 min-h-max self-center"
 	id="sidebar"
 >
-    <div class="fixed flex w-64 items-right">
-        <CloseButton on:click={() => (drawerHidden = true)} class="right-0 dark:text-white xl:hidden" />
+    <div class="flex">
+        <div class="fixed flex w-64 items-right">
+            <CloseButton on:click={() => (drawerHidden = true)} class="right-0 dark:text-white xl:hidden" />
+        </div>
+        <PostSidebar />
     </div>
-    <PostSidebar />
 </Drawer>
 <div class="flex px-4 mx-auto w-full">
     <article class="xl:ml-72 w-full mx-auto">
