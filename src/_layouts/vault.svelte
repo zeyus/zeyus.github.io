@@ -15,7 +15,6 @@
     export let feature_image: HTMLImgAttributes | undefined;
     export let gallery: VaultGallery | undefined;
 
-    console.log(feature_image);
     let index = 0;
     let forward = true;
     let gallery_position: string = "none";

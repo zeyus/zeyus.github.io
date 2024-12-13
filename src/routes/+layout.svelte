@@ -12,12 +12,12 @@
 	<title>{$title} - zeyus dot com</title>
 </svelte:head>
 <NavMenu />
-<div class="container mx-auto px-4 mb-5 pb-16">
+<div class="container mx-auto mt-14 sm:mt-20 px-4 mb-5 pb-16">
 <slot />
 </div>
-<Footer class="bg-gray-900 pb-3 sticky start-0 z-20 w-full border-t shadow border-gray-700 dark:border-gray-700">
+<Footer class="bg-gray-900 pb-2 pt-2 sticky start-0 z-20 w-full border-t shadow border-gray-700 dark:border-gray-700 sm:px-4 sm:flex-nowrap sm:pt-0">
     <div class="container mx-auto">
-        <div class="sm:flex sm:items-center sm:justify-between">
+        <div class="align-center justify-center flex flex-wrap items-center sm:justify-between">
             <FooterCopyright href="/" by="zeyus" year={year} copyrightMessage="(source code available under MIT license)" />
 
             <FooterLinkGroup ulClass="flex flex-wrap items-center my-3 text-sm">

@@ -75,7 +75,13 @@
             description: "Current development of a novel paradigm for studying the brain during simultaneous cooperative and competitive tasks. It is targeted at joint action, social interaction, and social cognition research, and will be combined with EEG hyperscanning and neuro-/bio-feedback.",
             link: "https://zeyus.com/RiseTogether/",
             source: "https://github.com/zeyus/RiseTogether"
-        }
+        },
+        {
+            name: "BrainJammers.com",
+            description: "Currently an interactive 3D WebGL brain, but probably will become a fake product to jam brains",
+            link: "https://brainjammers.com",
+            source: "https://github.com/zeyus/brainjammers.com"
+        },
     ];
 
 </script>
@@ -83,7 +89,7 @@
 <P class="mb-0 mt-4">Here are some of my projects:</P>
 <div class="sm:columns-2 xl:columns-3">
     {#each projects as project}
-        <Card class="w-full mt-4">
+        <Card class="w-full mt-4 break-inside-avoid-column">
             <h5 class="truncate whitespace-normal mb-2 text-2xl font-bold text-white">{project.name}</h5>
             <p class="mx-2 mb-5 text-gray-300 font-normal leading-tight">{@html project.description}</p>
             <ButtonGroup>
