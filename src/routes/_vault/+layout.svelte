@@ -85,7 +85,7 @@
     });
 
 
-
+    let pEl: HTMLParagraphElement | undefined
 
 	onMount(() => {
 		if (width >= breakPoint) {
@@ -101,7 +101,27 @@
             imgClassChange.observe(img, observerOptions);
         }
 
+        // create a div under each img element within the carousel
+        // this div will be used to display the image caption
+        const caroselDiv = document.querySelector(".c-inner");
+        const divEl = document.createElement("div");
+        divEl.classList.add("absolute", "inset-x-[5%]", "bottom-16", "align-middle", "hidden", "py-1", "text-center", "text-white", "md:block", "text-lg", "caption", "bg-black", "bg-opacity-50", "rounded-lg");
+        // add p inside the div
+        pEl = document.createElement("p");
+        pEl.classList.add("m-0", "p-0");
+        divEl.appendChild(pEl);
+        caroselDiv?.appendChild(divEl);
+
 	});
+
+    $effect(() => {
+        // get alt text based on index
+        const altText = images[index].alt || "";
+        // set the alt text to the p element
+        if (pEl) pEl.textContent = altText;
+        
+    });
+
     const toggleSide = () => {
 		if (width < breakPoint) {
 			drawerHidden = !drawerHidden;
@@ -149,10 +169,10 @@
 
         {#if page.data.props.gallery?.position === "end"}
             <div class="gallery-wrapper max-w-4xl space-y-4 m-auto">
-                <Carousel class="h-64 sm:h-64 md:h-64 lg:h-128 xl:h-192 2xl:h-192" imgClass="object-fit object-contain object-center" images={page.data.props.gallery.images} {forward} slideDuration={250} duration={3900} let:Controls bind:index>
+                <Carousel class="h-64 sm:h-64 md:h-64 lg:h-128 xl:h-192 2xl:h-192 c-inner" imgClass="object-fit object-contain object-center" images={page.data.props.gallery.images} {forward} slideDuration={250} duration={3900} let:Controls bind:index>
                     <Controls />  
                 </Carousel>
-                <Thumbnails class="thumbnails bg-transparent overflow-hidden overflow-x-scroll gap-3 w-full flex-nowrap" bind:index let:image let:selected let:Thumbnail images={page.data.props.gallery.images} {forward} >
+                <Thumbnails class="thumbnails bg-transparent overflow-hidden overflow-x-scroll gap-3 w-full flex-nowrap"  bind:index let:image let:selected let:Thumbnail images={page.data.props.gallery.images} bind:forward >
                     <Thumbnail {...image} {selected} class="object-cover flex flex-0 h-16 w-16 p-0 m-1 rounded-md shadow-xl hover:outline hover:outline-primary-500" activeClass="outline outline-primary-400"/>
                 </Thumbnails>
             </div>
