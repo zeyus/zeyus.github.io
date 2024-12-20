@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { Sidebar, SidebarBrand, SidebarCta, SidebarDropdownItem, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
-    const posts = import.meta.glob('../routes/_vault/*/**/+page.md');
+    const posts = import.meta.glob('../routes/_vault/*/**/+page.svelte');
 
     let sidebarItems: { name: string; path: string }[] = [];
     

@@ -1,38 +1,35 @@
-<script context="module">
-    import p from "../components/typo/p.svelte";
-    import h1 from "../components/typo/h1.svelte";
-    export { p, h1 };
-</script>
 <script lang="ts">
+    import { page } from '$app/state';
+
     import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
     import type { HTMLImgAttributes } from 'svelte/elements';
-    import { BarsOutline, ChevronRightOutline } from "flowbite-svelte-icons";
+    import { ChevronRightOutline } from "flowbite-svelte-icons";
     import { title as t } from "$lib/store.ts";
     import { onMount } from 'svelte';
-    import PostSidebar from "../components/PostSidebar.svelte";
-    export let title: string;
-    export let date: string;
-    export let feature_image: HTMLImgAttributes | undefined;
-    export let gallery: VaultGallery | undefined;
+    import PostSidebar from "../../components/PostSidebar.svelte";
 
-    let index = 0;
+    let { children } = $props();
+
+    let gallery: VaultGallery | undefined = page.data.props.gallery;
+
+    let index = $state(0);
     let forward = true;
-    let gallery_position: string = "none";
-    let images: HTMLImgAttributes[] = [];
-    if (gallery && gallery.position) {
-        gallery_position = gallery.position;
-        images = gallery.images;
+    let gallery_position: string = $state("none");
+    let images: HTMLImgAttributes[] = $state([]);
+    if (page.data.props.gallery && page.data.props.gallery.position) {
+        gallery_position = page.data.props.gallery.position;
+        images = page.data.props.gallery.images;
     } else if (gallery) {
         gallery_position = "start";
-        images = gallery.images;
+        images = page.data.props.gallery.images;
     }
 
-    t.set("_vault: " + title);
+    t.set("_vault: " + page.data.props.title);
 
     // make date human readable
-    let d: Date = new Date(date);
-    let options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
-    date = d.toLocaleDateString(undefined, options);
+    
+    const dateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
+
 
     import { sineIn } from 'svelte/easing';
 
@@ -43,16 +40,18 @@
 	};
     let breakPoint: number = 1280;
     let backdrop: boolean = false;
-	let width: number;
-	let activateClickOutside = true;
-    let drawerHidden: boolean = false;
-    $: if (width >= breakPoint) {
-		drawerHidden = false;
-		activateClickOutside = false;
-	} else {
-		drawerHidden = true;
-		activateClickOutside = true;
-	}
+	let width: number = $state(0);
+	let activateClickOutside = $state(true);
+    let drawerHidden: boolean = $state(false);
+    $effect(() => {
+        if (width >= breakPoint) {
+            drawerHidden = false;
+            activateClickOutside = false;
+        } else {
+            drawerHidden = true;
+            activateClickOutside = true;
+        }
+    });
 
     const observerOptions = {
         attributes: true,
@@ -139,21 +138,21 @@
 </Drawer>
 <div class="flex px-4 mx-auto w-full">
     <article class="xl:ml-72 w-full mx-auto">
-        <Heading>{ title }</Heading>
-        {#if feature_image && feature_image?.src && feature_image?.alt}
-            <Img src={feature_image.src} caption={feature_image.alt} alt={feature_image.alt} imgClass="rounded-lg object-cover w-full" size="max-w-full w-full h-96" figClass="max-w-full" />
+        <Heading>{ page.data.props.title }</Heading>
+        {#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
+            <Img src={page.data.props.feature_image.src} caption={page.data.props.feature_image.alt} alt={page.data.props.feature_image.alt} imgClass="rounded-lg object-cover w-full" size="max-w-full w-full h-96" figClass="max-w-full" />
         {/if}
 
-        <P class="date">Published on: { date }</P>
+        <P class="date">Published on: { new Date(page.data.props.date).toLocaleDateString(undefined, dateOptions) }</P>
 
-        <slot />
+        {@render children()}
 
-        {#if gallery_position === "end"}
+        {#if page.data.props.gallery?.position === "end"}
             <div class="gallery-wrapper max-w-4xl space-y-4 m-auto">
-                <Carousel class="h-64 sm:h-64 md:h-64 lg:h-128 xl:h-192 2xl:h-192" imgClass="object-fit object-contain object-center" images={images} {forward} slideDuration={250} duration={3900} let:Controls bind:index>
+                <Carousel class="h-64 sm:h-64 md:h-64 lg:h-128 xl:h-192 2xl:h-192" imgClass="object-fit object-contain object-center" images={page.data.props.gallery.images} {forward} slideDuration={250} duration={3900} let:Controls bind:index>
                     <Controls />  
                 </Carousel>
-                <Thumbnails class="thumbnails bg-transparent overflow-hidden overflow-x-scroll gap-3 w-full flex-nowrap" bind:index let:image let:selected let:Thumbnail {images} {forward} >
+                <Thumbnails class="thumbnails bg-transparent overflow-hidden overflow-x-scroll gap-3 w-full flex-nowrap" bind:index let:image let:selected let:Thumbnail images={page.data.props.gallery.images} {forward} >
                     <Thumbnail {...image} {selected} class="object-cover flex flex-0 h-16 w-16 p-0 m-1 rounded-md shadow-xl hover:outline hover:outline-primary-500" activeClass="outline outline-primary-400"/>
                 </Thumbnails>
             </div>
