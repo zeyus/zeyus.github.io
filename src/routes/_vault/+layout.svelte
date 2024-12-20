@@ -172,7 +172,7 @@
                 <Carousel class="h-64 sm:h-64 md:h-64 lg:h-128 xl:h-192 2xl:h-192 c-inner" imgClass="object-fit object-contain object-center" images={page.data.props.gallery.images} {forward} slideDuration={250} duration={3900} let:Controls bind:index>
                     <Controls />  
                 </Carousel>
-                <Thumbnails class="thumbnails bg-transparent overflow-hidden overflow-x-scroll gap-3 w-full flex-nowrap"  bind:index let:image let:selected let:Thumbnail images={page.data.props.gallery.images} bind:forward >
+                <Thumbnails class="thumbnails bg-transparent overflow-hidden overflow-x-scroll gap-3 w-full flex-nowrap"  bind:index let:image let:selected let:Thumbnail images={page.data.props.gallery.images} {forward} >
                     <Thumbnail {...image} {selected} class="object-cover flex flex-0 h-16 w-16 p-0 m-1 rounded-md shadow-xl hover:outline hover:outline-primary-500" activeClass="outline outline-primary-400"/>
                 </Thumbnails>
             </div>
