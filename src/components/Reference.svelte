@@ -1,35 +1,34 @@
 <script lang="ts">
     import { page } from '$app/state';
+    import { getContext } from 'svelte';
 
     let {
             item = $bindable(undefined),
-            items = $bindable([]),
             text = undefined,
             year = undefined,
         }:
         {
             item?: Footnote,
-            items: Footnote[],
             text?: string,
             year?: number,
          } = $props();
     
+    let items: () => Footnote[] = getContext('bibItems');
     // is the item in items?
-    if (item && !items.includes(item)) {
-        items.push(item);
+    if (item && !items().includes(item)) {
+        items().push(item);
     } else if (text) {
         // look for the item in items
-        const found = items.find((i) => i.text === text);
+        const found = items().find((i) => i.text === text);
         if (found) { item = found; } else {
             const url = page.url.pathname;
             item = { text, url, year };
-            items.push(item);
+            items().push(item);
         }
     }
 
-    $inspect(items);
     /*@ts-ignore*/
-    const index = items.indexOf(item);
+    const index = items().indexOf(item);
 
 </script>
 <sup id="footnote-{index}" class="footnote">

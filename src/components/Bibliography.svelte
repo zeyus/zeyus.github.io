@@ -2,9 +2,11 @@
     import { page } from '$app/state';
     import { List, Li } from 'flowbite-svelte';
 
-    let { items = $bindable() }: { items: Footnote[] } = $props();
+    import { getContext } from 'svelte';
+  
+    let items: () => Footnote[] = getContext('bibItems');
 
-    let myItems = $derived(items.filter((item) => item.url === page.url.pathname));
+    let myItems = $derived(items().filter((item) => item.url === page.url.pathname));
 
 </script>
 {#if myItems.length > 0}

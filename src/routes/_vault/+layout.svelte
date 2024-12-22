@@ -14,7 +14,7 @@
 
     let gallery: VaultGallery | undefined = page.data.props.gallery;
     let items: Footnote[] = $state([]);
-    setContext('bibItems', items);
+    setContext('bibItems', () => items);
     
     let index = $state(0);
     let forward = true;
@@ -181,7 +181,7 @@
                 </Thumbnails>
             </div>
         {/if}
-        <Bibliography bind:items={items} />
+        <Bibliography />
     </article>
     
 </div>
