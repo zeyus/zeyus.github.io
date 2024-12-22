@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from '$app/state';
+    import { setContext } from 'svelte';
 
     import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
     import type { HTMLImgAttributes } from 'svelte/elements';
@@ -7,11 +8,14 @@
     import { title as t } from "$lib/store.ts";
     import { onMount } from 'svelte';
     import PostSidebar from "../../components/PostSidebar.svelte";
+    import Bibliography from '../../components/Bibliography.svelte';
 
     let { children } = $props();
 
     let gallery: VaultGallery | undefined = page.data.props.gallery;
-
+    let items: Footnote[] = $state([]);
+    setContext('bibItems', items);
+    
     let index = $state(0);
     let forward = true;
     let gallery_position: string = $state("none");
@@ -177,7 +181,9 @@
                 </Thumbnails>
             </div>
         {/if}
+        <Bibliography bind:items={items} />
     </article>
+    
 </div>
 <style>
     .gallery-wrapper :global(.thumbnails) {

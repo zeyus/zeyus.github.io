@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { sineIn } from 'svelte/easing';
 	import { title } from '$lib/store.ts';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
@@ -21,7 +21,7 @@
 			path: cleanPath
 		});
 	}
-	let hideNav = true;
+	let hideNav = $state(true);
 	const onHamburgerClick = () => {
         hideNav = !hideNav;
     };
@@ -33,13 +33,13 @@
 
 	let slideParams = { delay: 50, duration: 150, easing: sineIn };
 
-	$: hidden = hideNav;
+	let hidden = $derived(hideNav);
 	// in this case the active url should only be the first part of the url (or  / if it's the home page)
-	$: activeUrl = '/' + $page.url.pathname.split('/')[1] || '';
+	let activeUrl = $derived('/' + page.url.pathname.split('/')[1] || '');
 
-	console.log(activeUrl);
 </script>
 <div id="fixedNavWrapper" class="relative">
+	{/* @ts-ignore */ null}
 	<Navbar let:NavContainer fluid={true} navContainerClass="mt-0 flex-nowrap pt-0 content-center" class="px-2 py-0 pt-0 mt-0 sm:px-4 h-11 sm:h-14 fixed w-full z-20 top-0 start-0 whitespace-nowrap border-b shadow border-gray-700 dark:border-gray-700">
 		<NavContainer class="flex-nowrap content-center h-11 sm:h-14 flex-row items-center">
 			<NavBrand href="/" class="col-start-1 col-end-4 self-center">
@@ -52,13 +52,13 @@
 			<NavUl
 			    {activeUrl}
 			    {slideParams}
-				bind:hidden
+				bind:hidden={hideNav}
 				class="fixed top-11 sm:top-14 sm:pe-4 w-auto end-2 md:relative md:flex md:visible md:start-auto md:end-0 md:top-auto md:h-full z-100 text-right"
 				ulClass="md:flex md:h-full md:flex-row md:space-x-4 dark:md:border-0 md:border-0 md:w-full md:flex-nowrap items-center"
 				on:click={() => onMenuItemClick()}
 			>
 				{#each menuItems as item}
-					<NavLi href={item.path} bind:hidden class="my-auto md:mt-7 align-bottom h-11 md:h-14 sm:flex" activeClass="active dark:text-primary-500 font-bold text-lg text-primary-500">{item.name}</NavLi>
+					<NavLi href={item.path} bind:hidden={hideNav} class="my-auto md:mt-7 align-bottom h-11 md:h-14 sm:flex" activeClass="active dark:text-primary-500 font-bold text-lg text-primary-500">{item.name}</NavLi>
 				{/each}
 			</NavUl>
 		</NavContainer>
