@@ -1,1 +1,0 @@
-import{default as n}from"../chunks/_page.GuigofL5.mjs";const e=!0,t=()=>({props:{title:"Welcome to the vault",date:"2024-12-10"}}),r=Object.freeze(Object.defineProperty({__proto__:null,load:t,prerender:e},Symbol.toStringTag,{value:"Module"}));export{n as component,r as universal};
