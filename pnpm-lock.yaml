@@ -55,6 +55,12 @@ importers:
       '@types/eslint__js':
         specifier: ^8.42.3
         version: 8.42.3
+      '@types/w3c-web-serial':
+        specifier: ^1.0.7
+        version: 1.0.7
+      '@types/w3c-web-usb':
+        specifier: ^1.0.10
+        version: 1.0.10
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.18.1
         version: 8.18.1(@typescript-eslint/parser@8.18.1(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2))(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
@@ -703,6 +709,12 @@ packages:
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
+
+  '@types/w3c-web-serial@1.0.7':
+    resolution: {integrity: sha512-jzcwm//EZ0Z306L1/O1GXC3GthRd//9eaNB4/Yagm98UjEQViTzDS8bYvL+y+rTk1r9OFt9Yhp5pprUQFzSiiQ==}
+
+  '@types/w3c-web-usb@1.0.10':
+    resolution: {integrity: sha512-CHgUI5kTc/QLMP8hODUHhge0D4vx+9UiAwIGiT0sTy/B2XpdX1U5rJt6JSISgr6ikRT7vxV9EVAFeYZqUnl1gQ==}
 
   '@typescript-eslint/eslint-plugin@8.18.1':
     resolution: {integrity: sha512-Ncvsq5CT3Gvh+uJG0Lwlho6suwDfUXH0HztslDf5I+F2wAFAZMRwYLEorumpKLzmO2suAXZ/td1tBg4NZIi9CQ==}
@@ -2578,6 +2590,10 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/resolve@1.20.2': {}
+
+  '@types/w3c-web-serial@1.0.7': {}
+
+  '@types/w3c-web-usb@1.0.10': {}
 
   '@typescript-eslint/eslint-plugin@8.18.1(@typescript-eslint/parser@8.18.1(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2))(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)':
     dependencies:

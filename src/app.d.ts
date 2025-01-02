@@ -51,6 +51,17 @@ declare global {
 		citationKey: string; // Unique identifier for the entry
 		fields: CommonBibTeXFields;
 	};
+
+	namespace Navigator {
+		type USB = {
+			getDevices: () => Promise<USBDevice[]>;
+			requestDevice: (options: USBDeviceRequestOptions) => Promise<USBDevice>;
+		}
+		type Serial = {
+			getPorts: () => Promise<SerialPort[]>;
+			requestPort: () => Promise<SerialPort>;
+		}
+	}
 }
 
 export {};

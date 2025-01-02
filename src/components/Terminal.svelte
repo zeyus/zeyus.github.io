@@ -1,5 +1,8 @@
 <script lang="ts">
     import { AnsiUp } from 'ansi_up';
+    import { onMount } from 'svelte';
+    import { getDevices, getPorts } from '$lib/serial';
+	import { on } from 'svelte/events';
 
     const ansi_up = new AnsiUp();
     const shellprompt = "anon@zeyus&gt;";
@@ -122,6 +125,16 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     // For typing out the intro
     const intro = "echo 👋\\x1b[31mHello\\x1b[0m👋\\n🌍\\x1b[32mWorld\\x1b[0m🌍"
     typeInput(intro);
+    let devices = $state<USBDevice[]>([]);
+    let ports = $state<SerialPort[]>([]);
+    onMount(async () => {
+        devices = await getDevices();
+        ports = await getPorts();
+    });
+
+    $inspect(ports);
+    $inspect(devices);
+    
 </script>
 <style>
     @font-face {
@@ -194,7 +207,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }
     }
 </style>
-<div bind:this={terminalDiv} class="terminal" id="terminal-wrapper" on:touchend={handleTerminalTouch}>
+<div bind:this={terminalDiv} class="terminal" id="terminal-wrapper" ontouchend={handleTerminalTouch}>
     {#each lines as line}
         <div class="terminal-line">
             {#if line.type === 'output'}
@@ -212,7 +225,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
             autocomplete="off"
             spellcheck="false"
             autocapitalize="off"
-            on:input={handleVirtualInput}
+            oninput={handleVirtualInput}
             name="mobileinput"
             id="touchinput"></textarea>
         <pre class="input">{currentInput}</pre><span class="cursor"></span>
@@ -221,3 +234,17 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
 <svelte:window
     on:keydown={handleInput}
 />
+<div>
+    <h2>Devices</h2>
+    <ul>
+        {#each devices as device}
+            <li>{device.productName}</li>
+        {/each}
+    </ul>
+    <h2>Ports</h2>
+    <ul>
+        {#each ports as port}
+            <li>{port.getInfo()}</li>
+        {/each}
+    </ul>
+</div>
