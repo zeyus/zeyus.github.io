@@ -34,16 +34,20 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         { text: '\n', type: 'output' },
     ]);
     let currentInput = $state('');
+    let currentPort: number | null = $state(null);
     let serialMode = $state(false);
     let inputElementValue = '';
     let terminalDiv: HTMLDivElement;
+    let serialIO = $state('');
+    let serailReadUnsub: () => void | undefined;
+    let serailWriteUnsub: () => void | undefined;
     
     // For handling input
     function handleInput(e: KeyboardEvent) {
         e.preventDefault();
         const touchdevice = document.getElementById('touchinput') as HTMLTextAreaElement;
         if (serialMode) {
-            handleSerialKey(e.key);
+            handleSerialKey(e);
             return;
         }
         if (e.key === 'Enter') {
@@ -92,13 +96,32 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
 
     }
 
-    function handleSerialKey(key: string) {
+    function handleSerialKey(e: KeyboardEvent) {
         // Handle serial input
-        serialTerminal.serialOutput.set(key);
+        const key = e.key;
+        let transformedKey: string;
+        switch (key) {
+            case 'Enter':
+                transformedKey = '\n';
+                break;
+            case 'Escape':
+                if (currentPort !== null) {
+                    serialTerminal.disconnect(currentPort);
+                }
+                return;
+            default:
+                transformedKey = key;
+                break;
+        }
+        serialTerminal.serialOutput.set(transformedKey);
+    }
+
+    function serialRequest(data: string) {
+        serialIO += data;
     }
 
     function serialResponse(data: string) {
-        lines = [...lines, { text: data, type: 'serial' }];
+        serialIO += data;
     }
     
     function handleCommand(input: string) {
@@ -166,6 +189,11 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                         const parity = args[6];
                         const flowControl = args[7];
                         lines = [...lines, { text: `Opening serial port ${port}...`, type: 'serial' }];
+                        serialMode = true;
+                        currentPort = port;
+                        serialIO = '';
+                        serailReadUnsub = serialTerminal.serialInput.subscribe(serialResponse);
+                        serailWriteUnsub = serialTerminal.serialOutput.subscribe(serialRequest);
                         serialTerminal.connect(port, {
                             baudRate: baudRate,
                             dataBits: dataBits,
@@ -173,15 +201,19 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                             parity: parity as ParityType,
                             flowControl: flowControl as FlowControlType
                         }).then((sp) => {
-                            serialMode = true;
-                            lines = [...lines, { text: `Opened serial port ${port}`, type: 'serial' }];
+                            lines = [...lines, { text: `Opened serial port ${port}, press ESCAPE to disconnect.`, type: 'serial' }];
                             sp.ondisconnect = () => {
+                                lines = [...lines, { text: serialIO, type: 'serial' }];
                                 lines = [...lines, { text: `Serial port ${port} disconnected`, type: 'serial' }];
+                                serialIO = '';
                                 serialMode = false;
+                                currentPort = null;
                             };
-                            serialTerminal.serialInput.subscribe(serialResponse);
                         }).catch((err) => {
+                            serialMode = false;
                             lines = [...lines, { text: `Error opening serial port ${port}: ${err}`, type: 'error' }];
+                            serailReadUnsub?.();
+                            serailWriteUnsub?.();
                         })
 
                         break;
@@ -192,12 +224,12 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                         }
                         const closeport = args[2];
                         lines = [...lines, { text: `Closing serial port ${closeport}...`, type: 'serial' }];
-                        serialTerminal.getPorts().then((ports) => {
-                            if (ports.includes(closeport)) {
-                                lines = [...lines, { text: `Closed serial port ${closeport}`, type: 'ouserialtput' }];
-                            } else {
-                                lines = [...lines, { text: `Serial port ${closeport} not found`, type: 'error' }];
-                            }
+                        serailReadUnsub?.();
+                        serailWriteUnsub?.();
+                        serialTerminal.disconnect(parseInt(closeport)).then(() => {
+                            lines = [...lines, { text: `Closed serial port ${closeport}`, type: 'serial' }];
+                        }).catch((err) => {
+                            lines = [...lines, { text: `Error closing serial port ${closeport}: ${err}`, type: 'error' }];
                         });
                         break;
                     default:
@@ -224,15 +256,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     // For typing out the intro
     const intro = "echo 👋\\x1b[31mHello\\x1b[0m👋\\n🌍\\x1b[32mWorld\\x1b[0m🌍"
     typeInput(intro);
-    let devices = $state<USBDevice[]>([]);
     let ports = $state<SerialPort[]>([]);
-    
-    const updateDevices = async () => {
-        serialTerminal.requestDevice({filters:[]}).then(function(device){
-            console.log(device);
-        });
-        devices = await serialTerminal.getDevices();
-    }
 
     const updatePorts = async () => {
         await serialTerminal.requestPort({filters:[]}).then(function(port){
@@ -240,13 +264,6 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         });
         ports = await serialTerminal.getPorts();
     }
-
-    onMount(() => {
-        
-    });
-
-    $inspect(ports);
-    $inspect(devices);
     
 </script>
 <style>
@@ -345,29 +362,16 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
             oninput={handleVirtualInput}
             name="mobileinput"
             id="touchinput"></textarea>
-        <pre class="input">{currentInput}</pre><span class="cursor"></span>
+        {#if serialMode}
+            <pre class="input">{serialIO}</pre><span class="cursor"></span>
+        {:else}
+            <pre class="input">{currentInput}</pre><span class="cursor"></span>
+        {/if}
     </div>
 </div>
 <svelte:window
     on:keydown={handleInput}
 />
 <div>
-    <button type="button" onclick={updateDevices}>Devices</button>
-    <ul>
-        {#each devices as device}
-            <li>{device.productName}</li>
-        {/each}
-    </ul>
     <button type="button" onclick={updatePorts}>Ports</button>
-    <ul>
-        {#each ports as port}
-            <li>{port.open({
-                baudRate: 9600,
-                dataBits: 8,
-                stopBits: 1,
-                parity: "none",
-                flowControl: "none"
-            })}</li>
-        {/each}
-    </ul>
 </div>

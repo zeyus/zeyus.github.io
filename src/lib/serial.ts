@@ -3,7 +3,7 @@
  * USB Serial Port communication for the browser
  */
 
-import { writable, type Writable } from "svelte/store";
+import { writable, type Unsubscriber, type Writable } from "svelte/store";
 
 class DummyUSB {
     
@@ -72,6 +72,8 @@ export class SerialTerminal {
     private ports: SerialPort[];
     private devices: USBDevice[];
     private connected: boolean;
+    private writer: Unsubscriber | undefined;
+    private reader: WritableStream<Uint8Array<ArrayBufferLike>> | undefined;
     serialInput: Writable<string>;
     serialOutput: Writable<string>;
 
@@ -85,6 +87,7 @@ export class SerialTerminal {
         this.serialOutput = writable("");
         this.getDevices();
         this.getPorts();
+        
     }
 
 
@@ -122,44 +125,58 @@ export class SerialTerminal {
             ...defaultPortOptions,
             ...options,
         };
-        try {
-            const reader = port.readable?.getReader();
-            if (reader) {
-                await reader.cancel();
-                reader.releaseLock();
-            }
 
-            const writer = port.writable?.getWriter();
-            if (writer) {
-                await writer.abort();
-                writer.releaseLock();
-            }
-            await port.close();
+        
+        try {
+            await port.open(options);
         } catch (e) {
             console.error(e);
+            // it may be already open
         }
-        await port.open(options);
+
         this.connected = true;
+        
 
-        port.readable?.pipeTo(new WritableStream({
-            write: (chunk) => {
-                const decoder = new TextDecoder();
-                const text = decoder.decode(chunk);
-                this.serialInput.set(text);
+        // setup reader
+        const qStrat: QueuingStrategy = new ByteLengthQueuingStrategy({ highWaterMark: 1}); // this may need to change
+        this.reader = new WritableStream<Uint8Array<ArrayBufferLike>>(
+            {
+                write: (chunk) => {
+                    return new Promise((resolve, reject) => {
+                        const decoder = new TextDecoder();
+                        const value = decoder.decode(chunk);
+                        this.serialInput.set(value);
+                        resolve();
+                    });
+                },
+                close: () => {
+                    console.log("reader closed");
+                },
+                abort: (reason) => {
+                    console.error(reason);
+                },
             },
-        }));
+            qStrat
+        )
+        await port.readable?.pipeTo(this.reader);
 
-        this.serialOutput.subscribe(async (value) => {
+        const writer = port.writable?.getWriter();
+        console.log(writer);
+        this.writer = this.serialOutput.subscribe(async (value) => {
+            console.log("write");
+            console.log(value);
             const encoder = new TextEncoder();
             const data = encoder.encode(value);
-            const writer = port.writable?.getWriter();
-            if (writer) {
-                await writer.write(data);
-                writer.releaseLock();
-            }
-            
+            writer?.ready.then(() => {
+                writer?.write(data);
+            });
+        }, () => {
+            writer?.ready.then(() => {
+                writer?.releaseLock();
+                writer?.close();
+            });
         });
-        
+
         return port;
     }
 
@@ -172,13 +189,38 @@ export class SerialTerminal {
         }
         const port = this.ports[portIdx];
         this.connected = false;
+        try {
+            if(port.readable?.locked) {
+                const reader = this.reader?.getWriter();
+                reader?.ready.then(() => {
+                    reader?.releaseLock();
+                    reader?.close();
+                });
+                
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        try {
+            port.writable?.getWriter().releaseLock();
+        } catch (e) {
+            console.error(e);
+        }
+        port.writable?.close();
+
         await port.close();
     }
 
     // destructor
     destroy = () => {
+        this.reader?.close();
+        this.writer?.();
         this.ports.forEach((port) => {
-            port.close();
+            try {
+                port.close();
+            } catch (e) {
+                console.error(e);
+            }
         });
     }
 }
