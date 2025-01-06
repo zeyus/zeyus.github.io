@@ -1,8 +1,7 @@
 <script lang="ts">
     import { AnsiUp } from 'ansi_up';
-    import { onMount } from 'svelte';
-    import { serialTerminal } from '$lib/serial';
-	import { on } from 'svelte/events';
+    import { createSerial, getPorts, usedSerialPorts } from '$lib/serial2';
+	import { serial } from '$lib/webserial-polyfill';
 
     const ansi_up = new AnsiUp();
     const shellprompt = "anon@zeyus&gt;";
@@ -39,8 +38,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     let inputElementValue = '';
     let terminalDiv: HTMLDivElement;
     let serialIO = $state('');
-    let serailReadUnsub: () => void | undefined;
-    let serailWriteUnsub: () => void | undefined;
+    const serialTerminal = createSerial();
     
     // For handling input
     function handleInput(e: KeyboardEvent) {
@@ -96,31 +94,152 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
 
     }
 
-    function handleSerialKey(e: KeyboardEvent) {
+    async function handleSerialKey(e: KeyboardEvent) {
         // Handle serial input
         const key = e.key;
+        if (key === 'Control' || key === 'Shift' || key === 'Alt' || key === 'Meta') {
+            return;
+        }
         let transformedKey: string;
+        let hiddenChar = false;
         switch (key) {
             case 'Enter':
                 transformedKey = '\n';
                 break;
+            case 'Backspace':
+                transformedKey = '\x08';
+                break;
             case 'Escape':
                 if (currentPort !== null) {
-                    serialTerminal.disconnect(currentPort);
+                    serialMode = false;
+                    serialTerminal.close();
                 }
                 return;
             default:
-                transformedKey = key;
-                break;
+                if (e.ctrlKey) {
+                    hiddenChar = true;
+                    switch (key) {
+                        case '@':
+                            transformedKey = '\x00';
+                            break;
+                        case 'a':
+                            transformedKey = '\x01';
+                            break;
+                        case 'b':
+                            transformedKey = '\x02';
+                            break;
+                        case 'c':
+                            transformedKey = '\x03';
+                            break;
+                        case 'd':
+                            transformedKey = '\x04';
+                            break;
+                        case 'e':
+                            transformedKey = '\x05';
+                            break;
+                        case 'f':
+                            transformedKey = '\x06';
+                            break;
+                        case 'g':
+                            transformedKey = '\x07';
+                            break;
+                        case 'h':
+                            transformedKey = '\x08';
+                            break;
+                        case 'i':
+                            transformedKey = '\x09';
+                            break;
+                        case 'j':
+                            transformedKey = '\x0a';
+                            break;
+                        case 'k':
+                            transformedKey = '\x0b';
+                            break;
+                        case 'l':
+                            transformedKey = '\x0c';
+                            break;
+                        case 'm':
+                            transformedKey = '\x0d';
+                            break;
+                        case 'n':
+                            transformedKey = '\x0e';
+                            break;
+                        case 'o':
+                            transformedKey = '\x0f';
+                            break;
+                        case 'p':
+                            transformedKey = '\x10';
+                            break;
+                        case 'q':
+                            transformedKey = '\x11';
+                            break;
+                        case 'r':
+                            transformedKey = '\x12';
+                            break;
+                        case 's':
+                            transformedKey = '\x13';
+                            break;
+                        case 't':
+                            transformedKey = '\x14';
+                            break;
+                        case 'u':
+                            transformedKey = '\x15';
+                            break;
+                        case 'v':
+                            transformedKey = '\x16';
+                            break;
+                        case 'w':
+                            transformedKey = '\x17';
+                            break;
+                        case 'x':
+                            transformedKey = '\x18';
+                            break;
+                        case 'y':
+                            transformedKey = '\x19';
+                            break;
+                        case 'z':
+                            transformedKey = '\x1a';
+                            break;
+                        case '[':
+                            transformedKey = '\x1b';
+                            break;
+                        case '\\':
+                            transformedKey = '\x1c';
+                            break;
+                        case ']':
+                            transformedKey = '\x1d';
+                            break;
+                        case '^':
+                            transformedKey = '\x1e';
+                            break;
+                        case '_':
+                            transformedKey = '\x1f';
+                            break;
+                        case '?':
+                            transformedKey = '\x7f';
+                            break;
+                        default:
+                            return;
+                    }
+                
+                } else {
+                    transformedKey = key;
+                    break;
+                }
         }
-        serialTerminal.serialOutput.set(transformedKey);
+        await serialRequest(transformedKey, hiddenChar);
     }
 
-    function serialRequest(data: string) {
-        serialIO += data;
+    async function serialRequest(data: string, hidden: boolean = false) {
+        if (!hidden) {
+            serialIO += data;
+        }
+
+        serialTerminal.write(data);
     }
 
-    function serialResponse(data: string) {
+    async function serialResponse(data: string) {
+        console.log("response", data);
         serialIO += data;
     }
     
@@ -155,81 +274,84 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                 break;
             case 'serial':
                 if (args.length < 2) {
-                    lines = [...lines, { text: 'Serial commands: list, open, close', type: 'output' }];
+                    lines = [...lines, { text: 'Serial commands: list, open, close, forget', type: 'output' }];
                     break;
                 }
                 const serialcommand = args[1];
                 switch (serialcommand) {
                     case 'list':
                         lines = [...lines, { text: 'Listing serial ports...', type: 'output' }];
-                        serialTerminal.getPorts().then((ports) => {
-                            ports.forEach((port, i) => {
-                                lines = [...lines, { text: i.toString() + ': Allowed port ' + i.toString(), type: 'serial' }];
-                            });
+                        ports = usedSerialPorts();
+                        ports.forEach((_, i) => {
+                            lines = [...lines, { text: i.toString() + ': Allowed port ' + i.toString(), type: 'serial' }];
                         });
+                        if (ports.length === 0) {
+                            lines = [...lines, { text: 'No serial ports permitted, to use them from your browser please request them using "serial open ..."', type: 'serial' }];
+                        }
                         break;
                     case 'open':
-                        if (args.length < 8) {
-                            const txt = 'Usage: serial open PORT_INDEX BAUD_RATE DATA_BITS STOP_BITS PARITY FLOW_CONTROL' +
-                                '\nPORT_INDEX: The index of the port to open' +
+                        if (args.length < 7) {
+                            const txt = 'Usage: serial open BAUD_RATE DATA_BITS STOP_BITS PARITY FLOW_CONTROL' +
                                 '\nBAUD_RATE: The baud rate to use (default: 9600)' +
                                 '\nDATA_BITS: The number of data bits (default: 8)' +
                                 '\nSTOP_BITS: The number of stop bits (default: 1)' +
                                 '\nPARITY: The parity to use (default: none)' +
                                 '\nFLOW_CONTROL: The flow control to use (default: none)' +
-                                '\nExample: serial open 0 9600 8 1 none none';
+                                '\nExample: serial open 9600 8 1 none none';
 
                             lines = [...lines, { text: txt, type: 'serial' }];
                             break;
                         }
-                        const port = parseInt(args[2]);
-                        const baudRate = parseInt(args[3]);
-                        const dataBits = parseInt(args[4]);
-                        const stopBits = parseInt(args[5]);
-                        const parity = args[6];
-                        const flowControl = args[7];
-                        lines = [...lines, { text: `Opening serial port ${port}...`, type: 'serial' }];
-                        serialMode = true;
-                        currentPort = port;
-                        serialIO = '';
-                        serailReadUnsub = serialTerminal.serialInput.subscribe(serialResponse);
-                        serailWriteUnsub = serialTerminal.serialOutput.subscribe(serialRequest);
-                        serialTerminal.connect(port, {
-                            baudRate: baudRate,
-                            dataBits: dataBits,
-                            stopBits: stopBits,
-                            parity: parity as ParityType,
-                            flowControl: flowControl as FlowControlType
-                        }).then((sp) => {
-                            lines = [...lines, { text: `Opened serial port ${port}, press ESCAPE to disconnect.`, type: 'serial' }];
-                            sp.ondisconnect = () => {
-                                lines = [...lines, { text: serialIO, type: 'serial' }];
-                                lines = [...lines, { text: `Serial port ${port} disconnected`, type: 'serial' }];
-                                serialIO = '';
-                                serialMode = false;
-                                currentPort = null;
-                            };
-                        }).catch((err) => {
-                            serialMode = false;
-                            lines = [...lines, { text: `Error opening serial port ${port}: ${err}`, type: 'error' }];
-                            serailReadUnsub?.();
-                            serailWriteUnsub?.();
-                        })
+                        // const port = parseInt(args[2]);
+                        const baudRate = parseInt(args[2]);
+                        const dataBits = parseInt(args[3]);
+                        const stopBits = parseInt(args[4]);
+                        const parity = args[5];
+                        const flowControl = args[6];
+                        serialTerminal.open(baudRate).then(() => {
+                            const port = serialTerminal.port;
 
+                            if (port === null) {
+                                lines = [...lines, { text: 'Error opening serial port: No serial ports available', type: 'error' }];
+                                return;
+                            }
+                            getPorts().then(() => {
+                                ports = usedSerialPorts();
+                                currentPort = usedSerialPorts().indexOf(port);
+                            });
+
+                            lines = [...lines, { text: `Opening serial port...`, type: 'serial' }];
+                            serialMode = true;
+                            
+                            serialIO = '';
+                            serialTerminal.selectPort(port, {
+                                baudRate: baudRate,
+                                dataBits: dataBits,
+                                stopBits: stopBits,
+                                parity: parity as ParityType,
+                                flowControl: flowControl as FlowControlType
+                            }).then(() => {
+                                serialTerminal.start(serialResponse);
+                                lines = [...lines, { text: `Opened serial port, press ESCAPE to disconnect.`, type: 'serial' }];
+                            }).catch((err) => {
+                                serialMode = false;
+                                lines = [...lines, { text: `Error opening serial port: ${err}`, type: 'error' }];
+                            })
+                        }).catch((err) => {
+                            lines = [...lines, { text: `Error opening serial port: ${err}`, type: 'error' }];
+                        });
                         break;
                     case 'close':
-                        if (args.length < 3) {
-                            lines = [...lines, { text: 'Usage: serial close PORT_INDEX', type: 'serial' }];
-                            break;
-                        }
-                        const closeport = args[2];
-                        lines = [...lines, { text: `Closing serial port ${closeport}...`, type: 'serial' }];
-                        serailReadUnsub?.();
-                        serailWriteUnsub?.();
-                        serialTerminal.disconnect(parseInt(closeport)).then(() => {
-                            lines = [...lines, { text: `Closed serial port ${closeport}`, type: 'serial' }];
+                        lines = [...lines, { text: 'Closing serial port...', type: 'serial' }];
+                        serialTerminal.close();
+                        lines = [...lines, { text: 'Closed serial port', type: 'serial' }];
+                        break;
+                    case 'forget':
+                        lines = [...lines, { text: 'Forgetting serial ports...', type: 'serial' }];
+                        serialTerminal.forget().then(() => {
+                            lines = [...lines, { text: 'Forgotten serial ports', type: 'serial' }];
                         }).catch((err) => {
-                            lines = [...lines, { text: `Error closing serial port ${closeport}: ${err}`, type: 'error' }];
+                            lines = [...lines, { text: `Error forgetting serial ports: ${err}`, type: 'error' }];
                         });
                         break;
                     default:
@@ -259,10 +381,9 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     let ports = $state<SerialPort[]>([]);
 
     const updatePorts = async () => {
-        await serialTerminal.requestPort({filters:[]}).then(function(port){
-            console.log(port);
-        });
-        ports = await serialTerminal.getPorts();
+        serialTerminal.open(9600);
+        await getPorts();
+        ports = usedSerialPorts();
     }
     
 </script>
