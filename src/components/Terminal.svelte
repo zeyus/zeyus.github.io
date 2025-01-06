@@ -1,17 +1,25 @@
 <script lang="ts">
     import { AnsiUp } from 'ansi_up';
+    import { Button } from 'flowbite-svelte';
     import { createSerial, getPorts, usedSerialPorts } from '$lib/serial2';
-	import { serial } from '$lib/webserial-polyfill';
 
     const ansi_up = new AnsiUp();
     const shellprompt = "anon@zeyus&gt;";
+
+
+    
     
     type Line = {
         text: string;
         type: 'input' | 'output' | 'error' | 'serial';
     };
-    let lines: Line[] = $state([
-        { text: `            __________                                 
+    let lines: Line[] = $state([]);
+
+    function addLine(text: string, type: 'input' | 'output' | 'error' | 'serial') {
+        lines = [...lines, { text, type }];
+    }
+
+    addLine(`            __________                                 
          .'----------\`.                              
          | .--------. |                             
          | |########| |       __________              
@@ -22,16 +30,16 @@
 |      /  %%%%%%%%%%%%  \\                             | 
 |     /  %%%%%%%%%%%%%%  \\                            | 
 |     ^^^^^^^^^^^^^^^^^^^^                            | 
-+-----------------------------------------------------+`, type: 'output' },
-        { text: '\n', type: 'output' },
-        { text: `WARNING:  Unauthorized access to this system is
++-----------------------------------------------------+`, 'output');
+    addLine('\n', 'output');
+    addLine(`WARNING:  Unauthorized access to this system is
 forbidden and will be prosecuted by law. By accessing
 this system, you agree that your actions may be
-monitored if unauthorized usage is suspected.`, type: 'output' },
-        { text: '\n', type: 'output' },
-        { text: 'Type "help" for a list of commands.', type: 'output' },
-        { text: '\n', type: 'output' },
-    ]);
+monitored if unauthorized usage is suspected.`, 'output');
+    addLine('\n', 'output');
+    addLine('Type "help" for a list of commands.', 'output');
+    addLine('\n', 'output');
+
     let currentInput = $state('');
     let currentPort: number | null = $state(null);
     let serialMode = $state(false);
@@ -89,9 +97,8 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         }, delay * input.length);
     }
 
-    function handleSerial(input: string) {
-
-
+    async function handleSerial(input: string) {
+        await serialRequest(input);
     }
 
     async function handleSerialKey(e: KeyboardEvent) {
@@ -264,29 +271,29 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                         .replace(/\\v/g, '\v')
                         .replace(/\\0/g, '\0')
                         .replace(/\\x1b/g, '\x1b'));
-                lines = [...lines, { text: output, type: 'output' }];
+                addLine(output, 'output');
                 break;
             case 'clear':
                 lines = [];
                 break;
             case 'help':
-                lines = [...lines, { text: 'Commands: echo, clear, help, serial', type: 'output' }];
+                addLine('Commands: echo, clear, help, serial', 'output');
                 break;
             case 'serial':
                 if (args.length < 2) {
-                    lines = [...lines, { text: 'Serial commands: list, open, close, forget', type: 'output' }];
+                    addLine('Serial commands: list, open, close, forget', 'output');
                     break;
                 }
                 const serialcommand = args[1];
                 switch (serialcommand) {
                     case 'list':
-                        lines = [...lines, { text: 'Listing serial ports...', type: 'output' }];
+                        addLine('Listing serial ports...', 'output');
                         ports = usedSerialPorts();
                         ports.forEach((_, i) => {
-                            lines = [...lines, { text: i.toString() + ': Allowed port ' + i.toString(), type: 'serial' }];
+                            addLine('Allowed port ' + i.toString(), 'serial');
                         });
                         if (ports.length === 0) {
-                            lines = [...lines, { text: 'No serial ports permitted, to use them from your browser please request them using "serial open ..."', type: 'serial' }];
+                            addLine('No serial ports permitted, to use them from your browser please request them using "serial open ..."', 'serial');
                         }
                         break;
                     case 'open':
@@ -299,7 +306,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                                 '\nFLOW_CONTROL: The flow control to use (default: none)' +
                                 '\nExample: serial open 9600 8 1 none none';
 
-                            lines = [...lines, { text: txt, type: 'serial' }];
+                            addLine(txt, 'output');
                             break;
                         }
                         // const port = parseInt(args[2]);
@@ -312,7 +319,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                             const port = serialTerminal.port;
 
                             if (port === null) {
-                                lines = [...lines, { text: 'Error opening serial port: No serial ports available', type: 'error' }];
+                                addLine('No serial ports available', 'error');
                                 return;
                             }
                             getPorts().then(() => {
@@ -320,7 +327,7 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                                 currentPort = usedSerialPorts().indexOf(port);
                             });
 
-                            lines = [...lines, { text: `Opening serial port...`, type: 'serial' }];
+                            addLine(`Opening serial port...`, 'serial');
                             serialMode = true;
                             
                             serialIO = '';
@@ -331,36 +338,42 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
                                 parity: parity as ParityType,
                                 flowControl: flowControl as FlowControlType
                             }).then(() => {
-                                serialTerminal.start(serialResponse);
-                                lines = [...lines, { text: `Opened serial port, press ESCAPE to disconnect.`, type: 'serial' }];
+                                serialTerminal.start(serialResponse).then(() => {
+                                    serialMode = false;
+                                    addLine('Serial port closed', 'serial');
+                                }).catch((err) => {
+                                    serialMode = false;
+                                    addLine(`Error starting serial port: ${err}`, 'error');
+                                    addLine('Try refreshing the browser tab or ensuring the port is not used by another program.', 'error');
+                                });
                             }).catch((err) => {
                                 serialMode = false;
-                                lines = [...lines, { text: `Error opening serial port: ${err}`, type: 'error' }];
+                                addLine(`Error opening serial port: ${err}`, 'error');
                             })
                         }).catch((err) => {
-                            lines = [...lines, { text: `Error opening serial port: ${err}`, type: 'error' }];
+                            addLine(`Error opening serial port: ${err}`, 'error');
                         });
                         break;
                     case 'close':
-                        lines = [...lines, { text: 'Closing serial port...', type: 'serial' }];
+                        addLine('Closing serial port...', 'serial');
                         serialTerminal.close();
-                        lines = [...lines, { text: 'Closed serial port', type: 'serial' }];
+                        addLine('Closed serial port', 'serial');
                         break;
                     case 'forget':
-                        lines = [...lines, { text: 'Forgetting serial ports...', type: 'serial' }];
+                        addLine('Forgetting serial ports...', 'serial');
                         serialTerminal.forget().then(() => {
-                            lines = [...lines, { text: 'Forgotten serial ports', type: 'serial' }];
+                            addLine('Serial ports forgotten.', 'serial');
                         }).catch((err) => {
-                            lines = [...lines, { text: `Error forgetting serial ports: ${err}`, type: 'error' }];
+                            addLine(`Error forgetting serial ports: ${err}`, 'error');
                         });
                         break;
                     default:
-                        lines = [...lines, { text: `Unknown serial command: ${serialcommand}`, type: 'error' }];
+                        addLine(`Unknown serial command: ${serialcommand}`, 'error');
                         break;
                 }
                 break;
             default:
-                lines = [...lines, { text: `Unknown command: ${command}`, type: 'error' }];
+                addLine(`Unknown command: ${command}`, 'error');
                 break;
         }
     }
@@ -380,12 +393,6 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
     typeInput(intro);
     let ports = $state<SerialPort[]>([]);
 
-    const updatePorts = async () => {
-        serialTerminal.open(9600);
-        await getPorts();
-        ports = usedSerialPorts();
-    }
-    
 </script>
 <style>
     @font-face {
@@ -490,9 +497,12 @@ monitored if unauthorized usage is suspected.`, type: 'output' },
         {/if}
     </div>
 </div>
+{#if serialMode}
+    <Button name="Disconnect" on:click={() => {
+        serialMode = false;
+        serialTerminal.close();
+    }}> Disconnect</Button>
+{/if}
 <svelte:window
     on:keydown={handleInput}
 />
-<div>
-    <button type="button" onclick={updatePorts}>Ports</button>
-</div>

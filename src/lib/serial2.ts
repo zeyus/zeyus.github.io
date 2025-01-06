@@ -686,7 +686,7 @@ const WebSerial = class {
                 msg += ' (the port may be open in another program, please try refreshing the tab)';
             }
             console.error(msg);
-            return;
+            throw error;
         }
 
         while (this.port.readable && this.keepReading) {
