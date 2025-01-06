@@ -15,7 +15,10 @@
  * See the License for the specific language governing
  * permissions and limitations under the License.
  */
-'use strict';
+/*
+ * Modified by: zeyus https://github.com/zeyus
+ * Modifications licensed under the MIT licence
+ */
 
 export enum SerialPolyfillProtocol {
   UsbCdcAcm, // eslint-disable-line no-unused-vars

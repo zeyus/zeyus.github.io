@@ -9,12 +9,15 @@
     import { onMount } from 'svelte';
     import PostSidebar from "../../components/PostSidebar.svelte";
     import Bibliography from '../../components/Bibliography.svelte';
+    import { sineIn } from 'svelte/easing';
+
+    import { Footnotes } from "$lib/footnotes.ts";
 
     let { children } = $props();
 
     let gallery: VaultGallery | undefined = page.data.props.gallery;
-    let items: Footnote[] = $state([]);
-    setContext('bibItems', () => items);
+    let items: Footnotes = $state(new Footnotes());
+    setContext('bibItems', items);
     
     let index = $state(0);
     let forward = true;
@@ -33,9 +36,6 @@
     // make date human readable
     
     const dateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
-
-
-    import { sineIn } from 'svelte/easing';
 
 	let transitionParams = {
 		x: -320,

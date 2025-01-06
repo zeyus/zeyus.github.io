@@ -3,17 +3,88 @@
     import { List, Li } from 'flowbite-svelte';
 
     import { getContext } from 'svelte';
+    import { Footnotes } from "$lib/footnotes.ts";
   
-    let items: () => Footnote[] = getContext('bibItems');
+    let items: Footnotes = getContext('bibItems');
+    let { highlightClass = 'bg-primary-800/50' } = $props();
 
-    let myItems = $derived(items().filter((item) => item.url === page.url.pathname));
+    const transitionClass = ['transition', 'ease-in-out', 'duration-300', 'delay-150'];
+
+    let myItems = $derived(items.filter((item) => item.url === page.url.pathname));
+
+    function scrollToFootnote(e: MouseEvent | TouchEvent | KeyboardEvent) {
+        if (e instanceof MouseEvent) {
+            e.preventDefault();
+        } else if (e instanceof KeyboardEvent) {
+            if (e.key !== 'Enter') return;
+        }
+        const occurrence = (e.target as HTMLButtonElement)?.parentElement?.getAttribute('data-return-to');
+        const targetClass = (e.target as HTMLButtonElement).getAttribute('data-target');
+        if (!targetClass) return;
+        const els = document.getElementsByClassName(targetClass);
+        if (!els) return;
+        let el: HTMLElement | null = null;
+        for (let i = 0; i < els.length; i++) {
+            if (els[i].getAttribute('data-occurrence') === occurrence) {
+                el = els[i] as HTMLElement;
+                break;
+            }
+        }
+        if (!el) {
+            el = els[0] as HTMLElement;
+        }
+        
+        el.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center'
+        });
+        el.focus();
+        // flash the element once as well as previous sibling (or parent if none)
+        el.classList.add(...transitionClass);
+        el.classList.add(highlightClass);
+        setTimeout(() => {
+            el.classList.remove(highlightClass);
+        }, 1000);
+        setTimeout(() => {
+            el.classList.remove(...transitionClass);
+        }, 1900);
+        const container = el.closest('.footnote-ref-sup');
+        if (!container) return;
+        const prev = container.previousElementSibling;
+        if (prev && !prev.classList.contains('footnote-ref-sup')) {
+            prev.classList.add(...transitionClass);
+            prev.classList.add(highlightClass);
+            setTimeout(() => {
+                prev.classList.remove(highlightClass);
+            }, 1000);
+            setTimeout(() => {
+                prev.classList.remove(...transitionClass);
+            }, 1900);
+        } else {
+            const parent = container.parentElement;
+            if (parent) {
+                parent.classList.add(...transitionClass);
+                parent.classList.add(highlightClass);
+                setTimeout(() => {
+                    parent.classList.remove(highlightClass);
+                }, 1000);
+                setTimeout(() => {
+                    parent.classList.remove(...transitionClass);
+                }, 1900);
+            }
+        }
+
+    }
 
 </script>
 {#if myItems.length > 0}
     <List class="footnotes w-full flex flex-col mt-12" position="inside">
         {#each myItems as item, index}
-            <Li liClass="footnote text-sm list-none basis-full w-full flex">
-                <a href="#footnote-{index + 1}-ref" class="footnote-ref align-top text-xs text-primary-300 mr-1">{index + 1}</a>
+            <Li id="footnote-{index + 1}" liClass="footnote text-sm list-none basis-full w-full flex {transitionClass.join(' ')}">
+                <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="footnote-id align-top text-xs text-primary-300 mr-1"
+                 aria-label="Scroll back to reference" 
+                >{index + 1}</button>
                 {item.text}
             </Li>
         {/each}

@@ -56,6 +56,9 @@ monitored if unauthorized usage is suspected.`, 'output');
             handleSerialKey(e);
             return;
         }
+        if (!touchdevice) {
+            return;
+        }
         if (e.key === 'Enter') {
             lines = [...lines, { text: currentInput, type: 'input' }];
             handleCommand(currentInput);

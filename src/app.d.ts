@@ -23,7 +23,8 @@ declare global {
 		text: string;
 		url: string;
 		year?: number;
-
+		occurrences: number;
+		addOccurrence: () => void;
 	};
 
 	type CommonBibTeXFields = {

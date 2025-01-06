@@ -6,9 +6,7 @@
     let sidebarItems: { name: string; path: string }[] = [];
     
     for (const path in posts) {
-        
         const name = path.split('/').slice(-2)[0];
-        console.log(name);
         const cleanPath = '/_vault/' + name;
         sidebarItems.push({
             name: name,
