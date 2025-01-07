@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AnsiUp } from 'ansi_up';
 	import { Button } from 'flowbite-svelte';
-	import { createSerial, getPorts, usedSerialPorts } from '$lib/serial2';
+	import { createSerial, getPorts, usedSerialPorts, WebSerial } from '$lib/serial2';
 
 	const ansi_up = new AnsiUp();
 	const shellprompt = 'anon@zeyus&gt;';
@@ -49,7 +49,7 @@ monitored if unauthorized usage is suspected.`,
 	let inputElementValue = '';
 	let terminalDiv: HTMLDivElement;
 	let serialIO = $state('');
-	const serialTerminal = createSerial();
+	const serialTerminal = createSerial() || null;
 
 	// For handling input
 	function handleInput(e: KeyboardEvent) {
@@ -128,7 +128,7 @@ monitored if unauthorized usage is suspected.`,
 			case 'Escape':
 				if (currentPort !== null) {
 					serialMode = false;
-					serialTerminal.close();
+					serialTerminal?.close();
 				}
 				return;
 			default:
@@ -249,7 +249,7 @@ monitored if unauthorized usage is suspected.`,
 		if (!hidden) {
 			serialIO += data;
 		}
-		serialTerminal.write(data);
+		serialTerminal?.write(data);
 	}
 
 	async function serialResponse(data: string) {
@@ -297,6 +297,12 @@ monitored if unauthorized usage is suspected.`,
 				addLine('Commands: echo, clear, help, serial', 'output');
 				break;
 			case 'serial':
+                if (!serialTerminal) {
+                    addLine('Uh, uh uh! You didn\'t say the magic word!', 'error');
+                    addLine(':( Unfortunately serial not supported in this browser', 'error');
+                    addLine('You need a browser that supports Web Serial API or the USB API', 'error');
+                    break;
+                }
 				if (args.length < 2) {
 					addLine('Serial commands: list, open, close, forget', 'output');
 					break;
@@ -350,7 +356,7 @@ monitored if unauthorized usage is suspected.`,
 									currentPort = usedSerialPorts().indexOf(port);
 								});
 
-								addLine(`Opening serial port...`, 'serial');
+								addLine(`Opening serial port, to exit press Escape...`, 'serial');
 								serialMode = true;
 
 								serialIO = '';
@@ -398,6 +404,10 @@ monitored if unauthorized usage is suspected.`,
 							.forget()
 							.then(() => {
 								addLine('Serial ports forgotten.', 'serial');
+                                getPorts().then(() => {
+                                    ports = usedSerialPorts();
+                                    currentPort = null;
+                                });
 							})
 							.catch((err) => {
 								addLine(`Error forgetting serial ports: ${err}`, 'error');
@@ -482,7 +492,7 @@ monitored if unauthorized usage is suspected.`,
 		name="Disconnect"
 		on:click={() => {
 			serialMode = false;
-			serialTerminal.close();
+			serialTerminal?.close();
 		}}
 	>Disconnect</Button>
 {/if}
@@ -522,7 +532,6 @@ monitored if unauthorized usage is suspected.`,
 		line-height: 1rem;
 		min-height: 1rem;
 		white-space: pre;
-		overflow-x: auto;
 		tab-size: 4;
 	}
 	.prompt {

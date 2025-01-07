@@ -64,11 +64,16 @@ export const usedSerialPorts = function (): Array<any> {
  * Create a and return a WebSerial instance.
  */
 export const createSerial = function () {
-    return new WebSerial();
+    try {
+        return new WebSerial();
+    } catch (error: any) {
+        console.warn(error.message);
+        return null;
+    }
 }
 
 
-const WebSerial = class {
+export const WebSerial = class {
     options: SerialOptions;
     port: SerialPort | SPFillType | null;
     reader: ReadableStreamDefaultReader<Uint8Array> | null;
