@@ -1,11 +1,9 @@
 <script lang="ts">
     /**
-     * Note: this doesn't work at runtime sadly.
-     * This means that images preloaded as modules will not be able to benefit from filters, transforms etc
-     * It still provides optimized versions of the original images
+     * Note: Enhanced:img breaks everything, so back to just img
      * */
     import { page } from '$app/state';
-    import { imageToModuleDefault } from "$lib/assets";
+    import { imageToSrc } from "$lib/assets";
 
     let { 
         image,
@@ -15,16 +13,12 @@
         sizes = "",
         transform = [],
     } = $props();
-    let srcSuffix = transform.length > 0 ? "?" + transform.join("&") : "";
+    // let srcSuffix = transform.length > 0 ? "?" + transform.join("&") : "";
     // let imgSrc = imageToModuleDefault(image.src + srcSuffix, page.url.pathname, page.data.imageModules);
-    let imgSrc = imageToModuleDefault(image.src, page.url.pathname, page.data.imageModules);
+    let imgSrc = imageToSrc(image.src, page.url.pathname);
 </script>
 <figure class="{figClass}">
-    {#if sizes !== "" && false}
-        <enhanced:img src="{imgSrc}" alt="{image.alt}" class="{imgClass}" sizes="{sizes}" />
-    {:else}
-        <enhanced:img src="{imgSrc}" alt="{image.alt}" class="{imgClass}" />
-    {/if}
+    <img src="{imgSrc}" alt="{image.alt}" class="{imgClass}" />
     {#if image.title}
         <figcaption class={captionClass}>{image.title}</figcaption>
     {/if}

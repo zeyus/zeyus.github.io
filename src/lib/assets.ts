@@ -10,7 +10,7 @@
  * @returns The default export of the image module.
  * 
  */
-const assetPrefix = '/src/_assets';
+const assetPrefix = '/_assets';
 const imagePrefix = '/images';
 export const imageToSrc = (src: string, path: string) => {
     // const pathParts = path.split('/').length;
