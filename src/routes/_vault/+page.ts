@@ -5,7 +5,7 @@ export const prerender = true;
 export const load: PageLoad = () => {
     const vaultHome: VaultPageProps = {
         title: "Welcome to the vault",
-        date: "2024-12-10",
+        date: new Date('2025-01-08'),
     };
     return {
         props: vaultHome

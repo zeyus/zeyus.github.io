@@ -8,12 +8,12 @@
 	let menuItems: { name: string; path: string }[] = [];
 
 	// only get top level routes
-	const modules = import.meta.glob('../routes/*/+page.[sm][vd]*');
+	const rootPages = import.meta.glob('../routes/*/+page.svelte');
 	menuItems.push({
 		name: 'home',
 		path: '/'
 	});
-	for (const path in modules) {
+	for (const path in rootPages) {
 		const name = path.split('/').slice(-2)[0];
 		const cleanPath = '/' + (name === 'routes' ? '' : name);
 		menuItems.push({
@@ -26,14 +26,11 @@
         hideNav = !hideNav;
     };
 	const onMenuItemClick = () => {
-	
 		hideNav = true;
-		
 	};
 
 	let slideParams = { delay: 50, duration: 150, easing: sineIn };
 
-	let hidden = $derived(hideNav);
 	// in this case the active url should only be the first part of the url (or  / if it's the home page)
 	let activeUrl = $derived('/' + page.url.pathname.split('/')[1] || '');
 

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
-    import { setContext } from 'svelte';
+    import type { LayoutData } from './$types';
+    import { setContext, type Snippet } from 'svelte';
 
     import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
     import type { HTMLImgAttributes } from 'svelte/elements';
@@ -13,9 +14,8 @@
 
     import { Footnotes } from "$lib/footnotes.ts";
 
-    let { children } = $props();
+    let { data, children }: { data: LayoutData, children: Snippet } = $props();
 
-    let gallery: VaultGallery | undefined = page.data.props.gallery;
     let items: Footnotes = $state(new Footnotes());
     setContext('bibItems', items);
     
@@ -26,10 +26,15 @@
     if (page.data.props.gallery && page.data.props.gallery.position) {
         gallery_position = page.data.props.gallery.position;
         images = page.data.props.gallery.images;
-    } else if (gallery) {
-        gallery_position = "start";
+    } else if (page.data.props.gallery) {
+        // gallery_position = "start";
         images = page.data.props.gallery.images;
+    } else {
+        gallery_position = "none";
+        images = [];
+        index = 0;
     }
+    setContext("images", () => images);
 
     t.set("_vault: " + page.data.props.title);
 
@@ -120,10 +125,10 @@
 
     $effect(() => {
         // get alt text based on index
+        if (!images.length) return;
         const altText = images[index].alt || "";
         // set the alt text to the p element
         if (pEl) pEl.textContent = altText;
-        
     });
 
     const toggleSide = () => {
@@ -157,7 +162,7 @@
         <div class="fixed flex w-64 items-right">
             <CloseButton on:click={() => (drawerHidden = true)} class="right-0 dark:text-white xl:hidden" />
         </div>
-        <PostSidebar />
+        <PostSidebar sidebarItems={data.entries} />
     </div>
 </Drawer>
 <div class="flex px-4 mx-auto w-full">

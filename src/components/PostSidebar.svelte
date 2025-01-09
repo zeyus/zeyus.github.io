@@ -1,18 +1,32 @@
 <script lang="ts">
     import { page } from '$app/state';
-    import { Sidebar, SidebarBrand, SidebarCta, SidebarDropdownItem, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
+    import { Sidebar, SidebarBrand, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
     const posts = import.meta.glob('../routes/_vault/*/**/+page.svelte');
 
-    let sidebarItems: { name: string; path: string }[] = [];
+    let { sidebarItems }: { sidebarItems: App.VaultEntries[] } = $props();
     
-    for (const path in posts) {
-        const name = path.split('/').slice(-2)[0];
-        const cleanPath = '/_vault/' + name;
-        sidebarItems.push({
-            name: name,
-            path: cleanPath
-		});
-    }
+    const nth = (d: number) => {
+        const dString = String(d);
+        const last = +dString.slice(-2);
+        if (last > 3 && last < 21) return 'th';
+        switch (last % 10) {
+            case 1:  return "st";
+            case 2:  return "nd";
+            case 3:  return "rd";
+            default: return "th";
+        }
+    };
+
+    // sort sidebar items by year,month, day descending
+    sidebarItems.sort((a, b) => {
+        if (a.props.date.getFullYear() !== b.props.date.getFullYear()) {
+            return a.props.date.getFullYear() - b.props.date.getFullYear();
+        } else if (a.props.date.getMonth() !== b.props.date.getMonth()) {
+            return a.props.date.getMonth() - b.props.date.getMonth();
+        } else {
+            return a.props.date.getDay() - b.props.date.getDay();
+        }
+    });
 
     const site = {
         name: '_vault: posts',
@@ -22,14 +36,42 @@
 
     const activeClass = 'flex items-center p-2 text-base font-normal text-primary-900 bg-primary-200 dark:bg-primary-700 rounded-lg dark:text-white hover:bg-primary-100 dark:hover:bg-gray-700';
     const nonActiveClass = 'flex items-center p-2 text-base font-normal text-green-900 rounded-lg dark:text-white hover:bg-green-100 dark:hover:bg-gray-700';
+    let currentYear: number = $state(0);
+    let currentMonth: number = $state(0);
+    let setYear = (year: number) => {
+        currentYear = year;
+    }
+    let setMonth = (month: number) => {
+        currentMonth = month;
+    }
+
 </script>
-<Sidebar activeUrl={page.url.pathname} {activeClass} {nonActiveClass} asideClass="w-64">
-    <SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
-        <SidebarGroup>
-            <SidebarBrand {site}>zeyus dot com</SidebarBrand>
-            {#each sidebarItems as item}
-                <SidebarItem href={item.path} label={item.name}></SidebarItem>
-            {/each}
-        </SidebarGroup>
-    </SidebarWrapper>
-</Sidebar>
+<div id="postSidebar">
+    <Sidebar activeUrl={page.url.pathname} {activeClass} {nonActiveClass} asideClass="w-64">
+        <SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
+            <SidebarGroup>
+                <SidebarBrand {site} spanClass="font-bold text-xl">zeyus dot com</SidebarBrand>
+                {#each sidebarItems as item}
+                    {#if currentYear !== item.props.date.getFullYear() || currentMonth !== item.props.date.getMonth()}
+                        <SidebarItem spanClass="text-slate-400 font-bold" activeClass="flex flex-row-reverse" nonActiveClass="flex flex-row-reverse" href={item.path} label={item.props.date.toLocaleString('default', { month: 'short' }) + " '" + item.props.date.toLocaleString('default', { year: '2-digit' })} />
+                        {setYear(item.props.date.getFullYear())}
+                        {setMonth(currentMonth = item.props.date.getMonth())}
+                    {/if}
+                    <SidebarItem spanClass="basis-4/5" activeClass="current-post flex flex-row text-primary-500 ps-3" nonActiveClass="flex flex-row ps-3" href={item.path} label={item.props.short_title || item.props.title}>
+                        <span class="self-center font-bold text-right basis-1/5 pe-3 justify-self-end text-xs text-slate-400" slot="subtext">{item.props.date.toLocaleString(
+                            'default',
+                            {
+                                day: 'numeric'
+                            }
+                        )}<sup>{nth(item.props.date.getDate())}</sup></span>
+                    </SidebarItem>
+                {/each}
+            </SidebarGroup>
+        </SidebarWrapper>
+    </Sidebar>
+</div>
+<style>
+    #postSidebar :global(.current-post::before) {
+        content: '> ';
+    }
+</style>

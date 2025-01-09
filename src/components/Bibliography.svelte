@@ -79,7 +79,10 @@
 
 </script>
 {#if myItems.length > 0}
-    <List class="footnotes w-full flex flex-col mt-12" position="inside">
+    <div class="w-100 mt-12 mb-4">
+        <div class="w-64 border-t border-slate-400 -ml-4"></div>
+    </div>
+    <List class="w-full flex flex-col" position="inside">
         {#each myItems as item, index}
             <Li id="footnote-{index + 1}" liClass="footnote text-sm list-none basis-full w-full flex {transitionClass.join(' ')}">
                 <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="footnote-id align-top text-xs text-primary-300 mr-1"

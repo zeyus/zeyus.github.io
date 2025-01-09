@@ -4,7 +4,15 @@ import type { HTMLImgAttributes } from 'svelte/elements';
 
 declare global {
 	namespace App {
-		
+		interface VaultPageModule {
+			load: () => Promise<{
+				props: VaultPageProps;
+			}>;
+		}
+		interface VaultEntries {
+			path: string;
+			props: VaultPageProps;
+		}
 	};
 	interface VaultGallery {
 		id?: string;
@@ -14,7 +22,8 @@ declare global {
 	};
 	interface VaultPageProps {
 		title: string;
-		date: string;
+		date: Date;
+		short_title?: string;
 		feature_image?: HTMLImgAttributes;
 		gallery?: VaultGallery;
 	};

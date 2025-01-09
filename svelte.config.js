@@ -11,6 +11,10 @@ const config = {
 	],
 
 	kit: {
+		alias: {
+			$components: './src/components',
+			$assets: './src/_assets'
+		},
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
