@@ -1,0 +1,1 @@
+import{w as c}from"./runtime.BzU52yKJ.mjs";import{w as l}from"./index.oYxekxRb.mjs";function u(r,t){var a;var e=(a=r.$$events)==null?void 0:a[t.type],s=c(e)?e.slice():e==null?[]:[e];for(var o of s)o.call(this,t)}function i(){const{subscribe:r,set:t,update:e}=l("");return{subscribe:r,set:s=>{t(s)},clear:()=>{t("zeyus dot com")}}}const f=i();export{u as b,f as t};

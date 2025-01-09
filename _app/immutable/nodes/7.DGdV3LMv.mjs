@@ -1,1 +1,0 @@
-import{default as n}from"../chunks/_page.DzJLTZoy.mjs";const e=!0,t=()=>({props:{title:"Welcome to the vault",date:new Date("2025-01-08")}}),r=Object.freeze(Object.defineProperty({__proto__:null,load:t,prerender:e},Symbol.toStringTag,{value:"Module"}));export{n as component,r as universal};
