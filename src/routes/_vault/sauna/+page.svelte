@@ -35,7 +35,8 @@
     <EnhancedImg image={images[4]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
 </div>
 <P>
-    After the materials arrived, I dug 6 foot pads and filled them with concrete to make a nice base for the sauna to sit on, ensuring that it was as level as possible. When it was cured, I started
+    After the materials arrived, I<Reference text="I will use 'I' throughout this article, but some friends, one in particular lent a hand throughout the process, as well as my partner" /> 
+    dug 6 foot pads and filled them with concrete to make a nice base for the sauna to sit on, ensuring that it was as level as possible. When it was cured, I started
     on the floor framing, using double 50x150mm beams to support the floor and the walls around the edges and the bearers were 50x150mm, and the same for the noggins.
 </P>
 <div class="flex flex-row flex-wrap items-start">
