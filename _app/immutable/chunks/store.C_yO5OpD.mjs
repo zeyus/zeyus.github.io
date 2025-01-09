@@ -1,1 +1,0 @@
-import{w as r}from"./runtime.BzU52yKJ.mjs";import{w as a}from"./index.oYxekxRb.mjs";function p(o,t){var s;var e=(s=o.$$events)==null?void 0:s[t.type],i=r(e)?e.slice():e==null?[]:[e];for(var l of i)l.call(this,t)}const c="/images/zeyusdotcom@3x.png",m="zeyus dot com official website";let u=a("zeyus dot com"),b=a(c),d=a(m);export{c as a,p as b,m as d,b as o,d as p,u as t};
