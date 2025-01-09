@@ -2,7 +2,7 @@
     import { page } from '$app/state';
     import type { LayoutData } from './$types';
     import { setContext, type Snippet } from 'svelte';
-
+    import { SvelteSet } from 'svelte/reactivity';
     import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
     import type { HTMLImgAttributes } from 'svelte/elements';
     import { ChevronRightOutline } from "flowbite-svelte-icons";
@@ -15,12 +15,12 @@
 
     import EnhancedImg from '$components/EnhancedImg.svelte';
 
-    import { Footnotes } from "$lib/footnotes.ts";
+    import { createFootnotesContext, type FootnotesContext } from "$lib/footnotes.svelte";
 
     let { data = $bindable(), children }: { data: LayoutData, children: Snippet } = $props();
 
-    let items: Footnotes = $state(new Footnotes());
-    setContext('bibItems', items);
+    let items = new SvelteSet<Footnote>();
+    setContext<FootnotesContext>('footnotes', createFootnotesContext(items) );
     
     let index = $state(0);
     let forward = true;

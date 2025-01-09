@@ -1,11 +1,11 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { getContext } from 'svelte';
-    import { Footnotes } from "$lib/footnotes.ts";
+    import type { FootnotesContext } from "$lib/footnotes.svelte";
 
     let {
             item = $bindable(undefined),
-            text = undefined,
+            text = "Invalid item, either an item or text must be provided",
             year = undefined,
             highlightClass = 'bg-primary-800/50'
         }:
@@ -16,26 +16,25 @@
             highlightClass?: string
          } = $props();
     
-    let items: Footnotes = getContext('bibItems');
+    let footnotes: FootnotesContext = getContext<FootnotesContext>('footnotes');
     // is the item in items?
-    if (item && !items.includes(item)) {
+    if (item && !footnotes.hasFootnote(item)) {
         item.occurrences = 1;
-        items.addFootnote(item);
+        footnotes.addFootnote(item);
     } else if (text) {
         // look for the item in items
-        const found = items.find((i) => i.text === text);
-        if (found) {
-            item = found;
-            item?.addOccurrence(); 
+        const found = footnotes.findFootnote(text, () => page.url.pathname);
+        if (found()) {
+            item = found();
+            if (item) item.occurrences++; 
         } else {
-            const url = page.url.pathname;
-            item = { text, url, year, occurrences: 1, addOccurrence: () => {if(item) item.occurrences++;} };
-            items.addFootnote(item);
+            let url = page.url.pathname;
+            item = { text, url, year, occurrences: 1 };
+            footnotes.addFootnote(item);
         }
     }
 
-    /*@ts-ignore*/
-    const index = items.indexOf(item);
+    const index = footnotes.indexOf(item);
     const occurrence = item?.occurrences || 1;
     const scrollToFootnote = (e: MouseEvent | TouchEvent | KeyboardEvent) => {
         if (e instanceof KeyboardEvent) {
@@ -65,5 +64,5 @@
 
 </script>
 <sup class="footnote-ref-sup">
-    <a ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} href="#footnote-{index + 1}" data-occurrence={occurrence} class="footnote-ref footnote-{index + 1}-ref align-top text-xs text-primary-300">{index + 1}</a>
+    <a ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} href="#footnote-{index() + 1}" data-occurrence={occurrence} class="footnote-ref footnote-{index() + 1}-ref align-top text-xs text-primary-300">{index() + 1}</a>
 </sup>

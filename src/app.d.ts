@@ -34,7 +34,6 @@ declare global {
 		url: string;
 		year?: number;
 		occurrences: number;
-		addOccurrence: () => void;
 	};
 
 	type CommonBibTeXFields = {
