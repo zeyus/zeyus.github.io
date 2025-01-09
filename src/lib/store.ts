@@ -1,17 +1,11 @@
 import { writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
 
-function createTitle() {
-	const {subscribe, set, update} = writable('');
-	
-	return {
-		subscribe,
-		set: (value: string) => {
-			set(value)
-		},
-		clear: () => {
-			set('zeyus dot com');
-		}
-	}
-}
+// change to global reactivity
 
-export const title = createTitle();
+export const defaultImage = '/images/zeyusdotcom@3x.png';
+export const defaultDescription = 'zeyus dot com official website';
+
+export let title: Writable<string> = writable('zeyus dot com');
+export let ogImage: Writable<string> = writable(defaultImage);
+export let pageDescription: Writable<string> = writable(defaultDescription);

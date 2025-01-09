@@ -6,7 +6,8 @@
     import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
     import type { HTMLImgAttributes } from 'svelte/elements';
     import { ChevronRightOutline } from "flowbite-svelte-icons";
-    import { title as t } from "$lib/store.ts";
+    import { imageToSrc } from '$lib/assets';
+    import { title as t, pageDescription, ogImage, defaultDescription, defaultImage } from "$lib/store.ts";
     import { onMount } from 'svelte';
     import PostSidebar from "$components/PostSidebar.svelte";
     import Bibliography from '$components/Bibliography.svelte';
@@ -16,7 +17,7 @@
 
     import { Footnotes } from "$lib/footnotes.ts";
 
-    let { data, children }: { data: LayoutData, children: Snippet } = $props();
+    let { data = $bindable(), children }: { data: LayoutData, children: Snippet } = $props();
 
     let items: Footnotes = $state(new Footnotes());
     setContext('bibItems', items);
@@ -32,10 +33,24 @@
         images = [];
         index = 0;
     }
-    setContext("images", () => images);
+    // setContext("images", () => images);
 
-    t.set("_vault: " + page.data.props.title);
+    $effect(() => {
+        //@TODO: change to global state not stores
+        t.set("_vault: " + page.data.props.title);
+        if (page.data.props.excerpt) {
+            pageDescription.set(page.data.props.excerpt);
+        } else {
+            pageDescription.set(defaultDescription);
+        }
 
+        if (page.data.props.feature_image && page.data.props.feature_image.src) {
+            ogImage.set(imageToSrc(page.data.props.feature_image.src, page.url.pathname));
+        } else {
+            ogImage.set(defaultImage);
+        }
+    });
+    
     // make date human readable
     
     const dateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };

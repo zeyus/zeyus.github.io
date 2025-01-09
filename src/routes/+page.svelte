@@ -1,8 +1,10 @@
 <script lang="ts">
     // @ts-ignore
     import { P, List, Li, A } from "flowbite-svelte";
-    import { title } from "$lib/store.ts";
+    import { title, pageDescription, ogImage, defaultDescription, defaultImage } from "$lib/store.ts";
     title.set('home');
+    pageDescription.set(defaultDescription);
+    ogImage.set(defaultImage);
 </script>
 
 <P class="dark:text-gray-200 mb-0 mt-4">Hi, I'm zeyus, the epitome of a generalist. I left industry to study <A href="https://en.wikipedia.org/wiki/Cognitive_science">cognitive science</A> and now I'm working on my PhD so I can specialize in generalism.</P>

@@ -1,6 +1,8 @@
 <script lang="ts">
-    import { title } from "$lib/store.ts";
+    import { title, pageDescription, ogImage, defaultImage } from "$lib/store.ts";
     title.set('projects');
+    ogImage.set(defaultImage);
+    pageDescription.set('A selection of projects that I have worked on, from apps to research, all open source!');
 
     import { ButtonGroup, Button, Card, P, A } from "flowbite-svelte";
     import { GithubSolid } from 'flowbite-svelte-icons';
