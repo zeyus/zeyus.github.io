@@ -12,7 +12,7 @@
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"gh-pages": "pnpm run build && pnpm exec gh-pages --nojekyll -d build -t true"
+		"gh-pages": "pnpm run build && pnpm exec gh-pages --nojekyll -d build -t"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.2.0",
