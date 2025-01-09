@@ -23,6 +23,7 @@ declare global {
 	interface VaultPageProps {
 		title: string;
 		date: Date;
+		excerpt?: string;
 		short_title?: string;
 		feature_image?: HTMLImgAttributes;
 		gallery?: VaultGallery;

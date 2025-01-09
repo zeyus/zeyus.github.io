@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { HTMLImgAttributes } from 'svelte/elements';
+    import type { HTMLImgAttributes } from 'svelte/elements'
+    import { page } from '$app/state';
     import { P } from 'flowbite-svelte';
-    import { getContext } from 'svelte';
     import Reference from '$components/Reference.svelte';
     import EnhancedImg from '$components/EnhancedImg.svelte';
 
-    let images = getContext<() => HTMLImgAttributes[]>('images')();
+    let images = page.data.props.gallery.images as HTMLImgAttributes[];
 </script>
 
 <P>

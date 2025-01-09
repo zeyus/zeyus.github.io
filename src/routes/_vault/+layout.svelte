@@ -23,16 +23,12 @@
     
     let index = $state(0);
     let forward = true;
-    let gallery_position: string = $state("none");
     let images: HTMLImgAttributes[] = $state([]);
     if (page.data.props.gallery && page.data.props.gallery.position) {
-        gallery_position = page.data.props.gallery.position;
         images = page.data.props.gallery.images;
     } else if (page.data.props.gallery) {
-        // gallery_position = "start";
         images = page.data.props.gallery.images;
     } else {
-        gallery_position = "none";
         images = [];
         index = 0;
     }
