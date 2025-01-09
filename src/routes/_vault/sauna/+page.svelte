@@ -138,7 +138,7 @@
 </P>
 <figure class="h-svh">
     <video controls muted class="mx-auto h-5/6">
-        <source src="/src/_assets/media/_vault/sauna/sauna_nosound.mp4" type="video/mp4" />
+        <source src="/_assets/media/_vault/sauna/sauna_nosound.mp4" type="video/mp4" />
         Your browser does not support the video tag.
     </video>
     <figcaption class="h-1/6 mt-2 text-sm text-center text-gray-500 dark:text-gray-400">The sauna in action 🔥🔥🤘</figcaption>
