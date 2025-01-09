@@ -13,7 +13,9 @@ const config = {
 	kit: {
 		alias: {
 			$components: './src/components',
-			$assets: './src/_assets'
+			$assets: './src/_assets',
+			$images: './src/_assets/images',
+			$media: './src/_assets/media',
 		},
 		adapter: adapter({
 			pages: 'build',

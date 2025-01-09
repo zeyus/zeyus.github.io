@@ -84,8 +84,8 @@
     </div>
     <List class="w-full flex flex-col" position="inside">
         {#each myItems as item, index}
-            <Li id="footnote-{index + 1}" liClass="footnote text-sm list-none basis-full w-full flex {transitionClass.join(' ')}">
-                <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="footnote-id align-top text-xs text-primary-300 mr-1"
+            <Li id="footnote-{index + 1}" liClass="mb-2 footnote text-sm list-none basis-full w-full flex {transitionClass.join(' ')}">
+                <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="max-h-max footnote-id object-top align-top text-xs text-primary-300 mr-1"
                  aria-label="Scroll back to reference" 
                 >{index + 1}</button>
                 {item.text}

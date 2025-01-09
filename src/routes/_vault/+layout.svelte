@@ -8,9 +8,11 @@
     import { ChevronRightOutline } from "flowbite-svelte-icons";
     import { title as t } from "$lib/store.ts";
     import { onMount } from 'svelte';
-    import PostSidebar from "../../components/PostSidebar.svelte";
-    import Bibliography from '../../components/Bibliography.svelte';
+    import PostSidebar from "$components/PostSidebar.svelte";
+    import Bibliography from '$components/Bibliography.svelte';
     import { sineIn } from 'svelte/easing';
+
+    import EnhancedImg from '$components/EnhancedImg.svelte';
 
     import { Footnotes } from "$lib/footnotes.ts";
 
@@ -169,7 +171,7 @@
     <article class="xl:ml-72 w-full mx-auto">
         <Heading>{ page.data.props.title }</Heading>
         {#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
-            <Img src={page.data.props.feature_image.src} caption={page.data.props.feature_image.alt} alt={page.data.props.feature_image.alt} imgClass="rounded-lg object-cover w-full" size="max-w-full w-full h-96" figClass="max-w-full" />
+            <EnhancedImg sizes="min(1280, 100vw)" transform={["h=384", "fit=cover"]} image={page.data.props.feature_image} imgClass="rounded-lg object-cover max-w-full w-full h-96" />
         {/if}
 
         <P class="date">Published on: { new Date(page.data.props.date).toLocaleDateString(undefined, dateOptions) }</P>

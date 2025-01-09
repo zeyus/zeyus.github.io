@@ -1,13 +1,14 @@
-<script>
+<script lang="ts">
     import "../app.postcss";
-    // @ts-ignore
+    // import { page } from '$app/state';
     import { title } from "$lib/store.ts";
-    import NavMenu from "../components/NavMenu.svelte";
-    import BreadcrumbTrail from "../components/BreadcrumbTrail.svelte";
+    import NavMenu from "$components/NavMenu.svelte";
+    import BreadcrumbTrail from "$components/BreadcrumbTrail.svelte";
     import { Footer, FooterCopyright, FooterLinkGroup, FooterIcon } from "flowbite-svelte";
     import { GithubSolid, YoutubeSolid, HeadphonesOutline, CodeOutline, UsersGroupOutline, VideoCameraOutline } from 'flowbite-svelte-icons';
-    // get current year
+
     let year = new Date().getFullYear();
+
 </script>
 <svelte:head>
 	<title>{$title} - zeyus dot com</title>

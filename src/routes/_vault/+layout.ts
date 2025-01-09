@@ -16,6 +16,7 @@ export const load: LayoutLoad = async () => {
         });
 
     }
+
     return {
         entries: vaultEntries
     } 
