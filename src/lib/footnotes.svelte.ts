@@ -11,10 +11,7 @@ export interface FootnotesContext {
 }
 
 
-export const createFootnotesContext = (items?: Set<Footnote>): FootnotesContext => {
-    if (typeof items === 'undefined') {
-        items = new Set<Footnote>();
-    }
+export const createFootnotesContext = (items: Set<Footnote> | undefined = new Set<Footnote>()): FootnotesContext => {
     return {
         addFootnote: (fn: Footnote): void => {
             $effect(() => {
