@@ -18,7 +18,13 @@
 	});
 	for (const path in rootPages) {
 		const name = path.split('/').slice(-2)[0];
-		const cleanPath = '/' + (name === 'routes' ? '' : name + '/');
+		let cleanPath = (name === 'routes' ? '' : name);
+		if (!cleanPath.startsWith('/')) {
+			cleanPath = '/' + cleanPath;
+		}
+		if (!cleanPath.endsWith('/')) {
+			cleanPath += '/';
+		}
 		menuItems.push({
 			name: name,
 			path: cleanPath
@@ -35,7 +41,7 @@
 	let slideParams = { delay: 50, duration: 150, easing: sineIn };
 
 	// in this case the active url should only be the first part of the url (or  / if it's the home page)
-	let activeUrl = $derived('/' + page.url.pathname.split('/')[1] || '');
+	let activeUrl = $derived((page.url.pathname.length > 1 && page.url.pathname.split('/').length > 1) ? '/' + page.url.pathname.split('/')[1] + '/' : '/');
 
 </script>
 <div id="fixedNavWrapper" class="relative">

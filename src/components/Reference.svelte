@@ -37,7 +37,7 @@
 
     
     let idxfn = footnotes.indexOf(item);
-    let index = $derived(idxfn());
+    let index = idxfn(); // $derived(idxfn());
     let occurrence = item?.occurrences || 1;
     const scrollToFootnote = (e: MouseEvent | TouchEvent | KeyboardEvent) => {
         if (e instanceof KeyboardEvent) {

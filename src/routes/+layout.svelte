@@ -11,6 +11,7 @@
     import Bibliography from "$components/Bibliography.svelte";
     import { createFootnotesContext, type FootnotesContext } from "$lib/footnotes.svelte";
     import ScrollToTop from "$components/ScrollToTop.svelte";
+	import { imageToSrc } from "$lib/assets";
 
     // can this be less reactive or somehow work with pre-rendering?
     let items = new SvelteSet<Footnote>();
@@ -20,12 +21,16 @@
     let year = new Date().getFullYear();
 
     let metadata = new SvelteMap<string, string>();
+    let title = page.data.props?.title ?? 'zeyus dot com';
+    let description = page.data.props?.excerpt ?? 'the official website of zeyus, a cognitive science researcher, software engineer, hacker, musician, and...';
+    let ogImage = page.data.props?.feature_image?.src ? imageToSrc(page.data.props.feature_image.src, page.url.pathname) : '/images/zeyusdotcom@3x.png';
+    let date = page.data.props?.date ?? new Date();
     let metaCtx = createMetadataContext(metadata, {
         defaultMeta: {
-            title: 'zeyus dot com',
-            description: 'the official website of zeyus, a cognitive science researcher, software engineer, hacker, musician, and...',
-            ogImage: '/images/zeyusdotcom@3x.png',
-            date: new Date(),
+            title: title,
+            description: description,
+            ogImage: ogImage,
+            date: date,
         },
         titleSuffix: '| zeyus dot com',
     });

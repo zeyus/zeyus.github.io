@@ -10,8 +10,8 @@
 
     const transitionClass = ['transition', 'ease-in-out', 'duration-300', 'delay-150'];
 
-    let myItems = $derived(items.filter((item: Footnote) => item.url === page.url.pathname)());
-
+    // let myItems = $derived(items.filter((item: Footnote) => item.url === page.url.pathname)());
+    let myItems = items.filter((item: Footnote) => item.url === page.url.pathname)();
     function scrollToFootnote(e: MouseEvent | TouchEvent | KeyboardEvent) {
         if (e instanceof KeyboardEvent) {
             if (e.key !== 'Enter') return;
