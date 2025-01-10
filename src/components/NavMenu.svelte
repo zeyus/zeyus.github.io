@@ -49,7 +49,7 @@
 	<Navbar let:NavContainer fluid={true} navContainerClass="mt-0 flex-nowrap pt-0 content-center" class="px-2 py-0 pt-0 mt-0 sm:px-4 h-11 sm:h-14 fixed w-full z-20 top-0 start-0 whitespace-nowrap border-b shadow border-gray-700 dark:border-gray-700">
 		<NavContainer class="flex-nowrap content-center h-11 sm:h-14 flex-row items-center">
 			<NavBrand href="/" class="col-start-1 col-end-4 self-center">
-				<Img srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
+				<Img src="/images/zeyusdotcom@2x.png" srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
 				<span id="nav-title" class="self-center whitespace-nowrap truncate text-left text-xl font-semibold dark:text-white"
 					>{metaCtx.title(false)}</span
 				>

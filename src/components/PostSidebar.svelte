@@ -30,8 +30,8 @@
 <div id="postSidebar">
     <Sidebar activeUrl={page.url.pathname} {activeClass} {nonActiveClass} asideClass="w-64">
         <SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
+            <SidebarBrand {site} spanClass="font-bold text-xl">zeyus dot com</SidebarBrand>
             <SidebarGroup>
-                <SidebarBrand {site} spanClass="font-bold text-xl">zeyus dot com</SidebarBrand>
                 {#each sidebarItems as item}
                     {#if currentYear !== item.props.date.getFullYear() || currentMonth !== item.props.date.getMonth()}
                         <SidebarItem spanClass="text-slate-400 font-bold" activeClass="flex flex-row-reverse" nonActiveClass="flex flex-row-reverse" href={item.path} label={item.props.date.toLocaleString('default', { month: 'short' }) + " '" + item.props.date.toLocaleString('default', { year: '2-digit' })} />

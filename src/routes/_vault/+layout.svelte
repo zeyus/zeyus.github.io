@@ -1,8 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
     import type { LayoutData } from './$types';
-    import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
-    import type { HTMLImgAttributes } from 'svelte/elements';
+    import { Heading, Drawer, CloseButton, Button } from "flowbite-svelte";
     import { ChevronRightOutline } from "flowbite-svelte-icons";
     import { imageToSrc } from '$lib/assets';
     import { onMount, type Snippet } from 'svelte';
@@ -17,20 +16,6 @@
     let metaCtx = getContext<MetadataContext>('metadata');
 
     let { data, children }: { data: LayoutData, children: Snippet } = $props();
-    
-    let index = $state(0);
-    let forward = true;
-    let images: HTMLImgAttributes[] = $state([]);
-    if (page.data.props.gallery && page.data.props.gallery.position) {
-        images = page.data.props.gallery.images;
-    } else if (page.data.props.gallery) {
-        images = page.data.props.gallery.images;
-    } else {
-        images = [];
-        index = 0;
-    }
-    
-    
 
     $effect(() => {
         metaCtx.setMetadata({
@@ -73,9 +58,6 @@
         subtree: true
     };
 
-
-    let pEl: HTMLParagraphElement | undefined
-
 	onMount(() => {
 		if (width >= breakPoint) {
 			drawerHidden = false;
@@ -85,64 +67,7 @@
 			activateClickOutside = true;
 		}
 
-        const img = document.querySelector(".thumbnails");
-        if (img) {
-            if (typeof MutationObserver !== 'undefined') {
-                    const imgClassChange = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        // make sure the mutation is on the img element
-                        if (mutation.target instanceof HTMLImageElement) {
-                            // if the img element has a new class
-                            if (mutation.target.classList.contains("outline")) {
-                                // find parent .thumbnails element
-                                const parent = mutation.target.closest(".thumbnails");
-                                
-                                if (parent && parent instanceof HTMLElement) {
-                                    // make sure the selected element is visible
-                                    // smooth scroll to the selected element
-                                    const scrollTarget = Math.max(mutation.target.offsetLeft - parent.offsetWidth, 0);
-                                    parent.scrollTo({
-                                        left: scrollTarget,
-                                        behavior: "smooth"
-                                    });
-                                }
-                            }
-                        }
-                    });
-                });
-                imgClassChange.observe(img, observerOptions);
-            }
-        }
-
-        // create a div under each img element within the carousel
-        // this div will be used to display the image caption
-        const caroselDiv = document.querySelector(".c-inner");
-        const divEl = document.createElement("div");
-        divEl.classList.add("absolute", "inset-x-[5%]", "bottom-16", "align-middle", "hidden", "py-1", "text-center", "text-white", "md:block", "text-lg", "caption", "bg-black", "bg-opacity-50", "rounded-lg");
-        // add p inside the div
-        pEl = document.createElement("p");
-        pEl.classList.add("m-0", "p-0");
-        divEl.appendChild(pEl);
-        caroselDiv?.appendChild(divEl);
-
 	});
-
-    $effect(() => {
-        // get alt text based on index
-        if (!images.length) return;
-        const altText = images[index].alt || "";
-        // set the alt text to the p element
-        if (pEl) pEl.textContent = altText;
-    });
-
-    const toggleSide = () => {
-		if (width < breakPoint) {
-			drawerHidden = !drawerHidden;
-		}
-	};
-
-    
-
 </script>
 <svelte:window bind:innerWidth={width} />
 <Button
@@ -181,35 +106,6 @@
         {/if}
 
         {@render children()}
-
-        {#if page.data.props.gallery?.position === "end"}
-            <div class="gallery-wrapper max-w-4xl space-y-4 m-auto">
-                <Carousel class="h-64 sm:h-64 md:h-64 lg:h-128 xl:h-192 2xl:h-192 c-inner" imgClass="object-fit object-contain object-center" images={page.data.props.gallery.images} {forward} slideDuration={250} duration={3900} let:Controls bind:index>
-                    <Controls />  
-                </Carousel>
-                <Thumbnails class="thumbnails bg-transparent overflow-hidden overflow-x-scroll gap-3 w-full flex-nowrap"  bind:index let:image let:selected let:Thumbnail images={page.data.props.gallery.images} {forward} >
-                    <Thumbnail {...image} {selected} class="object-cover flex flex-0 h-16 w-16 p-0 m-1 rounded-md shadow-xl hover:outline hover:outline-primary-500" activeClass="outline outline-primary-400"/>
-                </Thumbnails>
-            </div>
-        {/if}
-        
     </article>
     
 </div>
-<style>
-    .gallery-wrapper :global(.thumbnails) {
-        justify-content: left;
-        /* style x scrollbar */
-        scrollbar-width: thin;
-        scrollbar-color: var(--color-text) var(--color-background);
-        
-    }
-    .gallery-wrapper :global(.thumbnails button) {
-        display:flex;
-        width: max-content;
-        flex: 0 0 auto;
-    }
-    .gallery-wrapper :global(.thumbnails button img) {
-        flex: 0 0 auto;
-    }
-</style>

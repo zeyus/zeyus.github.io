@@ -2,22 +2,27 @@
     import type { HTMLImgAttributes } from 'svelte/elements'
     import { page } from '$app/state';
     import { P } from 'flowbite-svelte';
-    import Reference from '$components/Reference.svelte';
+    import BoringReference from '$components/BoringReference.svelte';
+    import BoringBibliography from '$components/BoringBibliography.svelte';
+    import { createFootnote } from '$components/BoringReference.svelte';
     import EnhancedImg from '$components/EnhancedImg.svelte';
 
     let images = page.data.props.gallery.images as HTMLImgAttributes[];
-</script>
+    let items: Footnote[] = [];
 
+</script>
+<EnhancedImg image={images[0]} figClass="w-96 float-end" />
 <P>
-    <EnhancedImg image={images[0]} figClass="w-96 float-end" />
     So, one side of my family is from Finland, and one of the consistencies of both places I lived during my childhood 
-    was the presence of a sauna.<Reference text="These places were in vastly different locations, the first was near Sydney, and the second was in the middle of nowhere." />
+    was the presence of a sauna.<BoringReference
+        bind:items
+        item={createFootnote("These places were in vastly different locations, the first was near Sydney, and the second was in the middle of nowhere.")}
+    />
 </P>
 <P>
-  
   Since moving to Denmark several years ago, we ended up buying a house which had a wood shed on the property, and I knew it would be 
   the perfect place for a sauna. Although, I had to wait for a while to save up enough money and
-  there were other projects that were more urgent.<Reference text="Stuff like radon mitigation, dealing with mold, that kind of fun stuff" />
+  there were other projects that were more urgent.<BoringReference bind:items item={createFootnote("Stuff like radon mitigation, dealing with mold, that kind of fun stuff")} />
 </P>
 <P>
     The time finally came, and I started planning, so I used made some measurements of the wood shed and then put it in a CAD program to work out the best layout.
@@ -35,7 +40,7 @@
     <EnhancedImg image={images[4]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
 </div>
 <P>
-    After the materials arrived, I<Reference text="I will use 'I' throughout this article, but some friends, one in particular lent a hand throughout the process, as well as my partner" /> 
+    After the materials arrived, I<BoringReference bind:items item={createFootnote("I will use 'I' throughout this article, but some friends, one in particular lent a hand throughout the process, as well as my partner")} /> 
     dug 6 foot pads and filled them with concrete to make a nice base for the sauna to sit on, ensuring that it was as level as possible. When it was cured, I started
     on the floor framing, using double 50x150mm beams to support the floor and the walls around the edges and the bearers were 50x150mm, and the same for the noggins.
 </P>
@@ -70,8 +75,8 @@
     <EnhancedImg image={images[16]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
 </div>
 <P>
-    Around this time the stove arrived<Reference text="I got a really awesome deal on a Harvia Pro 20, which I couldn't pass up...it ended up being cheaper than smaller wood stoves and vastly cheaper than even the cheapest electric stoves.
-    Electric wasn't an option anyway because the wood shed doesn't have any mains connection and I'm not legally allowed to dig in underground wiring here." />, and of course I just wanted everything done so we could enjoy the sauna, 
+    Around this time the stove arrived<BoringReference bind:items item={createFootnote("I got a really awesome deal on a Harvia Pro 20, which I couldn't pass up...it ended up being cheaper than smaller wood stoves and vastly cheaper than even the cheapest electric stoves. Electric wasn't an option anyway because the wood shed doesn't have any mains connection and I'm not legally allowed to dig in underground wiring here.")} />,
+    and of course I just wanted everything done so we could enjoy the sauna, 
     but still there was a lot of work left to do. Next up I used whatever wood I had left to make the ceiling beams and fixed them to the framing,
     and the insulation treatment for the ceiling was the same as the walls, with the addition of a plastic mesh for support. With all the framing and insulation done, the panelling could begin.
 </P>
@@ -148,3 +153,5 @@
     I'm really happy with how everything turned out, and since building it, we've used it on average at least twice a week, and often when we have visitors we end up using it even more! It's such a great way to relax,
     and it's a nice place to sit and chat, and there's no real chance of other distractions.
 </P>
+
+<BoringBibliography bind:items />
