@@ -31,7 +31,7 @@
 
 </script>
 <svelte:head>
-	<title>{metaCtx.title()} - zeyus dot com</title>
+	<title>{metaCtx.title()}</title>
     <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
     <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
     <meta name="description" content="{metaCtx.description()}" />
