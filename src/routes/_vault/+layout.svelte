@@ -155,7 +155,7 @@
 	{transitionParams}
 	bind:hidden={drawerHidden}
 	bind:activateClickOutside
-    divClass="overflow fixed-y-auto xl:relative my-auto flex flex-row xl:flex-col z-50 p-0 bg-white dark:bg-transparent top-32 bottom-32 xl:float-left xl:top-0 xl:bottom-0"
+    divClass="overflow fixed-y-auto xl:relative my-auto flex flex-row xl:flex-col z-50 p-0 bg-white dark:bg-transparent top-32 bottom-32 xl:float-left xl:mt-10 xl:z-0 xl:top-0 xl:bottom-0"
     leftOffset="my-auto start-0 min-h-max"
 	width="w-64"
 	class="overflow-auto my-auto start-0 min-h-max self-center"
@@ -170,12 +170,14 @@
 </Drawer>
 <div class="flex px-4 mx-auto w-full xl:w-auto">
     <article class="w-full mx-auto">
-        <Heading>{ page.data.props.title }</Heading>
+        <div class="flex flex-wrap flex-row mb-4 w-full justify-between">
+            <Heading class="mb-0 max-w-max">{ page.data.props.title }</Heading>
+            <span class="date whitespace-nowrap self-end text-gray-500">Published on: { new Date(page.data.props.date).toLocaleDateString(undefined, dateOptions) }</span>
+        
+        </div>
         {#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
-            <EnhancedImg sizes="min(1280, 100vw)" transform={["h=384", "fit=cover"]} image={page.data.props.feature_image} imgClass="rounded-lg object-cover max-w-full w-full h-96" />
+            <EnhancedImg sizes="min(1280, 100vw)" transform={["h=384", "fit=cover"]} image={page.data.props.feature_image} figClass="max-w-full mb-8" imgClass="rounded-lg object-cover max-w-full w-full h-96" />
         {/if}
-
-        <P class="date">Published on: { new Date(page.data.props.date).toLocaleDateString(undefined, dateOptions) }</P>
 
         {@render children()}
 

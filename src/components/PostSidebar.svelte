@@ -10,7 +10,7 @@
     sidebarItems.sort(sortPosts);
 
     const site = {
-        name: '_vault: posts',
+        name: 'Recent posts',
         href: '/_vault',
         img: '/favicon.png'
     }
