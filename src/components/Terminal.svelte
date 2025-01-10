@@ -88,11 +88,13 @@ monitored if unauthorized usage is suspected.`,
 		}
 		// if \r or \n is in the input, handle it as an enter
 		if (currentInput.includes('\r') || currentInput.includes('\n')) {
+			if(typeof KeyboardEvent === 'undefined') return;
 			handleInput(new KeyboardEvent('keydown', { key: 'Enter' }));
 		}
 	}
 
 	function typeInput(input: string, delay: number = 25) {
+		if(typeof KeyboardEvent === 'undefined') return;
 		for (let i = 0; i < input.length; i++) {
 			setTimeout(() => {
 				currentInput += input[i];

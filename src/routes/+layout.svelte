@@ -13,7 +13,8 @@
     import ScrollToTop from "$components/ScrollToTop.svelte";
 
     let items = new SvelteSet<Footnote>();
-    setContext<FootnotesContext>('footnotes', createFootnotesContext(items) );
+    let fnContext = createFootnotesContext(items);
+    setContext<FootnotesContext>('footnotes', fnContext);
 
     let year = new Date().getFullYear();
 

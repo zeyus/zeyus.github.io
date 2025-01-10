@@ -23,6 +23,6 @@
     </List>
 </P>
 <P class="dark:text-gray-200">
-    If you're interested in some stuff I write about, check out <A href="/_vault">the _vault</A>, if you'd like to see some of the open source projects I've worked on, take a look at
-    <A href="/projects">the projects page</A>. If you just want to connect to your Arduino or other serial device directly from your browser, check out <A href="/terminal">the terminal</A><Reference text="Requires a browser that supports the WebSerial or USB APIs" />.
+    If you're interested in some stuff I write about, check out <A href="/_vault/">the _vault</A>, if you'd like to see some of the open source projects I've worked on, take a look at
+    <A href="/projects/">the projects page</A>. If you just want to connect to your Arduino or other serial device directly from your browser, check out <A href="/terminal/">the terminal</A><Reference text="Requires a browser that supports the WebSerial or USB APIs" />.
 </P>

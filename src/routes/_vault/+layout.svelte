@@ -16,7 +16,7 @@
 
     let metaCtx = getContext<MetadataContext>('metadata');
 
-    let { data = $bindable(), children }: { data: LayoutData, children: Snippet } = $props();
+    let { data, children }: { data: LayoutData, children: Snippet } = $props();
     
     let index = $state(0);
     let forward = true;
@@ -73,29 +73,6 @@
         subtree: true
     };
 
-    const imgClassChange = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            // make sure the mutation is on the img element
-            if (mutation.target instanceof HTMLImageElement) {
-                // if the img element has a new class
-                if (mutation.target.classList.contains("outline")) {
-                    // find parent .thumbnails element
-                    const parent = mutation.target.closest(".thumbnails");
-                    
-                    if (parent && parent instanceof HTMLElement) {
-                        // make sure the selected element is visible
-                        // smooth scroll to the selected element
-                        const scrollTarget = Math.max(mutation.target.offsetLeft - parent.offsetWidth, 0);
-                        parent.scrollTo({
-                            left: scrollTarget,
-                            behavior: "smooth"
-                        });
-                    }
-                }
-            }
-        });
-    });
-
 
     let pEl: HTMLParagraphElement | undefined
 
@@ -110,7 +87,31 @@
 
         const img = document.querySelector(".thumbnails");
         if (img) {
-            imgClassChange.observe(img, observerOptions);
+            if (typeof MutationObserver !== 'undefined') {
+                    const imgClassChange = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        // make sure the mutation is on the img element
+                        if (mutation.target instanceof HTMLImageElement) {
+                            // if the img element has a new class
+                            if (mutation.target.classList.contains("outline")) {
+                                // find parent .thumbnails element
+                                const parent = mutation.target.closest(".thumbnails");
+                                
+                                if (parent && parent instanceof HTMLElement) {
+                                    // make sure the selected element is visible
+                                    // smooth scroll to the selected element
+                                    const scrollTarget = Math.max(mutation.target.offsetLeft - parent.offsetWidth, 0);
+                                    parent.scrollTo({
+                                        left: scrollTarget,
+                                        behavior: "smooth"
+                                    });
+                                }
+                            }
+                        }
+                    });
+                });
+                imgClassChange.observe(img, observerOptions);
+            }
         }
 
         // create a div under each img element within the carousel
@@ -165,7 +166,7 @@
         <div class="fixed xl:relative flex w-64 items-right">
             <CloseButton on:click={() => (drawerHidden = true)} class="right-0 dark:text-white xl:hidden" />
         </div>
-        <PostSidebar sidebarItems={data.entries} />
+        <PostSidebar sidebarItems={data.posts} />
     </div>
 </Drawer>
 <div class="flex px-4 mx-auto w-full xl:w-auto">

@@ -8,7 +8,7 @@
 
     // let { data }: { data: PageData } = $props();
     import { page } from '$app/state';
-    const posts = page.data.entries;
+    let posts = page.data.posts;
 
     // sort sidebar items by year,month, day descending
     posts.sort(sortPosts);

@@ -11,7 +11,7 @@
 
     const site = {
         name: 'Recent posts',
-        href: '/_vault',
+        href: '/_vault/',
         img: '/favicon.png'
     }
 

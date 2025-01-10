@@ -16,7 +16,8 @@ export const imageToSrc = (src: string, path: string) => {
     // const pathParts = path.split('/').length;
     // add ../ for each part of the path
     // const prefix = Array(pathParts).fill('..').join('/');
-    return `${assetPrefix}${imagePrefix}${path}/${src}`;
+    const slash = path.endsWith('/') ? '' : '/';
+    return `${assetPrefix}${imagePrefix}${path}${slash}${src}`;
 }
 
 export const imageToModuleDefault = (src: string, path: string, imageModules: Record<string, any>) => {

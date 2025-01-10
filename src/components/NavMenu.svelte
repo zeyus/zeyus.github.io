@@ -18,7 +18,7 @@
 	});
 	for (const path in rootPages) {
 		const name = path.split('/').slice(-2)[0];
-		const cleanPath = '/' + (name === 'routes' ? '' : name);
+		const cleanPath = '/' + (name === 'routes' ? '' : name + '/');
 		menuItems.push({
 			name: name,
 			path: cleanPath

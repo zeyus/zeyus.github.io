@@ -3,8 +3,10 @@
     import { getContext } from 'svelte';
     import type { FootnotesContext } from "$lib/footnotes.svelte";
 
+
+    let footnotes: FootnotesContext = getContext<FootnotesContext>('footnotes');
     let {
-            item = $bindable(undefined),
+            item = undefined,
             text = "Invalid item, either an item or text must be provided",
             year = undefined,
             highlightClass = 'bg-primary-800/50'
@@ -16,7 +18,6 @@
             highlightClass?: string
          } = $props();
     
-    let footnotes: FootnotesContext = getContext<FootnotesContext>('footnotes');
     // is the item in items?
     if (item && !footnotes.hasFootnote(item)) {
         item.occurrences = 1;
@@ -34,8 +35,10 @@
         }
     }
 
-    const index = footnotes.indexOf(item);
-    const occurrence = item?.occurrences || 1;
+    
+    let idxfn = footnotes.indexOf(item);
+    let index = $derived(idxfn());
+    let occurrence = item?.occurrences || 1;
     const scrollToFootnote = (e: MouseEvent | TouchEvent | KeyboardEvent) => {
         if (e instanceof KeyboardEvent) {
             if (e.key !== 'Enter') return;
@@ -63,6 +66,8 @@
     };
 
 </script>
-<sup class="footnote-ref-sup">
-    <a ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} href="#footnote-{index() + 1}" data-occurrence={occurrence} class="footnote-ref footnote-{index() + 1}-ref align-top text-xs text-primary-300">{index() + 1}</a>
-</sup>
+{#if index >= 0}
+    <sup class="footnote-ref-sup">
+        <a ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} href="#footnote-{index + 1}" data-occurrence={occurrence} class="footnote-ref footnote-{index + 1}-ref align-top text-xs text-primary-300">{index + 1}</a>
+    </sup>
+{/if}

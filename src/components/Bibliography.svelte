@@ -10,7 +10,7 @@
 
     const transitionClass = ['transition', 'ease-in-out', 'duration-300', 'delay-150'];
 
-    let myItems = items.filter((item: Footnote) => item.url === page.url.pathname);
+    let myItems = $derived(items.filter((item: Footnote) => item.url === page.url.pathname)());
 
     function scrollToFootnote(e: MouseEvent | TouchEvent | KeyboardEvent) {
         if (e instanceof KeyboardEvent) {
@@ -64,12 +64,12 @@
     }
 
 </script>
-{#if myItems().length > 0}
+{#if myItems.length > 0}
     <div class="w-100 mt-12 mb-4">
         <div class="w-64 border-t border-slate-400 -ml-4"></div>
     </div>
     <List class="w-full flex flex-col" position="inside">
-        {#each myItems() as item, index}
+        {#each myItems as item, index}
             <Li id="footnote-{index + 1}" liClass="mb-2 footnote text-sm list-none basis-full w-full flex justify-start content-start {transitionClass.join(' ')}">
                 <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="h-5 ml-0 my-0 footnote-id object-top align-top text-xs text-primary-300 mr-1"
                  aria-label="Scroll back to reference" 

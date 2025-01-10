@@ -21,6 +21,7 @@ const config = {
 			pages: 'build',
 			assets: 'build',
 			fallback: '404.html',
+			
 			precompress: false,
 			strict: true
 		}),
@@ -29,7 +30,13 @@ const config = {
 		},
 		output: {
 			preloadStrategy: 'preload-mjs'
-		}
+		},
+		prerender: {
+			handleHttpError: 'warn',
+			crawl: true,
+			handleMissingId: 'warn',
+
+		},
 	}
 };
 
