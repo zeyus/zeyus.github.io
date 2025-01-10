@@ -8,18 +8,18 @@
     // Remove zero-length tokens.
     let tokens = page.url.pathname.split('/').filter((t) => t !== '');
     // Create { label, href } pairs for each token.
-    let tokenPath = '';
+    let tokenPath = '/';
     crumbs = tokens.map((t) => {
-        tokenPath += '/' + t + '/';
+        tokenPath += t + '/';
         return { label: t, href: tokenPath };
     });
     //});
     // unnecessary duplication to allow reactivity during dev but static during prod
     $effect(() => {
         tokens = page.url.pathname.split('/').filter((t) => t !== '');
-        tokenPath = '';
+        tokenPath = '/';
         crumbs = tokens.map((t) => {
-            tokenPath += '/' + t + '/';
+            tokenPath += t + '/';
             return { label: t, href: tokenPath };
         });
     });
