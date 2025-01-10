@@ -12,6 +12,7 @@
     import { createFootnotesContext, type FootnotesContext } from "$lib/footnotes.svelte";
     import ScrollToTop from "$components/ScrollToTop.svelte";
 
+    // can this be less reactive or somehow work with pre-rendering?
     let items = new SvelteSet<Footnote>();
     let fnContext = createFootnotesContext(items);
     setContext<FootnotesContext>('footnotes', fnContext);

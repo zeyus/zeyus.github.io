@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
-
+    // can this be non-reactive?
     let crumbs: Array<{ label: string, href: string }> = $state([]);
     $effect(() => {
         // Remove zero-length tokens.
