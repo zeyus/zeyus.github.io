@@ -1,26 +1,22 @@
 <script lang="ts">
     import { page } from '$app/state';
     import type { LayoutData } from './$types';
-    import { setContext, type Snippet } from 'svelte';
-    import { SvelteSet } from 'svelte/reactivity';
     import { Heading, P, Drawer, CloseButton, Button, Carousel, Thumbnails, Img } from "flowbite-svelte";
     import type { HTMLImgAttributes } from 'svelte/elements';
     import { ChevronRightOutline } from "flowbite-svelte-icons";
     import { imageToSrc } from '$lib/assets';
-    import { title as t, pageDescription, ogImage, defaultDescription, defaultImage } from "$lib/store.ts";
-    import { onMount } from 'svelte';
+    import { onMount, type Snippet } from 'svelte';
     import PostSidebar from "$components/PostSidebar.svelte";
-    import Bibliography from '$components/Bibliography.svelte';
     import { sineIn } from 'svelte/easing';
 
     import EnhancedImg from '$components/EnhancedImg.svelte';
 
-    import { createFootnotesContext, type FootnotesContext } from "$lib/footnotes.svelte";
+    import { getContext } from "svelte";
+	import type { MetadataContext } from "$lib/metadata.svelte";
+
+    let metaCtx = getContext<MetadataContext>('metadata');
 
     let { data = $bindable(), children }: { data: LayoutData, children: Snippet } = $props();
-
-    let items = new SvelteSet<Footnote>();
-    setContext<FootnotesContext>('footnotes', createFootnotesContext(items) );
     
     let index = $state(0);
     let forward = true;
@@ -33,22 +29,16 @@
         images = [];
         index = 0;
     }
-    // setContext("images", () => images);
+    
+    
 
     $effect(() => {
-        //@TODO: change to global state not stores
-        t.set("_vault: " + page.data.props.title);
-        if (page.data.props.excerpt) {
-            pageDescription.set(page.data.props.excerpt);
-        } else {
-            pageDescription.set(defaultDescription);
-        }
-
-        if (page.data.props.feature_image && page.data.props.feature_image.src) {
-            ogImage.set(imageToSrc(page.data.props.feature_image.src, page.url.pathname));
-        } else {
-            ogImage.set(defaultImage);
-        }
+        metaCtx.setMetadata({
+            title: "_vault: " + page.data.props.title,
+            description: page.data.props.excerpt,
+            ogImage: page.data.props.feature_image?.src ? imageToSrc(page.data.props.feature_image.src, page.url.pathname) : undefined,
+            date: page.data.props.date
+        });
     });
     
     // make date human readable
@@ -165,21 +155,21 @@
 	{transitionParams}
 	bind:hidden={drawerHidden}
 	bind:activateClickOutside
-    divClass="overflow fixed-y-auto my-auto flex flex-row z-50 p-0 bg-white dark:bg-transparent top-32 bottom-32"
+    divClass="overflow fixed-y-auto xl:relative my-auto flex flex-row xl:flex-col z-50 p-0 bg-white dark:bg-transparent top-32 bottom-32 xl:float-left xl:top-0 xl:bottom-0"
     leftOffset="my-auto start-0 min-h-max"
 	width="w-64"
 	class="overflow-auto my-auto start-0 min-h-max self-center"
 	id="sidebar"
 >
     <div class="flex">
-        <div class="fixed flex w-64 items-right">
+        <div class="fixed xl:relative flex w-64 items-right">
             <CloseButton on:click={() => (drawerHidden = true)} class="right-0 dark:text-white xl:hidden" />
         </div>
         <PostSidebar sidebarItems={data.entries} />
     </div>
 </Drawer>
-<div class="flex px-4 mx-auto w-full">
-    <article class="xl:ml-72 w-full mx-auto">
+<div class="flex px-4 mx-auto w-full xl:w-auto">
+    <article class="w-full mx-auto">
         <Heading>{ page.data.props.title }</Heading>
         {#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
             <EnhancedImg sizes="min(1280, 100vw)" transform={["h=384", "fit=cover"]} image={page.data.props.feature_image} imgClass="rounded-lg object-cover max-w-full w-full h-96" />
@@ -199,7 +189,7 @@
                 </Thumbnails>
             </div>
         {/if}
-        <Bibliography />
+        
     </article>
     
 </div>

@@ -1,31 +1,64 @@
 <script lang="ts">
     import "../app.postcss";
     import { page } from '$app/state';
-    import { title, ogImage, pageDescription } from "$lib/store.ts";
     import NavMenu from "$components/NavMenu.svelte";
     import BreadcrumbTrail from "$components/BreadcrumbTrail.svelte";
     import { Footer, FooterCopyright, FooterLinkGroup, FooterIcon } from "flowbite-svelte";
     import { GithubSolid, YoutubeSolid, HeadphonesOutline, CodeOutline, UsersGroupOutline, VideoCameraOutline } from 'flowbite-svelte-icons';
+    import { SvelteMap, SvelteSet } from 'svelte/reactivity';
+    import { createMetadataContext, type MetadataContext } from "$lib/metadata.svelte";
+	import { setContext } from "svelte";
+    import Bibliography from "$components/Bibliography.svelte";
+    import { createFootnotesContext, type FootnotesContext } from "$lib/footnotes.svelte";
+    import ScrollToTop from "$components/ScrollToTop.svelte";
+
+    let items = new SvelteSet<Footnote>();
+    setContext<FootnotesContext>('footnotes', createFootnotesContext(items) );
 
     let year = new Date().getFullYear();
 
+    let metadata = new SvelteMap<string, string>();
+    let metaCtx = createMetadataContext(metadata, {
+        defaultMeta: {
+            title: 'zeyus dot com',
+            description: 'the official website of zeyus, a cognitive science researcher, software engineer, hacker, musician, and...',
+            ogImage: '/images/zeyusdotcom@3x.png',
+            date: new Date(),
+        },
+        titleSuffix: '| zeyus dot com',
+    });
+    setContext<MetadataContext>('metadata', metaCtx);
+
 </script>
 <svelte:head>
-	<title>{$title} - zeyus dot com</title>
-    <meta name="description" content="{$pageDescription}" />
+	<title>{metaCtx.title()} - zeyus dot com</title>
+    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+    <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+    <meta name="description" content="{metaCtx.description()}" />
     <meta name="author" content="zeyus" />
-    <meta property="og:image" content="https://zeyus.com{$ogImage}" />
-    <meta property="og:title" content="{$title} - zeyus dot com" />
-    <meta property="og:description" content="{$pageDescription}" />
+    <meta property="og:image" content="https://zeyus.com{metaCtx.ogImage()}" />
+    <meta property="og:title" content="{metaCtx.title()}" />
+    <meta property="og:description" content="{metaCtx.description()}" />
     <meta property="og:site_name" content="zeyus dot com" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://zeyus.com{page.url.pathname}" />
+    <meta name="DC.creator" content="zeyus, https://github.com/zeyus" />
+    <meta name="DC.date" content="{metaCtx.date()}" />
+    <meta name="DC.publisher" content="zeyus" />
+    <meta name="DC.title" content="{metaCtx.title()}" />
+    <meta name="DC.format" content="text/html" />
+    <meta name="DC.type" content="Text" />
+    <meta name="DC.identifier" content="https://zeyus.com{page.url.pathname}" />
+    <meta name="DCTERMS.abstract" content="{metaCtx.description()}" />
+
 </svelte:head>
 <NavMenu />
 <div class="container mx-auto mt-14 sm:mt-20 px-4 mb-5 pb-16">
     <BreadcrumbTrail />
     <slot />
+    <Bibliography />
 </div>
+<ScrollToTop />
 <Footer class="bg-gray-900 p-2 sticky start-0 z-20 w-full border-t shadow border-gray-700 dark:border-gray-700 sm:px-4 sm:flex-nowrap sm:pt-0">
     <div class="container mx-auto">
         <div class="align-center justify-center flex flex-wrap items-center sm:justify-between">

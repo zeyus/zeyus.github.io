@@ -13,11 +13,10 @@
     let myItems = items.filter((item: Footnote) => item.url === page.url.pathname);
 
     function scrollToFootnote(e: MouseEvent | TouchEvent | KeyboardEvent) {
-        if (e instanceof MouseEvent) {
-            e.preventDefault();
-        } else if (e instanceof KeyboardEvent) {
+        if (e instanceof KeyboardEvent) {
             if (e.key !== 'Enter') return;
         }
+        e.preventDefault();
         const occurrence = (e.target as HTMLButtonElement)?.parentElement?.getAttribute('data-return-to');
         const targetClass = (e.target as HTMLButtonElement).getAttribute('data-target');
         if (!targetClass) return;
@@ -51,30 +50,17 @@
         }, 1900);
         const container = el.closest('.footnote-ref-sup');
         if (!container) return;
-        const prev = container.previousElementSibling;
-        if (prev && !prev.classList.contains('footnote-ref-sup')) {
-            prev.classList.add(...transitionClass);
-            prev.classList.add(highlightClass);
+        const parent = container.parentElement;
+        if (parent) {
+            parent.classList.add(...transitionClass);
+            parent.classList.add(highlightClass);
             setTimeout(() => {
-                prev.classList.remove(highlightClass);
+                parent.classList.remove(highlightClass);
             }, 1000);
             setTimeout(() => {
-                prev.classList.remove(...transitionClass);
+                parent.classList.remove(...transitionClass);
             }, 1900);
-        } else {
-            const parent = container.parentElement;
-            if (parent) {
-                parent.classList.add(...transitionClass);
-                parent.classList.add(highlightClass);
-                setTimeout(() => {
-                    parent.classList.remove(highlightClass);
-                }, 1000);
-                setTimeout(() => {
-                    parent.classList.remove(...transitionClass);
-                }, 1900);
-            }
         }
-
     }
 
 </script>
@@ -84,8 +70,8 @@
     </div>
     <List class="w-full flex flex-col" position="inside">
         {#each myItems() as item, index}
-            <Li id="footnote-{index + 1}" liClass="mb-2 footnote text-sm list-none basis-full w-full flex {transitionClass.join(' ')}">
-                <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="max-h-max footnote-id object-top align-top text-xs text-primary-300 mr-1"
+            <Li id="footnote-{index + 1}" liClass="mb-2 footnote text-sm list-none basis-full w-full flex justify-start content-start {transitionClass.join(' ')}">
+                <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="h-5 ml-0 my-0 footnote-id object-top align-top text-xs text-primary-300 mr-1"
                  aria-label="Scroll back to reference" 
                 >{index + 1}</button>
                 {item.text}

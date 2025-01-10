@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { sineIn } from 'svelte/easing';
-	import { title } from '$lib/store.ts';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
   	import { Img } from 'flowbite-svelte';
+	import type { MetadataContext } from "$lib/metadata.svelte";
+	import { getContext } from "svelte";
+
+    let metaCtx = getContext<MetadataContext>('metadata');
 
 	let menuItems: { name: string; path: string }[] = [];
 
@@ -42,7 +45,7 @@
 			<NavBrand href="/" class="col-start-1 col-end-4 self-center">
 				<Img srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
 				<span id="nav-title" class="self-center whitespace-nowrap truncate text-left text-xl font-semibold dark:text-white"
-					>{$title}</span
+					>{metaCtx.title(false)}</span
 				>
 			</NavBrand>
 			<NavHamburger onClick={() => onHamburgerClick()} class="md:hidden col-end-8 col-span-1 bg-primary-600 dark:bg-primary-600 text-white rounded-none" />
