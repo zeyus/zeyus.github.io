@@ -1,1 +1,0 @@
-const o=()=>({props:{title:"Building Ardour on OSX 15.3 for an M3 MacBook Pro",date:new Date("2025-01-13"),excerpt:"A rough guide to build and install Ardour on OSX"}}),e=Object.freeze(Object.defineProperty({__proto__:null,load:o},Symbol.toStringTag,{value:"Module"}));export{e as _};
