@@ -1,14 +1,42 @@
 <script lang="ts">
-    import { P, List, Li } from 'flowbite-svelte';
+    import { P, List, Li, Button, Toast } from 'flowbite-svelte';
     // import BoringReference from '$components/BoringReference.svelte';
     // import BoringBibliography from '$components/BoringBibliography.svelte';
     // import { createFootnote } from '$components/BoringReference.svelte';
     import { Highlight } from 'svelte-highlight';
+    import LangTag from "svelte-highlight/LangTag.svelte";
+    import { type LanguageType } from 'svelte-highlight/languages'
     import { diff } from 'svelte-highlight/languages/diff'
     import { bash } from 'svelte-highlight/languages/bash'
-    import "svelte-highlight/styles/black-metal-dark-funeral.css";
+    import { ClipboardCleanOutline } from 'flowbite-svelte-icons';
+    import "svelte-highlight/styles/dark-violet.css";
 
     let items: Footnote[] = [];
+    let toastStatus = false;
+
+    function triggerToast() {
+        toastStatus = true;
+        setTimeout(() => {
+            toastStatus = false;
+        }, 3000);
+    }
+
+    const langtagColor = "rgb(192 38 211)";
+    const langtagTop = "0";
+    const langtagRight = "1.5rem";
+    const highlightClass = "";
+    const langtag = true;
+
+    async function copyCode(e: MouseEvent) {
+        const target = e.target as HTMLElement;
+        const container = target.closest('div.codeblock') as HTMLElement;
+        if (!container) return;
+        const code = container.querySelector('pre.langtag') as HTMLElement;
+        if (code) {
+            await navigator.clipboard.writeText(code.innerText);
+            triggerToast();
+        }
+    }
 
     const wscript_patch = `diff --git a/wscript b/wscript
 index 9745aeafd2..4ab8eb08a0 100644
@@ -68,81 +96,104 @@ const waf_cmds = `LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/usr/local/include:/opt/ho
 LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/opt/homebrew/include CC=/usr/bin/clang CXX=/usr/bin/clang++ ./waf  -j$(sysctl -n hw.logicalcpu) -v
 LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/opt/homebrew/include CC=/usr/bin/clang CXX=/usr/bin/clang++ ./waf i18n`;
 </script>
-<P>
-    This is very much a work in progress rough guide. But I thought I would document it now so it doesn't get lost in the void.
-</P>
-<P>These are my most recently installed homebrew packages:</P>
-<List id="pkg-list" class="ml-4 space-y-1 text-gray-500 dark:text-gray-400" position="inside">
-    <Li>gtk+</Li>
-    <Li>hicolor-icon-theme</Li>
-    <Li>at-spi2-core</Li>
-    <Li>libxtst</Li>
-    <Li>libxi</Li>
-    <Li>libxfixes</Li>
-    <Li>dbus</Li>
-    <Li>cmake</Li>
-    <Li>speexdsp</Li>
-    <Li>sleef</Li>
-    <Li>meson</Li>
-    <Li>ninja</Li>
-    <Li>lilv</Li>
-    <Li>sratom</Li>
-    <Li>sord</Li>
-    <Li>zix</Li>
-    <Li>serd</Li>
-    <Li>lrdf</Li>
-    <Li>raptor</Li>
-    <Li>libwebsockets</Li>
-    <Li>cppunit</Li>
-    <Li>lv2</Li>
-    <Li>pangomm@2.46</Li>
-    <Li>pangomm</Li>
-    <Li>cairomm@1.14</Li>
-    <Li>cairomm</Li>
-    <Li>aubio</Li>
-    <Li>numpy</Li>
-    <Li>fftw</Li>
-    <Li>open-mpi</Li>
-    <Li>pmix</Li>
-    <Li>hwloc</Li>
-    <Li>jack</Li>
-    <Li>aften</Li>
-    <Li>berkeley-db@5</Li>
-    <Li>vamp-plugin-sdk</Li>
-    <Li>taglib</Li>
-    <Li>liblo</Li>
-    <Li>glibmm@2.66</Li>
-    <Li>libsigc++@2</Li>
-    <Li>fluid-synth</Li>
-    <Li>glibmm</Li>
-    <Li>libsigc++</Li>
-    <Li>boost</Li>
-    <Li>cpp-gsl</Li>
-    <Li>gsl</Li>
-</List>
-<P>
-    clone the repo
-</P>
-<Highlight language={bash} code={`git clone https://github.com/Ardour/ardour.git`} />
-
-<P>
-    cd into the repo
-</P>
-<Highlight language={bash} code={`cd ardour`} />
-
-<P>
-    Apply the following patches
-</P>
-<Highlight language={diff} code={wscript_patch} />
-<Highlight language={diff} code={osx_build_patch} />
-<P>
-    Run the following commands
-</P>
-<Highlight language={bash} code={waf_cmds} />
-<P>
-    Now set some environment variables for signing 
-</P>
-<Highlight language={bash} code={`set -x APPLE_DEVELOPER_ID_FOR_APPLICATION "Apple Development: xxx@xxx (XXXXX)"\ncd tools/osx_packaging\n./osx_build --nls --public`} />
-<P>
-    Now you should have a signed app in the build directory that you can install...good luck.
-</P>
+{#snippet codeBlock(code: string, language: LanguageType<string>)}
+<div class="codeblock relative">
+    <Highlight let:highlighted --langtag-color={langtagColor} --langtag-top={langtagTop} --langtag-right={langtagRight} class={highlightClass} {language} {code}>
+        <Button outline={false} color="none" on:click={copyCode} class="absolute end-4 top-4 z-50 w-6 h-6 p-0">
+            <ClipboardCleanOutline class="w-6 h-6 m-0 text-gray-500 dark:text-gray-400 cursor-pointer dark:hover:text-primary-600" />
+        </Button>
+        <LangTag highlighted={highlighted} languageName={language.name} code={false} {langtag} />
+    </Highlight>
+</div>
+{/snippet}
+<div id="ardour-article">
+    <P>
+        This is very much a work in progress rough guide. But I thought I would document it now so it doesn't get lost in the void.
+    </P>
+    <P>These are my most recently installed homebrew packages, some of the required packages were probably already installed previously:</P>
+    <List id="pkg-list" list="none" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ml-8 space-y-1 text-gray-500 dark:text-gray-400 mb-4" position="inside">
+        <Li>gtk+</Li>
+        <Li>hicolor-icon-theme</Li>
+        <Li>at-spi2-core</Li>
+        <Li>libxtst</Li>
+        <Li>libxi</Li>
+        <Li>libxfixes</Li>
+        <Li>dbus</Li>
+        <Li>cmake</Li>
+        <Li>speexdsp</Li>
+        <Li>sleef</Li>
+        <Li>meson</Li>
+        <Li>ninja</Li>
+        <Li>lilv</Li>
+        <Li>sratom</Li>
+        <Li>sord</Li>
+        <Li>zix</Li>
+        <Li>serd</Li>
+        <Li>lrdf</Li>
+        <Li>raptor</Li>
+        <Li>libwebsockets</Li>
+        <Li>cppunit</Li>
+        <Li>lv2</Li>
+        <Li>pangomm@2.46</Li>
+        <Li>pangomm</Li>
+        <Li>cairomm@1.14</Li>
+        <Li>cairomm</Li>
+        <Li>aubio</Li>
+        <Li>numpy</Li>
+        <Li>fftw</Li>
+        <Li>open-mpi</Li>
+        <Li>pmix</Li>
+        <Li>hwloc</Li>
+        <Li>jack</Li>
+        <Li>aften</Li>
+        <Li>berkeley-db@5</Li>
+        <Li>vamp-plugin-sdk</Li>
+        <Li>taglib</Li>
+        <Li>liblo</Li>
+        <Li>glibmm@2.66</Li>
+        <Li>libsigc++@2</Li>
+        <Li>fluid-synth</Li>
+        <Li>glibmm</Li>
+        <Li>libsigc++</Li>
+        <Li>boost</Li>
+        <Li>cpp-gsl</Li>
+        <Li>gsl</Li>
+    </List>
+    <P>
+        clone the repo
+    </P>
+    {@render codeBlock(`git clone https://github.com/Ardour/ardour.git`, bash)}
+    <P>
+        cd into the repo
+    </P>
+    {@render codeBlock(`cd ardour`, bash)}
+    <P>
+        Apply the following patches
+    </P>
+    <P>
+        1) Patch wscript (waf)
+    </P>
+    {@render codeBlock(wscript_patch, diff)}
+    <P>
+        2) Patch osx_build
+    </P>
+    {@render codeBlock(osx_build_patch, diff)}
+    <P>
+        Run the following commands
+    </P>
+    {@render codeBlock(waf_cmds, bash)}
+    <P>
+        Now set some environment variables for signing 
+    </P>
+    {@render codeBlock(`set -x APPLE_DEVELOPER_ID_FOR_APPLICATION "Apple Development: xxx@xxx (XXXXX)"\ncd tools/osx_packaging\n./osx_build --nls --public`, bash)}
+    <P>
+        Now you should have a signed app in the build directory that you can install...good luck.
+    </P>
+    <Toast dismissable={false} divClass="rounded-lg px-8 py-4 dark:text-gray-400 dark:bg-gray-800 mb-0" class="fixed bottom-8 right-8" bind:toastStatus>Copied to clipboard</Toast>
+</div>
+<style>
+    #ardour-article :global(div.codeblock) {
+        margin-top: 0;
+        margin-bottom: 2rem;
+    }
+</style>

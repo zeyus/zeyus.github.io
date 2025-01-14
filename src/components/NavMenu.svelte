@@ -44,27 +44,27 @@
 	let activeUrl = $derived((page.url.pathname.length > 1 && page.url.pathname.split('/').length > 1) ? '/' + page.url.pathname.split('/')[1] + '/' : '/');
 
 </script>
-<div id="fixedNavWrapper" class="relative">
+<div id="fixedNavWrapper" class="relative w-full h-11 sm:h-14">
 	{/* @ts-ignore */ null}
-	<Navbar let:NavContainer fluid={true} navContainerClass="mt-0 flex-nowrap pt-0 content-center" class="px-2 py-0 pt-0 mt-0 sm:px-4 h-11 sm:h-14 fixed w-full z-20 top-0 start-0 whitespace-nowrap border-b shadow border-gray-700 dark:border-gray-700">
-		<NavContainer class="flex-nowrap content-center h-11 sm:h-14 flex-row items-center">
-			<NavBrand href="/" class="col-start-1 col-end-4 self-center">
-				<Img src="/images/zeyusdotcom@2x.png" srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
-				<span id="nav-title" class="self-center whitespace-nowrap truncate text-left text-xl font-semibold dark:text-white"
+	<Navbar let:NavContainer fluid={true} navContainerClass="max-w-full mt-0 flex-nowrap pt-0 content-center" class="px-2 py-0 pt-0 mt-0 sm:px-4 h-11 sm:h-14 fixed w-full z-20 top-0 start-0 whitespace-nowrap border-b shadow border-gray-700 dark:border-gray-700">
+		<NavContainer class="flex-nowrap relative content-center h-11 sm:h-14 flex-row items-center">
+			<NavBrand href="/" class="self-center justify-self-start flex flex-row shrink w-5/6 md:w-1/2 lg:w-2/3 xl:w-3/4 xxl:w-4/5">
+				<Img src="/images/zeyusdotcom@2x.png" srcset="/images/zeyusdotcom.png 1x, /images/zeyusdotcom@2x.png 2x, /images/zeyusdotcom@3x.png 3x" class="min-w-max max-w-max mr-3 h-6 sm:h-9" alt="zeyus dot com Logo" />
+				<span id="nav-title" class="self-center max-w-max min-w-4 shrink whitespace-nowrap truncate text-left text-xl font-semibold dark:text-white"
 					>{metaCtx.title(false)}</span
 				>
 			</NavBrand>
-			<NavHamburger onClick={() => onHamburgerClick()} class="md:hidden col-end-8 col-span-1 bg-primary-600 dark:bg-primary-600 text-white rounded-none" />
+			<NavHamburger onClick={() => onHamburgerClick()} class="end-2 md:hidden bg-primary-600 dark:bg-primary-600 text-white rounded-none justify-self-end" />
 			<NavUl
 			    {activeUrl}
 			    {slideParams}
 				bind:hidden={hideNav}
-				class="fixed top-11 sm:top-14 sm:pe-4 w-auto end-2 md:relative md:flex md:visible md:start-auto md:end-0 md:top-auto md:h-full z-100 text-right"
-				ulClass="md:flex md:h-full md:flex-row md:space-x-4 dark:md:border-0 md:border-0 md:w-full md:flex-nowrap items-center"
+				class="absolute end-0 top-11 sm:top-14 w-auto md:min-w-min md:max-w-max md:relative md:grow md:flex md:flex-row md:visible justify-self-end md:end-0 md:top-auto md:h-full z-100 text-right"
+				ulClass="md:flex md:h-full md:flex-row md:space-x-4 dark:md:border-0 md:justify-self-end md:border-0 md:w-full md:flex-nowrap items-center"
 				on:click={() => onMenuItemClick()}
 			>
 				{#each menuItems as item}
-					<NavLi href={item.path} bind:hidden={hideNav} class="my-auto md:mt-7 align-bottom h-11 md:h-14 sm:flex" activeClass="active dark:text-primary-500 font-bold text-lg text-primary-500">{item.name}</NavLi>
+					<NavLi href={item.path} bind:hidden={hideNav} class="my-auto md:mt-7 align-bottom h-11 md:h-14 md:flex" activeClass="active dark:text-primary-500 font-bold text-lg text-primary-500">{item.name}</NavLi>
 				{/each}
 			</NavUl>
 		</NavContainer>

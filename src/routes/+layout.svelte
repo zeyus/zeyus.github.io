@@ -60,7 +60,7 @@
 
 </svelte:head>
 <NavMenu />
-<div class="container mx-auto mt-14 sm:mt-20 px-4 mb-5 pb-16">
+<div class="container mx-auto mt-2 sm:mt-2 px-4 mb-5 pb-16">
     <BreadcrumbTrail />
     <slot />
 </div>
