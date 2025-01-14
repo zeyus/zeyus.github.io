@@ -38,8 +38,8 @@
                         {setYear(item.props.date.getFullYear())}
                         {setMonth(currentMonth = item.props.date.getMonth())}
                     {/if}
-                    <SidebarItem spanClass="basis-4/5" activeClass="current-post flex flex-row text-primary-500 ps-3" nonActiveClass="flex flex-row ps-3" href={item.path} label={item.props.short_title || item.props.title}>
-                        <span class="self-center font-bold text-right basis-1/5 pe-3 justify-self-end text-xs text-slate-400" slot="subtext">{item.props.date.toLocaleString(
+                    <SidebarItem spanClass="basis-11/12 self-center" activeClass="bg-gradient-to-r from-gray-800 via-75% via-black/[.15] to-gray-800 current-post flex text-sm flex-row font-bold text-primary-500 ps-0" nonActiveClass="flex flex-row ps-0" href={item.path} label={item.props.short_title || item.props.title}>
+                        <span class="font-bold text-right basis-1/12 pe-0 self-center justify-self-end min-h-6 text-xs text-slate-400" slot="subtext">{item.props.date.toLocaleString(
                             'default',
                             {
                                 day: 'numeric'
@@ -54,5 +54,6 @@
 <style>
     #postSidebar :global(.current-post::before) {
         content: '> ';
+        align-self: center;
     }
 </style>

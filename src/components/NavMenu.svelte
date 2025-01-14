@@ -44,7 +44,7 @@
 	let activeUrl = $derived((page.url.pathname.length > 1 && page.url.pathname.split('/').length > 1) ? '/' + page.url.pathname.split('/')[1] + '/' : '/');
 
 </script>
-<div id="fixedNavWrapper" class="relative w-full h-11 sm:h-14">
+<div id="fixedNavWrapper" class="relative w-full h-11 sm:h-14 z-30">
 	{/* @ts-ignore */ null}
 	<Navbar let:NavContainer fluid={true} navContainerClass="max-w-full mt-0 flex-nowrap pt-0 content-center" class="px-2 py-0 pt-0 mt-0 sm:px-4 h-11 sm:h-14 fixed w-full z-20 top-0 start-0 whitespace-nowrap border-b shadow border-gray-700 dark:border-gray-700">
 		<NavContainer class="flex-nowrap relative content-center h-11 sm:h-14 flex-row items-center">
@@ -60,11 +60,11 @@
 			    {slideParams}
 				bind:hidden={hideNav}
 				class="absolute end-0 top-11 sm:top-14 w-auto md:min-w-min md:max-w-max md:relative md:grow md:flex md:flex-row md:visible justify-self-end md:end-0 md:top-auto md:h-full z-100 text-right"
-				ulClass="md:flex md:h-full md:flex-row md:space-x-4 dark:md:border-0 md:justify-self-end md:border-0 md:w-full md:flex-nowrap items-center"
+				ulClass="md:flex md:dark:divide-none md:dark:bg-transparent md:items-stretch md:h-full md:flex-row md:space-x-4 dark:md:border-0 md:justify-self-end md:border-0 md:w-full md:flex-nowrap items-center items-center"
 				on:click={() => onMenuItemClick()}
 			>
 				{#each menuItems as item}
-					<NavLi href={item.path} bind:hidden={hideNav} class="my-auto md:mt-7 align-bottom h-11 md:h-14 md:flex" activeClass="active dark:text-primary-500 font-bold text-lg text-primary-500">{item.name}</NavLi>
+					<NavLi href={item.path} bind:hidden={hideNav} class="my-auto md:p-0 md:pt-4 md:border-none md:bg-transparent md:align-middle align-bottom md:flex md:self-center h-11 md:h-full" activeClass="active dark:text-primary-500 font-bold text-lg text-primary-500">{item.name}</NavLi>
 				{/each}
 			</NavUl>
 		</NavContainer>
