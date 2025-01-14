@@ -106,93 +106,92 @@ LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/opt/homebrew/include CC=/usr/bin/clang CXX=
     </Highlight>
 </div>
 {/snippet}
-<div id="ardour-article">
-    <P>
-        This is very much a work in progress rough guide. But I thought I would document it now so it doesn't get lost in the void.
-    </P>
-    <P>These are my most recently installed homebrew packages, some of the required packages were probably already installed previously:</P>
-    <List id="pkg-list" list="none" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ml-8 space-y-1 text-gray-500 dark:text-gray-400 mb-4" position="inside">
-        <Li>gtk+</Li>
-        <Li>hicolor-icon-theme</Li>
-        <Li>at-spi2-core</Li>
-        <Li>libxtst</Li>
-        <Li>libxi</Li>
-        <Li>libxfixes</Li>
-        <Li>dbus</Li>
-        <Li>cmake</Li>
-        <Li>speexdsp</Li>
-        <Li>sleef</Li>
-        <Li>meson</Li>
-        <Li>ninja</Li>
-        <Li>lilv</Li>
-        <Li>sratom</Li>
-        <Li>sord</Li>
-        <Li>zix</Li>
-        <Li>serd</Li>
-        <Li>lrdf</Li>
-        <Li>raptor</Li>
-        <Li>libwebsockets</Li>
-        <Li>cppunit</Li>
-        <Li>lv2</Li>
-        <Li>pangomm@2.46</Li>
-        <Li>pangomm</Li>
-        <Li>cairomm@1.14</Li>
-        <Li>cairomm</Li>
-        <Li>aubio</Li>
-        <Li>numpy</Li>
-        <Li>fftw</Li>
-        <Li>open-mpi</Li>
-        <Li>pmix</Li>
-        <Li>hwloc</Li>
-        <Li>jack</Li>
-        <Li>aften</Li>
-        <Li>berkeley-db@5</Li>
-        <Li>vamp-plugin-sdk</Li>
-        <Li>taglib</Li>
-        <Li>liblo</Li>
-        <Li>glibmm@2.66</Li>
-        <Li>libsigc++@2</Li>
-        <Li>fluid-synth</Li>
-        <Li>glibmm</Li>
-        <Li>libsigc++</Li>
-        <Li>boost</Li>
-        <Li>cpp-gsl</Li>
-        <Li>gsl</Li>
-    </List>
-    <P>
-        clone the repo
-    </P>
-    {@render codeBlock(`git clone https://github.com/Ardour/ardour.git`, bash)}
-    <P>
-        cd into the repo
-    </P>
-    {@render codeBlock(`cd ardour`, bash)}
-    <P>
-        Apply the following patches
-    </P>
-    <P>
-        1) Patch wscript (waf)
-    </P>
-    {@render codeBlock(wscript_patch, diff)}
-    <P>
-        2) Patch osx_build
-    </P>
-    {@render codeBlock(osx_build_patch, diff)}
-    <P>
-        Run the following commands
-    </P>
-    {@render codeBlock(waf_cmds, bash)}
-    <P>
-        Now set some environment variables for signing 
-    </P>
-    {@render codeBlock(`set -x APPLE_DEVELOPER_ID_FOR_APPLICATION "Apple Development: xxx@xxx (XXXXX)"\ncd tools/osx_packaging\n./osx_build --nls --public`, bash)}
-    <P>
-        Now you should have a signed app in the build directory that you can install...good luck.
-    </P>
-    <Toast dismissable={false} divClass="rounded-lg px-8 py-4 dark:text-gray-400 dark:bg-gray-800 mb-0" class="fixed bottom-8 right-8" bind:toastStatus>Copied to clipboard</Toast>
-</div>
+<P>
+    This is very much a work in progress rough guide. But I thought I would document it now so it doesn't get lost in the void.
+</P>
+<P>These are my most recently installed homebrew packages, some of the required packages were probably already installed previously:</P>
+<List id="pkg-list" list="none" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ml-8 space-y-1 text-gray-500 dark:text-gray-400 mb-4" position="inside">
+    <Li>gtk+</Li>
+    <Li>hicolor-icon-theme</Li>
+    <Li>at-spi2-core</Li>
+    <Li>libxtst</Li>
+    <Li>libxi</Li>
+    <Li>libxfixes</Li>
+    <Li>dbus</Li>
+    <Li>cmake</Li>
+    <Li>speexdsp</Li>
+    <Li>sleef</Li>
+    <Li>meson</Li>
+    <Li>ninja</Li>
+    <Li>lilv</Li>
+    <Li>sratom</Li>
+    <Li>sord</Li>
+    <Li>zix</Li>
+    <Li>serd</Li>
+    <Li>lrdf</Li>
+    <Li>raptor</Li>
+    <Li>libwebsockets</Li>
+    <Li>cppunit</Li>
+    <Li>lv2</Li>
+    <Li>pangomm@2.46</Li>
+    <Li>pangomm</Li>
+    <Li>cairomm@1.14</Li>
+    <Li>cairomm</Li>
+    <Li>aubio</Li>
+    <Li>numpy</Li>
+    <Li>fftw</Li>
+    <Li>open-mpi</Li>
+    <Li>pmix</Li>
+    <Li>hwloc</Li>
+    <Li>jack</Li>
+    <Li>aften</Li>
+    <Li>berkeley-db@5</Li>
+    <Li>vamp-plugin-sdk</Li>
+    <Li>taglib</Li>
+    <Li>liblo</Li>
+    <Li>glibmm@2.66</Li>
+    <Li>libsigc++@2</Li>
+    <Li>fluid-synth</Li>
+    <Li>glibmm</Li>
+    <Li>libsigc++</Li>
+    <Li>boost</Li>
+    <Li>cpp-gsl</Li>
+    <Li>gsl</Li>
+</List>
+<P>
+    clone the repo
+</P>
+{@render codeBlock(`git clone https://github.com/Ardour/ardour.git`, bash)}
+<P>
+    cd into the repo
+</P>
+{@render codeBlock(`cd ardour`, bash)}
+<P>
+    Apply the following patches
+</P>
+<P>
+    1) Patch wscript (waf)
+</P>
+{@render codeBlock(wscript_patch, diff)}
+<P>
+    2) Patch osx_build
+</P>
+{@render codeBlock(osx_build_patch, diff)}
+<P>
+    Run the following commands
+</P>
+{@render codeBlock(waf_cmds, bash)}
+<P>
+    Now set some environment variables for signing 
+</P>
+{@render codeBlock(`set -x APPLE_DEVELOPER_ID_FOR_APPLICATION "Apple Development: xxx@xxx (XXXXX)"\ncd tools/osx_packaging\n./osx_build --nls --public`, bash)}
+<P>
+    Now you should have a signed app in the build directory that you can install...good luck.
+</P>
+<Toast dismissable={false} divClass="rounded-lg px-8 py-4 dark:text-gray-400 dark:bg-gray-800 mb-0" class="fixed bottom-8 right-8" bind:toastStatus>Copied to clipboard</Toast>
+
 <style>
-    #ardour-article :global(div.codeblock) {
+    div.codeblock {
         margin-top: 0;
         margin-bottom: 2rem;
     }
