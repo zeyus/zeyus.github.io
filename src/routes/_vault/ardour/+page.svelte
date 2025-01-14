@@ -27,7 +27,8 @@
     const highlightClass = "";
     const langtag = true;
 
-    async function copyCode(e: MouseEvent) {
+    async function copyCode(e: MouseEvent | TouchEvent | KeyboardEvent) {
+        if (e instanceof KeyboardEvent && e.key !== 'Enter') return;
         const target = e.target as HTMLElement;
         const container = target.closest('div.codeblock') as HTMLElement;
         if (!container) return;
@@ -99,7 +100,7 @@ LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/opt/homebrew/include CC=/usr/bin/clang CXX=
 {#snippet codeBlock(code: string, language: LanguageType<string>)}
 <div class="codeblock relative">
     <Highlight let:highlighted --langtag-color={langtagColor} --langtag-top={langtagTop} --langtag-right={langtagRight} class={highlightClass} {language} {code}>
-        <Button outline={false} color="none" on:click={copyCode} class="absolute end-4 top-4 z-50 w-6 h-6 p-0">
+        <Button outline={false} color="none" on:keyup={copyCode} on:touchend={copyCode} on:click={copyCode} class="absolute end-4 top-4 z-50 w-6 h-6 p-0">
             <ClipboardCleanOutline class="w-6 h-6 m-0 text-gray-500 dark:text-gray-400 cursor-pointer dark:hover:text-primary-600" />
         </Button>
         <LangTag highlighted={highlighted} languageName={language.name} code={false} {langtag} />
