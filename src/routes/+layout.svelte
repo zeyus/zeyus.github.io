@@ -66,6 +66,11 @@
     <slot />
 </div>
 <ScrollToTop />
+{#if !dev}
+    <div class="absolute bottom-0 right-0">
+        <img src="https://nozzle.localhose.com/pp/ship/?p=44cc6df4-eff5-40cd-af14-c1987e06e46e&i={encodeURI(page.url.pathname)}" alt="Pirates ^_^" />
+    </div>
+{/if}
 <Footer class="bg-gray-900 p-2 sticky start-0 z-20 w-full border-t shadow border-gray-700 dark:border-gray-700 sm:px-4 sm:flex-nowrap sm:pt-0">
     <div class="container mx-auto">
         <div class="align-center justify-center flex flex-wrap items-center sm:justify-between">
@@ -105,7 +110,4 @@
             </FooterLinkGroup> 
         </div>
     </div>
-    {#if !dev}
-        <img src="https://nozzle.localhose.com/pp/ship/?p=44cc6df4-eff5-40cd-af14-c1987e06e46e&i={encodeURI(page.url.pathname)}" alt="Pirates ^_^" />
-    {/if}
 </Footer>
