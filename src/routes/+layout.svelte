@@ -1,6 +1,7 @@
 <script lang="ts">
     import "../app.postcss";
     import { page } from '$app/state';
+    import { dev } from '$app/environment';
     import NavMenu from "$components/NavMenu.svelte";
     import BreadcrumbTrail from "$components/BreadcrumbTrail.svelte";
     import { Footer, FooterCopyright, FooterLinkGroup, FooterIcon, FooterLink } from "flowbite-svelte";
@@ -35,7 +36,7 @@
         titleSuffix: '| zeyus dot com',
     });
     setContext<MetadataContext>('metadata', metaCtx);
-
+    
 </script>
 <svelte:head>
 	<title>{metaCtx.title()}</title>
@@ -104,4 +105,7 @@
             </FooterLinkGroup> 
         </div>
     </div>
+    {#if !dev}
+        <img src="https://nozzle.localhose.com/pp/ship/?p=44cc6df4-eff5-40cd-af14-c1987e06e46e&i={encodeURI(page.url.pathname)}" alt="Pirates ^_^" />
+    {/if}
 </Footer>
