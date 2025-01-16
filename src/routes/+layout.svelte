@@ -8,8 +8,7 @@
     import { GithubSolid, YoutubeSolid, HeadphonesOutline, CodeOutline, UsersGroupOutline, VideoCameraOutline } from 'flowbite-svelte-icons';
     import { SvelteMap, SvelteSet } from 'svelte/reactivity';
     import { createMetadataContext, type MetadataContext } from "$lib/metadata.svelte";
-	import { setContext } from "svelte";
-    import Bibliography from "$components/Bibliography.svelte";
+	import { setContext, type Snippet } from "svelte";
     import { createFootnotesContext, type FootnotesContext } from "$lib/footnotes.svelte";
     import ScrollToTop from "$components/ScrollToTop.svelte";
 	import { imageToSrc } from "$lib/assets";
@@ -18,6 +17,8 @@
     let items = new SvelteSet<Footnote>();
     let fnContext = createFootnotesContext(items);
     setContext<FootnotesContext>('footnotes', fnContext);
+
+    let { children }: { children: Snippet } = $props();
 
     let year = new Date().getFullYear();
 
@@ -36,6 +37,12 @@
         titleSuffix: '| zeyus dot com',
     });
     setContext<MetadataContext>('metadata', metaCtx);
+    
+    let queryParams: string = $derived(new URLSearchParams({
+        p: '44cc6df4-eff5-40cd-af14-c1987e06e46e',
+        i: encodeURI(page.url.pathname),
+        _: Date.now().toString(),
+    }).toString());
     
 </script>
 <svelte:head>
@@ -63,12 +70,12 @@
 <NavMenu />
 <div class="container mx-auto mt-2 sm:mt-2 px-4 mb-5 pb-16">
     <BreadcrumbTrail />
-    <slot />
+    {@render children()}
 </div>
 <ScrollToTop />
 {#if !dev}
     <div class="absolute bottom-0 right-0">
-        <img src="https://nozzle.localhose.com/pp/ship/?p=44cc6df4-eff5-40cd-af14-c1987e06e46e&i={encodeURI(page.url.pathname)}" alt="Pirates ^_^" />
+        <img src="https://nozzle.localhose.com/pp/ship/?{queryParams}" alt="Pirates ^_^" />
     </div>
 {/if}
 <Footer class="bg-gray-900 p-2 sticky start-0 z-20 w-full border-t shadow border-gray-700 dark:border-gray-700 sm:px-4 sm:flex-nowrap sm:pt-0">
