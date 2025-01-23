@@ -142,7 +142,7 @@
 
 </script>
 
-<P class="mb-0 mt-4 block mb-4">Here are some of my projects:</P>
+<P class="mt-4 block mb-4">Here are some of my projects:</P>
 
 <div class="w-full justify-end pe-4 flex flex-row flex-wrap">
     {#if selectedTags.length > 0}
