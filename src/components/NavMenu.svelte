@@ -30,6 +30,10 @@
 			path: cleanPath
 		});
 	}
+	menuItems.push({
+		name: 'find me',
+		path: 'https://me.zys.im/'
+	});
 	let hideNav = $state(true);
 	const onHamburgerClick = () => {
         hideNav = !hideNav;
