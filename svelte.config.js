@@ -16,6 +16,8 @@ const config = {
 			$assets: './src/_assets',
 			$images: './src/_assets/images',
 			$media: './src/_assets/media',
+			// '@octokit/core': '@octokit/core/dist-src/index.js',
+			// '@octokit/rest': '@octokit/rest/dist-node/index.js',
 		},
 		adapter: adapter({
 			pages: 'build',
@@ -37,6 +39,15 @@ const config = {
 			handleMissingId: 'warn',
 
 		},
+		// vite: {
+		// 	ssr: {
+		// 		noExternal: [/^@octokit\/.*$/],
+		// 	},
+		// 	optimizeDeps: {
+		// 		include: ["@octokit/core", "@octokit/rest"],
+		// 		exclude: [],
+		// 	},
+		// }
 	}
 };
 
