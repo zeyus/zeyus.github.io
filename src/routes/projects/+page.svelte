@@ -20,6 +20,13 @@
             tags: ["politics", "tool"]
         },
         {
+            name: "liblsl.dart native",
+            description: "A Dart / Flutter library for the Lab Streaming Layer (LSL), a system for synchronizing streaming data in real-time. Using native-assets, this library builds the liblsl dynamic library and Dart bindings + an experimental user-friendly API (WIP). Works in OSX, Linux, Windows, iOS, Android (including Meta Quest).",
+            link: "https://pub.dev/packages/liblsl",
+            source: "https://github.com/zeyus/liblsl.dart",
+            tags: ["research", "tool", "library"]
+        },
+        {
             name: "Python3BlueBox",
             description: "A old-school hacking tool, remade for the modern age. Generate MF (Multi-frequency) tones to control phone systems, just like in the movies.",
             link: "https://pypi.org/project/mfbluebox/",
