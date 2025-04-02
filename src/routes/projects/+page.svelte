@@ -24,7 +24,15 @@
             description: "A Dart / Flutter library for the Lab Streaming Layer (LSL), a system for synchronizing streaming data in real-time. Using native-assets, this library builds the liblsl dynamic library and Dart bindings + an experimental user-friendly API (WIP). Works in OSX, Linux, Windows, iOS, Android (including Meta Quest).",
             link: "https://pub.dev/packages/liblsl",
             source: "https://github.com/zeyus/liblsl.dart",
-            tags: ["research", "tool", "library"]
+            tags: ["research", "tool", "library", "dart", "lsl"]
+        },
+        {
+            name: "Python XDF explorer",
+            description: "A python GUI script to view XDF files (eXtensible Data Format), from e.g. Lab Streaming Layer (LSL). It allows you to view the data in a more user-friendly way, and also to export it to CSV.",
+            link: "https://gist.github.com/zeyus/c80b27b66335b19dbf93467326ff208f",
+            source: "https://gist.github.com/zeyus/c80b27b66335b19dbf93467326ff208f",
+            tags: ["research", "tool", "python", "lsl"]
+
         },
         {
             name: "Python3BlueBox",
