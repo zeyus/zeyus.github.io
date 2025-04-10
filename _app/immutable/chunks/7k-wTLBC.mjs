@@ -1,0 +1,1 @@
+const e=()=>({props:{title:"ESP32 particle fluid simulation",date:new Date("2025-04-10"),excerpt:"A write-up about my project to make a battery-powered ESP32 particle fluid simulation.",short_title:"ESP32 fluid sim"}}),i=Object.freeze(Object.defineProperty({__proto__:null,load:e},Symbol.toStringTag,{value:"Module"}));export{i as _};
