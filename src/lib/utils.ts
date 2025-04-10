@@ -12,12 +12,12 @@ export const nth = (d: number) => {
 
 
 export const sortPosts = (a: App.VaultEntries, b: App.VaultEntries) => {
-    if (a.props.date.getFullYear() !== b.props.date.getFullYear()) {
+    if (b.props.date.getFullYear() !== a.props.date.getFullYear()) {
         return a.props.date.getFullYear() - b.props.date.getFullYear();
     } else if (a.props.date.getMonth() !== b.props.date.getMonth()) {
-        return a.props.date.getMonth() - b.props.date.getMonth();
+        return b.props.date.getMonth() - a.props.date.getMonth();
     } else {
-        return a.props.date.getDay() - b.props.date.getDay();
+        return b.props.date.getDay() - a.props.date.getDay();
     }
 };
 

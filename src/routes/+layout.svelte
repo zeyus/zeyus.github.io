@@ -68,7 +68,7 @@
 
 </svelte:head>
 <NavMenu />
-<div class="container mx-auto mt-2 sm:mt-2 px-4 mb-5 pb-16">
+<div class="container main-content mx-auto mt-2 sm:mt-2 px-4 mb-5 pb-16">
     <BreadcrumbTrail />
     {@render children()}
 </div>

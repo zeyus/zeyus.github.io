@@ -18,8 +18,8 @@
 
 </script>
 
-<P class="dark:text-gray-200 mb-0 mt-4">Hi, I'm zeyus, the epitome of a generalist. I left industry to study <A href="https://en.wikipedia.org/wiki/Cognitive_science">cognitive science</A> and now I'm working on my PhD so I can specialize in generalism.</P>
-<List class="list-disc dark:text-gray-200 list-inside ml-3">
+<P class="dark:text-gray-200 mb-2 mt-4">Hi, I'm zeyus, the epitome of a generalist. I left industry to study <A href="https://en.wikipedia.org/wiki/Cognitive_science">cognitive science</A> and now I'm working on my PhD so I can specialize in generalism.</P>
+<List class="list-['>'] dark:text-gray-200 ml-3 mb-4" position="inside">
     <Li>Cognitive Scientist</Li>
     <Li>PhD student</Li>
     <Li><A href="https://github.com/zeyus">Open-source contributor and developer</A></Li>
