@@ -89,7 +89,7 @@
             description: "A dart + flutter mobile / web / desktop app to perform experiments using touch tracking interfaces (compatible with MouseTrap data files).",
             link: "https://zeyus.com/touchtracker/web/index.html",
             source: "https://github.com/zeyus/touchtracker",
-            tags: ["tool", "research"]
+            tags: ["tool", "research", "dart", "flutter"]
         },
         {
             name: "ukulele (fork), a discord music bot",
@@ -112,7 +112,7 @@
             description: "Current development of a novel paradigm for studying the brain during simultaneous cooperative and competitive tasks. It is targeted at joint action, social interaction, and social cognition research, and will be combined with EEG hyperscanning and neuro-/bio-feedback.",
             link: "https://zeyus.com/RiseTogether/",
             source: "https://github.com/zeyus/RiseTogether",
-            tags: ["research", "game"]
+            tags: ["research", "game", "flutter", "dart", "flame"]
         },
         {
             name: "BrainJammers.com",
@@ -121,6 +121,15 @@
             source: "https://github.com/zeyus/brainjammers.com",
             tags: ["WebGL", "toy"]
         },
+        {
+            name: "Red Ocelot",
+            description: "A Space Shooter game developed (by myself and @stuartrapop) in < 1 week for the Flame Game Jame 2025",
+            link: "https://zeyus.itch.io/red-ocelot",
+            linkText: "Play",
+            source: "https://github.com/FlameJam2025-T2/red_ocelot",
+            tags: ["game", "flutter", "dart", "flame", "fun"]
+        },
+
     ];
 
     const tagSort = (a: string, b: string) => a.localeCompare(b);
