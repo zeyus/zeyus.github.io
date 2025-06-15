@@ -1,0 +1,1 @@
+import{J as o,a7 as i,R as f,a8 as c,a2 as p,y as h,C as u}from"./DkShWkU_.mjs";function l(s,a,...r){var e=s,t=c,n;o(()=>{t!==(t=a())&&(n&&(p(n),n=null),n=f(()=>t(e,...r)))},i),h&&(e=u)}function v(s){const a=Math.cos(s*Math.PI*.5);return Math.abs(a)<1e-14?1:1-a}export{v as a,l as s};
