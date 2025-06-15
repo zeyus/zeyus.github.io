@@ -63,7 +63,8 @@
 		"overrides": {
 			"cookie": ">=1.0.0",
 			"@types/cookie": "-",
-			"esbuild": ">=0.25.0"
+			"esbuild": ">=0.25.0",
+			"brace-expansion": ">=2.0.2"
 		},
 		"onlyBuiltDependencies": [
 			"esbuild",
