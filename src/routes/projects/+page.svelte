@@ -23,8 +23,22 @@
             name: "liblsl.dart native",
             description: "A Dart / Flutter library for the Lab Streaming Layer (LSL), a system for synchronizing streaming data in real-time. Using native-assets, this library builds the liblsl dynamic library and Dart bindings + an experimental user-friendly API (WIP). Works in OSX, Linux, Windows, iOS, Android (including Meta Quest).",
             link: "https://pub.dev/packages/liblsl",
-            source: "https://github.com/zeyus/liblsl.dart",
+            source: "https://github.com/NexusDynamic/liblsl.dart",
             tags: ["research", "tool", "library", "dart", "lsl"]
+        },
+        {
+            name: "flutter_multicast_lock",
+            description: "A Flutter plugin for managing Android WiFi multicast locks. This plugin allows you to acquire and release multicast locks on Android devices, which is necessary for receiving multicast UDP packets.",
+            link: "https://pub.dev/packages/flutter_multicast_lock",
+            source: "https://github.com/NexusDynamic/flutter_multicast_lock",
+            tags: ["tool", "library", "dart", "flutter"]
+        },
+        {
+            name: "flutter_refresh_rate_control",
+            description: "A Flutter plugin that allows you to request high refresh rate mode on Android and iOS devices. This plugin provides a simple API to attempt to enable the highest possible refresh rate for your Flutter application.",
+            link: "https://pub.dev/packages/flutter_refresh_rate_control",
+            source: "https://github.com/NexusDynamic/flutter_refresh_rate_control",
+            tags: ["tool", "library", "dart", "flutter"]
         },
         {
             name: "Python XDF explorer",
@@ -110,8 +124,7 @@
         {
             name: "WIP Novel social paradigm",
             description: "Current development of a novel paradigm for studying the brain during simultaneous cooperative and competitive tasks. It is targeted at joint action, social interaction, and social cognition research, and will be combined with EEG hyperscanning and neuro-/bio-feedback.",
-            link: "https://zeyus.com/RiseTogether/",
-            source: "https://github.com/zeyus/RiseTogether",
+            source: "https://github.com/NexusDynamic/RiseTogether",
             tags: ["research", "game", "flutter", "dart", "flame"]
         },
         {
