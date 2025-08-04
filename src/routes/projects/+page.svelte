@@ -41,6 +41,13 @@
             tags: ["tool", "library", "dart", "flutter"]
         },
         {
+            name: "easy_shared_preferences",
+            description: "A flexible, hierarchical wrapper for flutter's shared_preferences package.",
+            link: "https://pub.dev/packages/easy_shared_preferences",
+            source: "https://github.com/NexusDynamic/easy_shared_preferences",
+            tags: ["tool", "library", "dart", "flutter"]
+        },
+        {
             name: "Python XDF explorer",
             description: "A python GUI script to view XDF files (eXtensible Data Format), from e.g. Lab Streaming Layer (LSL). It allows you to view the data in a more user-friendly way, and also to export it to CSV.",
             link: "https://gist.github.com/zeyus/c80b27b66335b19dbf93467326ff208f",
