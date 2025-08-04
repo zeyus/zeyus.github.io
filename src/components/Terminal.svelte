@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AnsiUp } from 'ansi_up';
 	import { Button } from 'flowbite-svelte';
-	import { createSerial, getPorts, usedSerialPorts, WebSerial } from '$lib/serial2';
+	import { createSerial, getPorts, usedSerialPorts, } from '$lib/serial2';
 
 	const ansi_up = new AnsiUp();
 	const shellprompt = 'anon@zeyus&gt;';
@@ -492,14 +492,13 @@ monitored if unauthorized usage is suspected.`,
 {#if serialMode}
 	<Button
 		name="Disconnect"
-		on:click={() => {
+		onclick={() => {
 			serialMode = false;
 			serialTerminal?.close();
 		}}
 	>Disconnect</Button>
 {/if}
 <svelte:window on:keydown={handleInput} />
-
 <style>
 	@font-face {
 		font-family: 'HackNerdFont';

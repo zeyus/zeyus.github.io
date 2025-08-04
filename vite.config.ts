@@ -1,15 +1,22 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
-// import mkcert from "vite-plugin-mkcert";
+import tailwindcss from "@tailwindcss/vite";
+import mkcert from "vite-plugin-mkcert";
 
 export default defineConfig({
 	plugins: [
+		tailwindcss(),
 		sveltekit(),
-		// mkcert()
+		mkcert()
 	],
+	css: {
+		
+	},
 	server: {
-        // https: true,
-        proxy: {}
+		https: {
+
+		},
+		proxy: {}
     },
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']

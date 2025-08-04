@@ -192,11 +192,11 @@
     {#if selectedTags.length > 0}
         <Button
             size="sm"
-            color="none"
+            color="light"
             outline={false}
             shadow={false}
             class="p-0 mb-3 me-2 text-red-700 dark:text-red-700 text-xl"
-            on:click={() => selectedTags = []}
+            onclick={() => selectedTags = []}
             >x</Button>
     {/if}
     {#each allTags as tag}
@@ -204,12 +204,12 @@
         {@const colorClasses = checked ? 'dark:bg-primary-800 dark:text-black dark:hover:bg-primary-900' : 'dark:bg-none dark:text-gray-300 dark:hover:bg-primary-900 dark:hover:text-white'}
         <Button
             size="sm"
-            color="none"
+            color="light"
             pill={true}
             outline={true}
             shadow={false}
             class="ml-2 mb-2 p-2 hover:bg-gray-700 dark:border-2 dark:border-primary-900 min-w-10 {colorClasses}"
-            on:click={() => toggleTag(tag)}
+            onclick={() => toggleTag(tag)}
             {checked}
             >{tag}</Button>
     {/each}
@@ -234,9 +234,9 @@
                 </ButtonGroup>
                 <!-- tags -->
                 <div class="self-center w-fit h-fit">
-                    {#each project.tags.sort(tagSort) as tag}
-                        <Button color="none" class="ml-2 p-1"
-                            on:click={() => selectedTags = [tag]}
+                    {#each project.tags.toSorted(tagSort) as tag}
+                        <Button color="light" class="ml-2 p-1"
+                            onclick={() => selectedTags = [tag]}
                         >{tag}</Button>
                     {/each}
                 </div>

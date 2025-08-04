@@ -70,7 +70,7 @@
     </div>
     <List class="w-full flex flex-col" position="inside">
         {#each myItems as item, index}
-            <Li id="footnote-{index + 1}" liClass="mb-2 footnote text-sm list-none basis-full w-full flex justify-start content-start {transitionClass.join(' ')}">
+            <Li id="footnote-{index + 1}" class="mb-2 footnote text-sm list-none basis-full w-full flex justify-start content-start {transitionClass.join(' ')}">
                 <button type="button" data-target="footnote-{index + 1}-ref" ontouchend={scrollToFootnote} onkeydown={scrollToFootnote} onclick={scrollToFootnote} class="h-5 ml-0 my-0 footnote-id object-top align-top text-xs text-primary-300 mr-1"
                  aria-label="Scroll back to reference" 
                 >{index + 1}</button>
