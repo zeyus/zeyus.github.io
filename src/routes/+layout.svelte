@@ -83,7 +83,7 @@
         <div class="align-center justify-center flex flex-wrap items-center sm:justify-between">
             <FooterCopyright href="/" by="zeyus" year={year} copyrightMessage="(source code available under MIT license)" />
 
-            <FooterLinkGroup ulClass="flex flex-wrap items-center my-3 text-sm">
+            <FooterLinkGroup class="flex flex-wrap items-center my-3 text-sm">
                 <FooterLink href="https://github.com/zeyus/zeyus.github.io">
                     <FooterIcon>
                         <CodeOutline class="w-6 h-6" />

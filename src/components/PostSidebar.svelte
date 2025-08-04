@@ -27,8 +27,8 @@
 
 </script>
 <div id="postSidebar">
-    <Sidebar activeUrl={page.url.pathname} {activeClass} {nonActiveClass} asideClass="w-64">
-        <SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded bg-none border-primary-800 border-2 pb-8">
+    <Sidebar activeUrl={page.url.pathname} classes= {{ active: activeClass, nonactive: nonActiveClass, div: "w-64"}}>
+        <SidebarWrapper class="overflow-y-auto py-4 px-3 rounded bg-none border-primary-800 border-2 pb-8">
             <SidebarBrand {site} spanClass="font-bold text-xl">zeyus dot com</SidebarBrand>
             <SidebarGroup>
                 {#each sidebarItems as item}
@@ -38,12 +38,14 @@
                         {setMonth(currentMonth = item.props.date.getMonth())}
                     {/if}
                     <SidebarItem spanClass="basis-11/12 self-center" activeClass="bg-gradient-to-r from-gray-800 via-75% via-black/[.15] to-gray-800 current-post flex text-sm flex-row font-bold text-primary-500 ps-0" nonActiveClass="flex font-bold text-sm flex-row ps-0" href={item.path} label={item.props.short_title || item.props.title}>
-                        <span class="font-bold text-right basis-1/12 pe-0 self-center justify-self-end min-h-6 text-xs text-slate-400" slot="subtext">{item.props.date.toLocaleString(
+                        {#snippet subtext()}
+                        <span class="font-bold text-right basis-1/12 pe-0 self-center justify-self-end min-h-6 text-xs text-slate-400">{item.props.date.toLocaleString(
                             'default',
                             {
                                 day: 'numeric'
                             }
                         )}<sup>{nth(item.props.date.getDate())}</sup></span>
+                        {/snippet}
                     </SidebarItem>
                 {/each}
             </SidebarGroup>
