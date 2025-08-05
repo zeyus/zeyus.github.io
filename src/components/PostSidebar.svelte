@@ -20,7 +20,7 @@
     const nonActiveClass = 'flex items-center p-2 text-base font-normal text-green-900 rounded-lg dark:text-white hover:bg-green-100 dark:hover:bg-gray-700';
     
     
-    let sidebarItemsGrouped = $derived(() => {
+    let sidebarItemsGrouped = (() => {
         let currentYear: number = 0;
         let currentMonth: number = 0;
         const items: Record<string, App.VaultEntries[]> = {};
@@ -34,15 +34,12 @@
             items[item.props.date.toLocaleString('default', { month: 'short' }) + " '" + item.props.date.toLocaleString('default', { year: '2-digit' })].push(item);
         }
         return items;
-    });
-
-                
-
+    })();
 
 </script>
 <div id="postSidebar">
-    <Sidebar activeUrl={page.url.pathname} classes= {{ active: activeClass, nonactive: nonActiveClass, div: "w-64"}}>
-        <SidebarWrapper class="overflow-y-auto py-4 px-3 rounded bg-none border-primary-800 border-2 pb-8">
+    <Sidebar class="w-64 top-1/3 fixed 2xl:relative" isOpen={true} activeUrl={page.url.pathname} classes= {{ active: activeClass, nonactive: nonActiveClass }} breakpoint="2xl" position="fixed" backdrop={false}>
+        <SidebarWrapper class="overflow-y-auto py-4 px-3 rounded-sm bg-none border-primary-800 border-2 pb-8">
             <SidebarBrand {site} classes={{span: "font-bold text-xl"}}>zeyus dot com</SidebarBrand>
             <SidebarGroup>
                 {#each Object.entries(sidebarItemsGrouped) as [key, sidebarItems]}
@@ -50,12 +47,12 @@
                     {#each sidebarItems as item}
                         <SidebarItem spanClass="basis-11/12 self-center" activeClass="bg-gradient-to-r from-gray-800 via-75% via-black/[.15] to-gray-800 current-post flex text-sm flex-row font-bold text-primary-500 ps-0" nonActiveClass="flex font-bold text-sm flex-row ps-0" href={item.path} label={item.props.short_title || item.props.title}>
                             {#snippet subtext()}
-                            <span class="font-bold text-right basis-1/12 pe-0 self-center justify-self-end min-h-6 text-xs text-slate-400">{item.props.date.toLocaleString(
-                                'default',
-                                {
-                                    day: 'numeric'
-                                }
-                            )}<sup>{nth(item.props.date.getDate())}</sup></span>
+                                <span class="font-bold text-right basis-1/12 pe-0 self-center justify-self-end min-h-6 text-xs text-slate-400">{item.props.date.toLocaleString(
+                                    'default',
+                                    {
+                                        day: 'numeric'
+                                    }
+                                )}<sup>{nth(item.props.date.getDate())}</sup></span>
                             {/snippet}
                         </SidebarItem>
                     {/each}

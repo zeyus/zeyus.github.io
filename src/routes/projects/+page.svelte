@@ -217,25 +217,25 @@
 
 <div class="columns-1 sm:columns-2 xl:columns-3 w-full">
     {#each projects as project}
-        <Card class="w-full mb-4 break-inside-avoid-column mx-auto sm:mx-0 max-w-lg">
+        <Card class="w-full mb-4 break-inside-avoid-column mx-auto sm:mx-0 max-w-lg p-4">
             <h5 class="truncate whitespace-normal mb-2 text-2xl font-bold text-white">{project.name}</h5>
             <p class="mx-2 mb-5 text-gray-300 font-normal leading-tight">{@html project.description}</p>
-            <div class="flex flex-row w-full justify-between">
-                <ButtonGroup>
+            <div class="flex flex-col w-full justify-between">
+                <ButtonGroup class="project-buttons h-8 mb-4 flex gap-2 justify-center">
                     {#if project.link}
-                        <Button color="primary" class="w-50" href={project.link}>
-                            <span>{project.linkText ? project.linkText : 'Go'}</span>
+                        <Button color="primary" class="h-8 my-0 inline-flex" href={project.link}>
+                            {project.linkText ? project.linkText : 'Go'}
                         </Button>
                     {/if}
-                    <Button color="alternative" class="w-50" href={project.source}>
+                    <Button color="alternative" class="h-8 my-0 inline-flex" href={project.source}>
                         <GithubSolid class="mr-2" />
                         <span>Source</span>
                     </Button>
                 </ButtonGroup>
                 <!-- tags -->
-                <div class="self-center w-fit h-fit">
+                <div class="self-center w-fit h-fit mb-2">
                     {#each project.tags.toSorted(tagSort) as tag}
-                        <Button color="light" class="ml-2 p-1"
+                        <Button color="light" class="ml-2 p-1 text-primary-800 dark:text-primary-800 dark:hover:bg-primary-900 dark:hover:text-white"
                             onclick={() => selectedTags = [tag]}
                         >{tag}</Button>
                     {/each}
@@ -244,3 +244,8 @@
         </Card>
     {/each}
 </div>
+<style>
+    :global(.project-buttons svg) {
+        display: inline-flex;
+    }
+</style>
