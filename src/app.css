@@ -53,6 +53,10 @@
   src: url('/ClearSans-OP0p.woff2') format('woff2');
 }
 
+div[role="presentation"] {
+  display: none;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
