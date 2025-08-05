@@ -38,9 +38,9 @@
 
 </script>
 <div id="postSidebar">
-    <Sidebar class="w-64 top-1/3 fixed 2xl:relative" isOpen={true} activeUrl={page.url.pathname} classes= {{ active: activeClass, nonactive: nonActiveClass }} breakpoint="2xl" position="fixed" backdrop={false}>
-        <SidebarWrapper class="overflow-y-auto py-4 px-3 rounded-sm bg-none border-primary-800 border-2 pb-8">
-            <SidebarBrand {site} classes={{span: "font-bold text-xl"}}>zeyus dot com</SidebarBrand>
+    <Sidebar class="w-64 top-1/3 fixed relative p-0 m-0 border-primary-800" isOpen={true} activeUrl={page.url.pathname} classes= {{ active: activeClass, nonactive: nonActiveClass }} breakpoint="2xl" position="fixed" backdrop={false}>
+        <SidebarWrapper class="overflow-y-auto p-0 m-0 rounded-sm bg-none border-none pb-8">
+            <SidebarBrand {site} classes={{span: "ms-3 font-bold text-xl inline-block"}}>zeyus dot com</SidebarBrand>
             <SidebarGroup>
                 {#each Object.entries(sidebarItemsGrouped) as [key, sidebarItems]}
                     <SidebarItem spanClass="text-slate-400 font-bold border-b-2 border-slate-700 w-full text-right mt-4 mb-2" activeClass="flex flex-row-reverse" nonActiveClass="flex flex-row-reverse" label={key} />

@@ -22,8 +22,8 @@
     }
 
     const langtagColor = "rgb(192 38 211)";
-    const langtagTop = "0";
-    const langtagRight = "1.5rem";
+    const langtagTop = "-2.5rem";
+    const langtagRight = "-.50rem";
     const highlightClass = "";
     const langtag = true;
 
@@ -100,8 +100,8 @@ LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/opt/homebrew/include CC=/usr/bin/clang CXX=
 {#snippet codeBlock(code: string, language: LanguageType<string>)}
 <div class="codeblock relative">
     <Highlight let:highlighted --langtag-color={langtagColor} --langtag-top={langtagTop} --langtag-right={langtagRight} class={highlightClass} {language} {code}>
-        <Button outline={false} color="none" on:keyup={copyCode} on:touchend={copyCode} on:click={copyCode} class="absolute end-4 top-4 z-10 w-6 h-6 p-0">
-            <ClipboardCleanOutline class="w-6 h-6 m-0 text-gray-500 dark:text-gray-400 cursor-pointer dark:hover:text-primary-600" />
+        <Button outline={false} onkeyup={copyCode} ontouchend={copyCode} onclick={copyCode} class="absolute end-4 top-4 z-10 w-8 h-8 p-0">
+            <ClipboardCleanOutline class="w-8 h-8 m-0 p-1 text-gray-500 dark:text-gray-400 cursor-pointer dark:hover:text-white" />
         </Button>
         <LangTag highlighted={highlighted} languageName={language.name} code={false} {langtag} />
     </Highlight>
@@ -111,7 +111,7 @@ LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/opt/homebrew/include CC=/usr/bin/clang CXX=
     This is very much a work in progress rough guide. But I thought I would document it now so it doesn't get lost in the void.
 </P>
 <P>These are my most recently installed homebrew packages, some of the required packages were probably already installed previously:</P>
-<List id="pkg-list" list="none" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ml-8 space-y-1 text-gray-500 dark:text-gray-400 mb-4" position="inside">
+<List id="pkg-list" class="grid grid-cols-2 md:grid-cols-3  ml-8 space-y-1 text-gray-500 dark:text-gray-400 mb-4" position="inside">
     <Li>gtk+</Li>
     <Li>hicolor-icon-theme</Li>
     <Li>at-spi2-core</Li>
@@ -189,7 +189,7 @@ LC_CTYPE=C ARM_NEON_SUPPORT=1 CPATH=/opt/homebrew/include CC=/usr/bin/clang CXX=
 <P>
     Now you should have a signed app in the build directory that you can install...good luck.
 </P>
-<Toast dismissable={false} divClass="rounded-lg px-8 py-4 dark:text-gray-400 dark:bg-gray-800 mb-0" class="fixed bottom-8 right-8" bind:toastStatus>Copied to clipboard</Toast>
+<Toast dismissable={false} classes={{content: "rounded-lg px-8 py-4 dark:text-gray-400 dark:bg-gray-800 mb-0" }}  class="fixed bottom-8 right-8" bind:toastStatus>Copied to clipboard</Toast>
 
 <style>
     div.codeblock {
