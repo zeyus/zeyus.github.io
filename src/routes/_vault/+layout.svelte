@@ -1,12 +1,10 @@
 <script lang="ts">
     import { page } from '$app/state';
     import type { LayoutData } from './$types';
-    import { Heading, Drawer, CloseButton, Button } from "flowbite-svelte";
-    import { ChevronRightOutline } from "flowbite-svelte-icons";
+    import { Heading } from "flowbite-svelte";
     import { imageToSrc } from '$lib/assets';
-    import { onMount, type Snippet } from 'svelte';
+    import { type Snippet } from 'svelte';
     import PostSidebar from "$components/PostSidebar.svelte";
-    import { sineIn } from 'svelte/easing';
 
     import EnhancedImg from '$components/EnhancedImg.svelte';
 
@@ -27,77 +25,17 @@
     });
     
     // make date human readable
-    
     const dateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
-
-	let transitionParams = {
-		x: -320,
-		duration: 200,
-		easing: sineIn
-	};
-    let breakPoint: number = 1536;
-    let backdrop: boolean = false;
-	let width: number = $state(0);
-	let activateClickOutside = $state(true);
-    let drawerHidden: boolean = $state(false);
-    $effect(() => {
-        if (width >= breakPoint) {
-            drawerHidden = false;
-            activateClickOutside = false;
-        } else {
-            drawerHidden = true;
-            activateClickOutside = true;
-        }
-    });
-
-    const observerOptions = {
-        attributes: true,
-        attributeOldValue: false,
-        attributeFilter: ["class"],
-        childList: true,
-        subtree: true
-    };
-
-	onMount(() => {
-		if (width >= breakPoint) {
-			drawerHidden = false;
-			activateClickOutside = false;
-		} else {
-			drawerHidden = true;
-			activateClickOutside = true;
-		}
-
-	});
 </script>
-<svelte:window bind:innerWidth={width} />
-
-
 <div class="flex flex-row">
-    <Drawer
-        {backdrop}
-        {transitionParams}
-        bind:hidden={drawerHidden}
-        activateClickOutside={activateClickOutside}
-        class="z-50 p-0 w-64 bg-white dark:bg-transparent 2xl:mt-10 2xl:z-0 2xl:relative 2xl:me-4"
-        id="sidebar"
-    >
-
-                <CloseButton onclick={() => (drawerHidden = true)} class="absolute top-2 right-2 dark:text-white 2xl:hidden z-100" />
-            <PostSidebar sidebarItems={data.posts} />
-        
-        
-    </Drawer>
-    <Button
-        onclick={() => (drawerHidden = false)} 
-        class="focus:outline-none fixed start-0 top-1/2 whitespace-normal focus:ring-2 p-0 focus:ring-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 my-0 rounded-none mx-0 2xl:hidden">
-        <ChevronRightOutline class="w-6 h-8" />
-    </Button>
-    
+    <PostSidebar sidebarItems={data.posts} />
+    <div class="w-0 d-none 2xl:w-64 2xl:block">
+        <!-- spacer to account for the sidebar -->
+    </div>
     <article class="w-full 2xl:w-(--article-max) mx-auto">
         <div class="flex flex-wrap flex-row mb-4 w-full justify-between">
             <Heading class="mb-0 max-w-max">{ page.data.props.title }</Heading>
             <span class="date whitespace-nowrap self-end text-gray-500">Published on: { new Date(page.data.props.date).toLocaleDateString(undefined, dateOptions) }</span>
-        
         </div>
         {#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
             <EnhancedImg sizes="min(1200, 100vw)" transform={["h=384", "fit=cover"]} image={page.data.props.feature_image} figClass="max-w-full mb-8" imgClass="rounded-lg object-cover max-w-full w-full h-96" />
@@ -105,6 +43,4 @@
 
         {@render children()}
     </article>
-        
-
 </div>
