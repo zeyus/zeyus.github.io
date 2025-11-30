@@ -7,6 +7,8 @@
     import { createFootnote } from '$components/BoringReference.svelte';
     import { WebGlShader } from "svader";
 
+    let showShader: boolean = $state(true);
+
     const shaderCode = `#version 300 es
         // License: CC BY-NC-SA 3.0
         // https://creativecommons.org/licenses/by-nc-sa/3.0/
@@ -86,7 +88,7 @@
         description: 'Hi, I\'m zeyus, the epitome of a generalist. I left industry to study cognitive science and now I\'m working on my PhD so I can specialize in generalism.',
     });
 
-    let items: Footnote[] = [];
+    let items: Footnote[] = $state([]);
 
 </script>
 
@@ -102,20 +104,26 @@
             <Li>You can follow me around the internet via my <A href="https://me.zys.im/">link list</A></Li>
         </List>
     </div>
-    <div class="w-full flex md:justify-around mb-4 md:mb-4 justify-center md:self-center">
-    <WebGlShader
-        width="300px"
-        height="256px"
-        code={shaderCode}
-        parameters={[
-            { name: "iResolution", value: "resolution" },
-            { name: "u_offset", value: "offset" },
-            { name: "iTime", value: "time" }
+    <div class="w-full flex md:justify-around mb-4 md:mb-4 justify-center md:self-center flex-col">
+    {#if showShader}
+        <WebGlShader
+            width="300px"
+            height="256px"
+            code={shaderCode}
+            parameters={[
+                { name: "iResolution", value: "resolution" },
+                { name: "u_offset", value: "offset" },
+                { name: "iTime", value: "time" }
 
-        ]}
-    >
-        <div class="fallback dark:text-gray-500">Enable WebGL to see an awesome shader.</div>
-    </WebGlShader>
+            ]}
+        >
+            <div class="fallback dark:text-gray-500">Enable WebGL to see an awesome shader.</div>
+        </WebGlShader>
+        <A onclick={() => showShader = false} class="mt-2 cursor-pointer text-sm dark:text-gray-400 hover:underline">[Hide shader]</A>
+    {:else}
+        <A onclick={() => showShader = true} class="mt-2 cursor-pointer text-sm dark:text-gray-400 hover:underline">[Show shader]</A>
+    {/if}
+
     </div>
 </div>
 <P class="dark:text-gray-200">
