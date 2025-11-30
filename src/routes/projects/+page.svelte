@@ -92,6 +92,13 @@
             tags: ["game", "fun", "docker"]
         },
         {
+            name: "Nine Peer's Morris",
+            description: "A serverless peer-to-peer WebRTC implementation of the medieval Nine Men's Morris game.",
+            link: "https://zeyus.com/nine-peers-morris/",
+            source: "https://github.com/zeyus/nine-peers-morris",
+            tags: ["game", "fun", "webrtc", "p2p"]
+        },
+        {
             name: "RAGGA: Retrieval Augmented Generation General Assistant",
             description: "Load quantized LLMs and run them on your local devices. Interact with your own notes (currently markdown notes are supported by default) and ask questions about what you have written.",
             source: "https://github.com/zeyus/RAGGA",
