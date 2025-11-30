@@ -104,7 +104,7 @@
     </SidebarWrapper>
 </Sidebar>
 <style>
-    #postSidebar :global(.current-post::before) {
+    :global(#postSidebar .current-post::before) {
         content: '> ';
         align-self: center;
     }

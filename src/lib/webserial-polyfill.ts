@@ -142,9 +142,10 @@ class UsbEndpointUnderlyingSource implements UnderlyingSource<Uint8Array> {
           this.onError_();
         }
         if (result.data?.buffer) {
-          const chunk = new Uint8Array(
+          const chunk = new Uint8Array<ArrayBufferLike>(
               result.data.buffer, result.data.byteOffset,
               result.data.byteLength);
+          // @ts-expect-error(enqueue expects ArrayBufferView<ArrayBufferLike> & Uint8Array<ArrayBufferLike>, but chunk is Uint8Array)
           controller.enqueue(chunk);
         }
       } catch (error: any) {
@@ -191,7 +192,8 @@ class UsbEndpointUnderlyingSink implements UnderlyingSink<Uint8Array> {
       controller: WritableStreamDefaultController): Promise<void> {
     try {
       const result =
-          await this.device_.transferOut(this.endpoint_.endpointNumber, chunk);
+        // @ts-expect-error(transferOut expects BufferSource, but chunk is Uint8Array)
+        await this.device_.transferOut(this.endpoint_.endpointNumber, chunk);
       if (result.status != 'ok') {
         controller.error(result.status);
         this.onError_();
