@@ -547,7 +547,16 @@
 </div>
 <P class="dark:text-gray-200 md:mt-4">
     If you're interested in some stuff I write about, check out <A href="/_vault/">the _vault</A>, if you'd like to see some of the open source projects I've worked on, take a look at
-    <A href="/projects/">the projects page</A>. If you just want to connect to your Arduino or other serial device directly from your browser, check out <A href="/terminal/">the terminal</A><BoringReference bind:items item={createFootnote("Requires a browser that supports the WebSerial or USB APIs")} />.
+    <A href="/projects/">the projects page</A>. If you just want to connect to your Arduino or other serial device directly from your browser, check out 
+    <A href="/terminal/">the terminal</A><BoringReference
+        bind:items item={
+            createFootnote(
+                "Requires a browser that supports the <a class='inline-flex items-center hover:underline " +
+                "text-primary-600 dark:text-primary-500 mx-1' " +
+                "href='https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility'>" +
+                "WebSerial</a> or <a class='inline-flex items-center hover:underline text-primary-600 " + 
+                "dark:text-primary-500 mx-1' href='" +
+                "https://developer.mozilla.org/en-US/docs/Web/API/USB#browser_compatibility'>USB</a> APIs")} />.
 </P>
 
 <BoringBibliography bind:items />
