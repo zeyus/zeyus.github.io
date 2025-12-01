@@ -15,14 +15,16 @@
             highlightClass?: string
          } = $props();
     
-    // is the item in items?
-    if (!items.includes(item)) {
+    // is the item in items? Compare by text instead of reference to avoid proxy issues
+    let foundIndex = items.findIndex(i => i.text === item.text);
+    if (foundIndex === -1) {
         item.occurrences = 1;
         items.push(item);
+        foundIndex = items.length - 1;
     }
 
-    let index = items.indexOf(item);
-    let occurrence = item.occurrences || 1;
+    let index = $derived(items.findIndex(i => i.text === item.text));
+    let occurrence = $derived(item.occurrences || 1);
     const scrollToFootnote = (e: MouseEvent | TouchEvent | KeyboardEvent) => {
         if (e instanceof KeyboardEvent) {
             if (e.key !== 'Enter') return;

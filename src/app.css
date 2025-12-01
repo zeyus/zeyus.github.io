@@ -146,7 +146,7 @@ article {
 }
 
 .main-content {
-    ul:not(#postSidebar ul) {
+    ul:not(#postSidebar ul) ul:not(ul.home-list) {
       list-style: none;
       margin-left: 1.5rem;
       margin-bottom: 1.5rem;
