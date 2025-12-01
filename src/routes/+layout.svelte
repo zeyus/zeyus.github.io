@@ -75,6 +75,10 @@
 	<meta property="og:site_name" content="zeyus dot com" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://zeyus.com{page.url.pathname}" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={metaCtx.title()} />
+	<meta name="twitter:description" content={metaCtx.description()} />
+	<meta name="twitter:image" content="https://zeyus.com{metaCtx.ogImage()}" />
 	<meta name="DC.creator" content="zeyus, https://github.com/zeyus" />
 	<meta name="DC.date" content={metaCtx.date()} />
 	<meta name="DC.publisher" content="zeyus" />
