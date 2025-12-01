@@ -49,7 +49,7 @@
 
 	let metaCtx = createMetadataContext(metadata, {
 		defaultMeta: { title, description, ogImage, date },
-		titleSuffix: '| zeyus dot com'
+		titleSuffix: '| zeyus dot com - cognitive science researcher, software engineer, hacker, musician, whatever'
 	});
 
 	setContext<MetadataContext>('metadata', metaCtx);
