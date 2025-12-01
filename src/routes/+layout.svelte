@@ -44,7 +44,7 @@
 		'the official website of zeyus, a cognitive science researcher, software engineer, hacker, musician, and...';
 	let ogImage = page.data.props?.feature_image?.src
 		? imageToSrc(page.data.props.feature_image.src, page.url.pathname)
-		: '/images/zeyusdotcom@3x.png';
+		: '/images/z_logo.png';
 	let date = page.data.props?.date ?? new Date();
 
 	let metaCtx = createMetadataContext(metadata, {

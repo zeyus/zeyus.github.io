@@ -319,7 +319,8 @@
 
     metaCtx.setMetadata({
         title: 'home',
-        description: 'Hi, I\'m zeyus, the epitome of a generalist. I left industry to study cognitive science and now I\'m working on my PhD so I can specialize in generalism.',
+        description: 'The official website of zeyus, a cognitive science researcher, software engineer, hacker, musician, and generalist. ' +
+            'Check out my projects, art, and other work.',
     });
 
     let items: Footnote[] = $state([]);
