@@ -18,6 +18,7 @@
 	});
 	for (const path in rootPages) {
 		const name = path.split('/').slice(-2)[0];
+		if (name === 'violin') continue;
 		let cleanPath = (name === 'routes' ? '' : name);
 		if (!cleanPath.startsWith('/')) {
 			cleanPath = '/' + cleanPath;
