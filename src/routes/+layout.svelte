@@ -41,7 +41,7 @@
 	let title = page.data.props?.title ?? 'zeyus dot com';
 	let description =
 		page.data.props?.excerpt ??
-		'the official website of zeyus, a cognitive science researcher, software engineer, hacker, musician, and...';
+		'the official website of zeyus, a cognitive science researcher, developer, hacker, musician, and...';
 	let ogImage = page.data.props?.feature_image?.src
 		? imageToSrc(page.data.props.feature_image.src, page.url.pathname)
 		: '/images/z_logo.jpg';
@@ -49,7 +49,7 @@
 
 	let metaCtx = createMetadataContext(metadata, {
 		defaultMeta: { title, description, ogImage, date },
-		titleSuffix: '| zeyus dot com - cognitive science researcher, software engineer, hacker, musician, whatever'
+		titleSuffix: '| zeyus dot com - cognitive science researcher, developer, hacker, musician, whatever'
 	});
 
 	setContext<MetadataContext>('metadata', metaCtx);
