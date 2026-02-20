@@ -1,0 +1,1 @@
+import{default as n}from"../chunks/C5UeP4lj.mjs";const e=()=>({props:{title:"violin beginner resources",excerpt:"Some basics for learning violin."}}),o=Object.freeze(Object.defineProperty({__proto__:null,load:e},Symbol.toStringTag,{value:"Module"}));export{n as component,o as universal};
