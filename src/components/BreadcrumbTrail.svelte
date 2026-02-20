@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
-	import { ChevronDoubleRightOutline, HomeOutline } from 'flowbite-svelte-icons';
+	import { HomeOutline } from 'flowbite-svelte-icons';
     // can this be non-reactive?
     let crumbs: Array<{ label: string, href: string }> = $state([]);
     //let crumbs: Array<{ label: string, href: string }> = [];
@@ -26,18 +26,21 @@
     });
 
 </script>
-<Breadcrumb id="breadcrumb-trail" classes={{list: "flex"}} class="mb-2" aria-label="Breadcrumb">
+<Breadcrumb id="breadcrumb-trail" classes={{list: "flex text-gray-700 dark:text-gray-400"}} class="mb-2 mt-2" aria-label="Breadcrumb">
     <BreadcrumbItem href="/" home={true}>{#snippet icon()}
-      <HomeOutline class="me-2 h-4 w-4" />
-    {/snippet}home</BreadcrumbItem>
+      <HomeOutline class="w-3 h-3 mr-1" />
+    {/snippet}~</BreadcrumbItem>
     {#each crumbs as item}
         <BreadcrumbItem href={item.href}>{#snippet icon()}
-      <ChevronDoubleRightOutline class="mx-2 h-5 w-5 dark:text-white" />
+      /
     {/snippet}{item.label}</BreadcrumbItem>
     {/each}
-</Breadcrumb>
+</Breadcrumb> 
 <style>
     :global(#breadcrumb-trail li svg) {
         display: inline-flex;
+    }
+    :global(#breadcrumb-trail) {
+        font-family: 'Mechanical Bold', monospace;
     }
 </style>

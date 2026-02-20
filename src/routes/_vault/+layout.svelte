@@ -29,7 +29,7 @@
 </script>
 <div class="flex flex-row">
     <PostSidebar sidebarItems={data.posts} />
-    <div class="w-0 d-none 2xl:w-64 2xl:block">
+    <div class="w-0 d-none 2xl:w-72 2xl:block">
         <!-- spacer to account for the sidebar -->
     </div>
     <article class="w-full 2xl:w-(--article-max) mx-auto">

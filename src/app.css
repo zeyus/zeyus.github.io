@@ -15,6 +15,7 @@
   --color-primary-700: #a21caf;
   --color-primary-800: #86198f;
   --color-primary-900: #701a75;
+  --color-primary-950: #350c37;
 
   --color-secondary-50: #f0f9ff;
   --color-secondary-100: #e0f2fe;
@@ -24,7 +25,7 @@
   --color-secondary-500: #0ea5e9;
   --color-secondary-600: #0284c7;
   --color-secondary-700: #0369a1;
-  --color-secondary-800: #075985;
+  --color-secondary-800: #3d3d3d;
   --color-secondary-900: #0c4a6e;
 
   --spacing-128: 32rem;
@@ -81,16 +82,22 @@ html {
     display: flex;
     flex-direction: column;
     font-size: 1.1rem;
+    background-color: var(--color-zinc-950);
 }
 
 body {
   flex-grow: 1;
+  border: 3px solid var(--color-primary-700);
+    border-radius: 0.5rem;
+    margin: 1rem;
+    background-color: var(--color-zinc-900);
 }
 
 html, body {
   font-family: 'Clear Sans', sans-serif;
   font-kerning: normal;
   letter-spacing: 0.005rem;
+  
 }
 
 .font-bold, h1, h2, h3, h4, h5, h6 {

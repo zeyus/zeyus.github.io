@@ -90,7 +90,6 @@
 </svelte:head>
 <NavMenu />
 <div class="main-content container mx-auto mt-2 mb-5 px-4 pb-16 sm:mt-2">
-	<BreadcrumbTrail />
 	{@render children()}
 </div>
 <ScrollToTop />
@@ -100,7 +99,7 @@
 	</div>
 {/if}
 <Footer
-	class="sticky start-0 z-20 w-full border-t border-gray-700 bg-gray-900 p-2 shadow sm:flex-nowrap sm:px-4 sm:pt-0 dark:border-gray-700"
+	class="sticky start-0 z-20 w-full rounded-t-none rounded-b-md bg-zinc-800 dark:bg-zinc-800 p-2 shadow sm:flex-nowrap sm:px-4 sm:pt-0 dark:border-gray-700"
 >
 	<div class="container mx-auto">
 		<div class="align-center flex flex-wrap items-center justify-center sm:justify-between">
@@ -110,8 +109,7 @@
 				{year}
 				copyrightMessage="(source code available under MIT license)"
 			/>
-
-			<FooterLinkGroup class="my-3 flex flex-wrap items-center text-sm">
+			<FooterLinkGroup class="my-0 mt-1 flex flex-wrap items-center text-sm">
 				<FooterLink href="https://github.com/zeyus/zeyus.github.io">
 					<FooterIcon>
 						<CodeOutline class="h-6 w-6" />

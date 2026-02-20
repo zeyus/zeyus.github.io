@@ -17,7 +17,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {#each posts as post}
         <a href={post.path}>
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+            <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-lg p-4">
                 <Heading tag="h2" class="mb-0 text-2xl font-bold text-primary-900 dark:text-primary-100">{post.props.title}</Heading>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{post.props.date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 {#if post.props.feature_image && post.props.feature_image?.src}

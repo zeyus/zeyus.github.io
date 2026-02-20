@@ -123,7 +123,7 @@
             name: "ukulele (fork), a discord music bot",
             description: "Play soundcloud, youtube, etc links in a discord call, customizable and working with later APIs.",
             link: "https://github.com/zeyus?tab=packages&repo_name=ukulele",
-            linkText: "Docker Image",
+            linkText: "Docker",
             source: "https://github.com/zeyus/ukulele",
             tags: ["docker", "bot", "music"]
         },
@@ -224,7 +224,7 @@
 
 <div class="columns-1 sm:columns-2 xl:columns-3 w-full">
     {#each projects as project}
-        <Card class="w-full mb-4 break-inside-avoid-column mx-auto sm:mx-0 max-w-lg p-4">
+        <Card class="w-full mb-4 dark:bg-zinc-800 break-inside-avoid-column mx-auto sm:mx-0 max-w-lg p-4">
             <h5 class="truncate whitespace-normal mb-2 text-2xl font-bold text-white">{project.name}</h5>
             <p class="mx-2 mb-5 text-gray-300 font-normal leading-tight">{@html project.description}</p>
             <div class="flex flex-col w-full justify-between">
@@ -234,7 +234,7 @@
                             {project.linkText ? project.linkText : 'Go'}
                         </Button>
                     {/if}
-                    <Button color="alternative" class="h-8 my-0 inline-flex" href={project.source}>
+                    <Button color="alternative" class="h-8 dark:hover:bg-zinc-500 dark:bg-zinc-800 my-0 inline-flex" href={project.source}>
                         <GithubSolid class="mr-2" />
                         <span>Source</span>
                     </Button>
@@ -242,7 +242,7 @@
                 <!-- tags -->
                 <div class="self-center w-fit h-fit mb-2">
                     {#each project.tags.toSorted(tagSort) as tag}
-                        <Button color="light" class="ml-2 p-1 text-primary-800 dark:text-primary-800 dark:hover:bg-primary-900 dark:hover:text-white"
+                        <Button color="light" class="ml-2 p-1 dark:bg-zinc-800 text-primary-600 dark:text-primary-600 dark:hover:bg-primary-900 dark:hover:text-white"
                             onclick={() => selectedTags = [tag]}
                         >{tag}</Button>
                     {/each}
