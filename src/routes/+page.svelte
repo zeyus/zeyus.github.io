@@ -32,7 +32,7 @@
     };
 
     const defaultSettings: ShaderSettings = {
-        showShader: true,
+        showShader: false,
         shaderX: shaderLimits.x.default,
         shaderY: shaderLimits.y.default,
         shaderZ: shaderLimits.z.default,
