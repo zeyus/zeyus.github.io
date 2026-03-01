@@ -40,6 +40,7 @@
 /* @source "../node_modules/flowbite-svelte-icons/dist"; */
 
 @layer base {
+
   /* disable chrome cancel button */
   input[type="search"]::-webkit-search-cancel-button {
     display: none;
@@ -78,29 +79,37 @@ p {
 }
 
 html {
-    min-height: 100vh; 
-    display: flex;
-    flex-direction: column;
-    font-size: 1.1rem;
-    background-color: var(--color-zinc-950);
+  min-height: 100vh;
+  width: 100vw;
+  max-width: 100vw;
+  font-size: 1.1rem;
+  background-color: var(--color-zinc-950);
 }
 
 body {
-  flex-grow: 1;
   border: 3px solid var(--color-primary-700);
-    border-radius: 0.5rem;
-    margin: 1rem;
-    background-color: var(--color-zinc-900);
+  border-radius: 0.5rem;
+  margin: 1rem;
+  margin-bottom: 4rem;
+  background-color: var(--color-zinc-900);
+  min-height: calc(100vh - 6rem);
 }
 
-html, body {
+html,
+body {
   font-family: 'Clear Sans', sans-serif;
   font-kerning: normal;
   letter-spacing: 0.005rem;
-  
+
 }
 
-.font-bold, h1, h2, h3, h4, h5, h6 {
+.font-bold,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Mechanical Bold', serif;
   font-weight: normal;
 }
@@ -125,26 +134,31 @@ article {
     margin-top: 2.5rem;
     margin-bottom: 1rem;
   }
+
   h2 {
     font-size: 1.5rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
   }
+
   h3 {
     font-size: 1.25rem;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
   }
+
   h4 {
     font-size: 1.1rem;
     margin-top: 1.25rem;
     margin-bottom: 0.25rem;
   }
+
   h5 {
     font-size: 1rem;
     margin-top: 1rem;
     margin-bottom: 0.25rem;
   }
+
   h6 {
     font-size: 0.9rem;
     margin-top: 0.75rem;
@@ -153,18 +167,20 @@ article {
 }
 
 .main-content {
-    ul:not(#postSidebar ul) ul:not(ul.home-list) {
-      list-style: none;
-      margin-left: 1.5rem;
-      margin-bottom: 1.5rem;
-      li:before {
-        content: '';
-        margin-right: 0.5rem;
-      }
-      li::marker {
-        content: "\003E";
-        font-weight: 900;
-      }
+  ul:not(#postSidebar ul) ul:not(ul.home-list) {
+    list-style: none;
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    li:before {
+      content: '';
+      margin-right: 0.5rem;
     }
+
+    li::marker {
+      content: "\003E";
+      font-weight: 900;
+    }
+  }
 
 }

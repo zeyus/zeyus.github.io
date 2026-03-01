@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AnsiUp } from 'ansi_up';
 	import { Button } from 'flowbite-svelte';
-	import { createSerial, getPorts, usedSerialPorts, } from '$lib/serial2';
+	import { createSerial, getPorts, usedSerialPorts } from '$lib/serial2';
 
 	const ansi_up = new AnsiUp();
 	const shellprompt = 'anon@zeyus&gt;';
@@ -88,13 +88,13 @@ monitored if unauthorized usage is suspected.`,
 		}
 		// if \r or \n is in the input, handle it as an enter
 		if (currentInput.includes('\r') || currentInput.includes('\n')) {
-			if(typeof KeyboardEvent === 'undefined') return;
+			if (typeof KeyboardEvent === 'undefined') return;
 			handleInput(new KeyboardEvent('keydown', { key: 'Enter' }));
 		}
 	}
 
 	function typeInput(input: string, delay: number = 25) {
-		if(typeof KeyboardEvent === 'undefined') return;
+		if (typeof KeyboardEvent === 'undefined') return;
 		for (let i = 0; i < input.length; i++) {
 			setTimeout(() => {
 				currentInput += input[i];
@@ -299,12 +299,12 @@ monitored if unauthorized usage is suspected.`,
 				addLine('Commands: echo, clear, help, serial', 'output');
 				break;
 			case 'serial':
-                if (!serialTerminal) {
-                    addLine('Uh, uh uh! You didn\'t say the magic word!', 'error');
-                    addLine(':( Unfortunately serial not supported in this browser', 'error');
-                    addLine('You need a browser that supports Web Serial API or the USB API', 'error');
-                    break;
-                }
+				if (!serialTerminal) {
+					addLine("Uh, uh uh! You didn't say the magic word!", 'error');
+					addLine(':( Unfortunately serial not supported in this browser', 'error');
+					addLine('You need a browser that supports Web Serial API or the USB API', 'error');
+					break;
+				}
 				if (args.length < 2) {
 					addLine('Serial commands: list, open, close, forget', 'output');
 					break;
@@ -406,10 +406,10 @@ monitored if unauthorized usage is suspected.`,
 							.forget()
 							.then(() => {
 								addLine('Serial ports forgotten.', 'serial');
-                                getPorts().then(() => {
-                                    ports = usedSerialPorts();
-                                    currentPort = null;
-                                });
+								getPorts().then(() => {
+									ports = usedSerialPorts();
+									currentPort = null;
+								});
 							})
 							.catch((err) => {
 								addLine(`Error forgetting serial ports: ${err}`, 'error');
@@ -449,6 +449,8 @@ monitored if unauthorized usage is suspected.`,
 </script>
 
 <div
+	aria-label="Terminal emulator"
+	role="application"
 	bind:this={terminalDiv}
 	class="terminal"
 	id="terminal-wrapper"
@@ -495,10 +497,11 @@ monitored if unauthorized usage is suspected.`,
 		onclick={() => {
 			serialMode = false;
 			serialTerminal?.close();
-		}}
-	>Disconnect</Button>
+		}}>Disconnect</Button
+	>
 {/if}
 <svelte:window on:keydown={handleInput} />
+
 <style>
 	@font-face {
 		font-family: 'HackNerdFont';

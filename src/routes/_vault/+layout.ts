@@ -16,5 +16,5 @@ export const load: LayoutLoad = async () => {
 
     return {
         posts: vaultEntries
-    } 
+    }
 };

@@ -52,9 +52,9 @@ export const load: PageLoad = () => {
         date: new Date('2025-01-08'),
         excerpt: "A visual tour of our sauna construction process",
         feature_image: {
-          src: "33.jpg",
-          alt: "Our very own sauna",
-          title: "Our very own sauna"
+            src: "33.jpg",
+            alt: "Our very own sauna",
+            title: "Our very own sauna"
         },
         gallery: saunaGallery
     };

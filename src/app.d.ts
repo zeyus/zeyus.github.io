@@ -55,7 +55,7 @@ declare global {
 		url?: string;
 		[key: string]: string | undefined; // To support additional fields
 	};
-	  
+
 	type BibTeXEntry = {
 		entryType: string; // e.g., "article", "book", etc.
 		citationKey: string; // Unique identifier for the entry
@@ -74,4 +74,4 @@ declare global {
 	}
 }
 
-export {};
+export { };
