@@ -1,1 +1,0 @@
-import{default as p}from"../chunks/RPTUt9DV.mjs";const e=()=>({props:{title:"projects",excerpt:"A selection of projects that I have worked on, from apps to research, all open source!"}}),o=Object.freeze(Object.defineProperty({__proto__:null,load:e},Symbol.toStringTag,{value:"Module"}));export{p as component,o as universal};
