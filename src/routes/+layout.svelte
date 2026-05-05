@@ -3,7 +3,6 @@
 	import { page } from '$app/state';
 	import { dev } from '$app/environment';
 	import NavMenu from '$components/NavMenu.svelte';
-	import BreadcrumbTrail from '$components/BreadcrumbTrail.svelte';
 
 	import {
 		Footer,
@@ -19,7 +18,10 @@
 		HeadphonesOutline,
 		CodeOutline,
 		UsersGroupOutline,
-		VideoCameraOutline
+		VideoCameraOutline,
+		ChevronDoubleLeftOutline,
+		ChevronDoubleRightOutline,
+		RocketOutline
 	} from 'flowbite-svelte-icons';
 
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
@@ -105,11 +107,43 @@
 	<div class="container mx-auto">
 		<div class="align-center flex flex-wrap items-center justify-center sm:justify-between">
 			<FooterCopyright
-				href="/"
+				href="https://github.com/zeyus/zeyus.github.io/blob/main/LICENSE"
 				by="zeyus"
 				{year}
-				copyrightMessage="(source code available under MIT license)"
+				copyrightMessage="(MIT license)"
 			/>
+			<div class="my-0 mt-1 flex items-center text-sm">
+				<a
+					href="https://netdir.org/nav/8/prev"
+					title="previous website in the netdir.org webring"
+					aria-label="previous website in the netdir.org webring"
+					><ChevronDoubleLeftOutline class="h-6 w-6 text-primary-600" /></a
+				>
+				<a
+					href="https://netdir.org/"
+					title="netdir.org webring homepage"
+					aria-label="netdir.org webring homepage"
+					><img
+						src="https://netdir.org/netdir.svg"
+						width="88"
+						height="31"
+						alt="netdir.org webring logo"
+						id="netdir-logo"
+					/></a
+				>
+				<a
+					href="https://netdir.org/nav/8/next"
+					title="next website in the netdir.org webring"
+					aria-label="next website in the netdir.org webring"
+					><ChevronDoubleRightOutline class="h-6 w-6 text-primary-600" /></a
+				>
+				<a
+					href="https://netdir.org/nav/8/random"
+					title="random website from the netdir.org webring"
+					aria-label="random website from the netdir.org webring"
+					><RocketOutline class="h-6 w-6 fill-mauve-900 text-primary-600" strokeWidth="1" /></a
+				>
+			</div>
 			<FooterLinkGroup class="my-0 mt-1 flex flex-wrap items-center text-sm">
 				<FooterLink href="https://github.com/zeyus/zeyus.github.io">
 					<FooterIcon>
@@ -145,3 +179,9 @@
 		</div>
 	</div>
 </Footer>
+
+<style>
+	#netdir-logo {
+		filter: hue-rotate(120deg) saturate(200%) brightness(0.75) contrast(1);
+	}
+</style>
