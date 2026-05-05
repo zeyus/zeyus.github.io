@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { ButtonGroup, Button, Card, P, A } from 'flowbite-svelte';
-	import { GithubSolid } from 'flowbite-svelte-icons';
+	import {
+		CaretDownSolid,
+		CaretUpSolid,
+		CloseCircleSolid,
+		CodeOutline
+	} from 'flowbite-svelte-icons';
 	import type { MetadataContext } from '$lib/metadata.svelte';
 	import { getContext } from 'svelte';
 
@@ -12,7 +17,16 @@
 			'A selection of projects that I have worked on, from apps to research, all open source!'
 	});
 
-	const allProjects = [
+	interface Project {
+		name: string;
+		description: string;
+		link?: string;
+		linkText?: string;
+		source?: string;
+		tags: string[];
+	}
+
+	const allProjects: Project[] = [
 		{
 			name: 'MEP Contact',
 			description:
@@ -24,7 +38,7 @@
 		{
 			name: 'liblsl.dart native',
 			description:
-				'A Dart / Flutter library for the Lab Streaming Layer (LSL), a system for synchronizing streaming data in real-time. Using native-assets, this library builds the liblsl dynamic library and Dart bindings + an experimental user-friendly API (WIP). Works in OSX, Linux, Windows, iOS, Android (including Meta Quest).',
+				'A Dart / Flutter library for the Lab Streaming Layer (LSL), a system for synchronizing streaming data in real-time. Using native-assets, this library builds the liblsl dynamic library and Dart bindings + a user-friendly API. Works in OSX, Linux, Windows, iOS, Android (including Meta Quest).',
 			link: 'https://pub.dev/packages/liblsl',
 			source: 'https://github.com/NexusDynamic/liblsl.dart',
 			tags: ['research', 'tool', 'library', 'dart', 'lsl']
@@ -155,7 +169,9 @@
 			name: 'WIP Novel social paradigm',
 			description:
 				'Current development of a novel paradigm for studying the brain during simultaneous cooperative and competitive tasks. It is targeted at joint action, social interaction, and social cognition research, and will be combined with EEG hyperscanning and neuro-/bio-feedback.',
-			source: 'https://github.com/NexusDynamic/RiseTogether',
+			/** source: 'https://github.com/NexusDynamic/RiseTogether', **/
+			linkText: 'Poster',
+			link: 'https://nexusdynamic.org/FINAL-Coop_comp_paradigm-A0Poster_reduced.pdf',
 			tags: ['research', 'game', 'flutter', 'dart', 'flame']
 		},
 		{
@@ -174,105 +190,162 @@
 			linkText: 'Play',
 			source: 'https://github.com/FlameJam2025-T2/red_ocelot',
 			tags: ['game', 'flutter', 'dart', 'flame', 'fun']
+		},
+		{
+			name: 'Double ROT-13 encoder/decoder',
+			description: 'Obvious joke.',
+			link: 'https://zeyus.neocities.org/dr13',
+			tags: ['fun', 'joke']
+		},
+		{
+			name: 'Neverending Sweater',
+			description:
+				'The talking parts from Weezer\'s "Undone (the sweater song)" on infinite repeat. Includes dialogue popups and the ability speed up the track.',
+			link: 'https://localhose.com/sweatshop.html',
+			tags: ['fun', 'joke']
+		},
+		{
+			name: 'android_libcpp_shared Dart / Flutter package',
+			description:
+				'Dart / flutter package for Android to add the libc++_shared.so STL C++ shared runtime library to your app.',
+			link: 'https://pub.dev/packages/android_libcpp_shared',
+			source: 'https://github.com/NexusDynamic/android_libcpp_shared',
+			tags: ['tool', 'library', 'dart', 'flutter', 'android']
 		}
 	];
 
 	const tagSort = (a: string, b: string) => a.localeCompare(b);
 
-	let orderDirection = $state('desc');
-	let orderBy = $state('name');
+	let orderDirection = $state('asc');
+	const orderBy = 'name';
 	const allTags = allProjects
 		.flatMap((p) => p.tags)
 		.filter((tag, index, self) => self.indexOf(tag) === index)
 		.sort(tagSort);
 	let selectedTags: string[] = $state([]);
+	let excludedTags: string[] = $state(['fun', 'joke', 'toy']);
 
-	let projects = $state(allProjects);
+	const sortProjects = (projects: Project[], order: string): Project[] => {
+		projects.sort((a, b) => {
+			const aValue = a[orderBy].toLowerCase();
+			const bValue = b[orderBy].toLowerCase();
+			if (aValue < bValue) return order === 'asc' ? -1 : 1;
+			if (aValue > bValue) return order === 'asc' ? 1 : -1;
+			return 0;
+		});
+		return projects;
+	};
 
-	const filterProjects = (tags: string[]) => {
-		projects = allProjects.filter((project) => {
+	const filterProjects = (tags: string[], exclude: string[]): Project[] => {
+		return allProjects.filter((project) => {
+			if (exclude.length > 0 && project.tags.some((tag: string) => exclude.includes(tag)))
+				return false;
 			if (tags.length === 0) return true;
 			return project.tags.some((tag: string) => tags.includes(tag));
 		});
 	};
 
+	let projects: Project[] = $derived(
+		sortProjects(filterProjects(selectedTags, excludedTags), orderDirection)
+	);
+
 	const toggleTag = (tag: string) => {
 		if (selectedTags.includes(tag)) {
 			selectedTags = selectedTags.filter((t) => t !== tag);
+			excludedTags = [...excludedTags, tag];
+		} else if (excludedTags.includes(tag)) {
+			excludedTags = excludedTags.filter((t) => t !== tag);
 		} else {
 			selectedTags = [...selectedTags, tag];
 		}
 	};
 
-	$effect(() => {
-		filterProjects(selectedTags);
-	});
+	// $effect(() => {
+	// 	projects = sortProjects(filterProjects(selectedTags, excludedTags), orderDirection);
+	// });
 </script>
 
-<P class="mt-4 mb-4 block">Here are some of my projects:</P>
-
-<div class="flex w-full flex-row flex-wrap justify-end pe-4">
-	{#if selectedTags.length > 0}
-		<Button
-			size="sm"
-			color="light"
-			outline={false}
-			shadow={false}
-			class="me-2 mb-3 p-0 text-xl text-red-700 dark:text-red-700"
-			onclick={() => (selectedTags = [])}>x</Button
-		>
-	{/if}
-	{#each allTags as tag}
-		{@const checked = selectedTags.includes(tag)}
-		{@const colorClasses = checked
-			? 'dark:bg-primary-800 dark:text-black dark:hover:bg-primary-900'
-			: 'dark:bg-none dark:text-gray-300 dark:hover:bg-primary-900 dark:hover:text-white'}
-		<Button
-			size="sm"
-			color="light"
-			pill={true}
-			outline={true}
-			shadow={false}
-			class="mb-2 ml-2 min-w-10 p-2 hover:bg-gray-700 dark:border-2 dark:border-primary-900 {colorClasses}"
-			onclick={() => toggleTag(tag)}
-			{checked}>{tag}</Button
-		>
-	{/each}
+<div class="flex w-full flex-row justify-end">
+	<div class="flex w-1/12 flex-row justify-between self-end p-0 md:w-4/12">
+		<button
+			aria-label="Toggle sort order (ascending/descending)"
+			title="Toggle sort order (ascending/descending)"
+			class="me-2 mb-3 h-2 w-2 cursor-pointer p-0 text-xl text-gray-800 dark:bg-none dark:text-gray-300"
+			onclick={() => (orderDirection = orderDirection === 'asc' ? 'desc' : 'asc')}
+			>{#if orderDirection === 'asc'}
+				<CaretUpSolid size="xs" />
+			{:else}
+				<CaretDownSolid size="xs" />
+			{/if}
+		</button>
+		{#if selectedTags.length > 0 || excludedTags.length > 0}
+			<button
+				aria-label="Clear filters"
+				title="Clear filters"
+				class="me-2 mb-3 h-2 w-2 cursor-pointer p-0 text-xl text-red-800 dark:bg-none dark:text-red-800"
+				onclick={() => ((selectedTags = []), (excludedTags = []))}
+				><CloseCircleSolid size="xs" /></button
+			>
+		{/if}
+	</div>
+	<div class="flex w-11/12 flex-[1_1_auto] flex-row flex-wrap justify-end md:w-8/12">
+		{#each allTags as tag}
+			{@const excluded = excludedTags.includes(tag)}
+			{@const checked = selectedTags.includes(tag) || excluded}
+			{@const colorClasses = checked
+				? !excluded
+					? 'dark:bg-primary-800 dark:text-black dark:hover:bg-primary-900 dark:border-primary-900'
+					: 'dark:bg-mauve-900 dark:text-gray-500 dark:hover:bg-mauve-950 dark:border-mauve-800'
+				: 'dark:bg-none dark:text-gray-300 dark:hover:bg-primary-900 dark:hover:text-white dark:border-primary-900'}
+			<Button
+				size="xs"
+				color="light"
+				pill={false}
+				outline={true}
+				shadow={false}
+				class="mb-2 ml-2 min-w-10 p-2 hover:bg-gray-700 dark:border-2 {colorClasses}"
+				onclick={() => toggleTag(tag)}
+				{checked}>{tag}</Button
+			>
+		{/each}
+	</div>
 </div>
-
 <div class="w-full columns-1 sm:columns-2 xl:columns-3">
 	{#each projects as project}
 		<Card
 			class="mx-auto mb-4 w-full max-w-lg break-inside-avoid-column p-4 sm:mx-0 dark:bg-zinc-800"
 		>
-			<h5 class="mb-2 truncate text-2xl font-bold whitespace-normal text-white">{project.name}</h5>
-			<p class="mx-2 mb-5 leading-tight font-normal text-gray-300">{@html project.description}</p>
+			<h5 class="mb-0 truncate text-2xl font-bold whitespace-normal text-white">{project.name}</h5>
+			<div class="m-0 mb-4 h-fit w-fit self-start p-0">
+				{#each project.tags.toSorted(tagSort) as tag}
+					<Button
+						size="xs"
+						color="light"
+						class="me-2 p-1 text-primary-600 dark:bg-zinc-800 dark:text-primary-600 dark:hover:bg-primary-900 dark:hover:text-white"
+						onclick={() => (selectedTags = [tag])}>{tag}</Button
+					>
+				{/each}
+			</div>
+			<p class="mx-2 mb-0 leading-tight font-normal text-gray-300">{@html project.description}</p>
 			<div class="flex w-full flex-col justify-between">
-				<ButtonGroup class="project-buttons mb-4 flex h-8 justify-center gap-2">
+				<ButtonGroup class="project-buttons mt-4 mb-0 flex h-8 justify-end gap-2">
 					{#if project.link}
 						<Button color="primary" class="my-0 inline-flex h-8" href={project.link}>
 							{project.linkText ? project.linkText : 'Go'}
 						</Button>
 					{/if}
-					<Button
-						color="alternative"
-						class="my-0 inline-flex h-8 dark:bg-zinc-800 dark:hover:bg-zinc-500"
-						href={project.source}
-					>
-						<GithubSolid class="mr-2" />
-						<span>Source</span>
-					</Button>
+					{#if project.source}
+						<Button
+							color="alternative"
+							class="my-0 inline-flex h-8 dark:bg-zinc-800 dark:hover:bg-zinc-500"
+							href={project.source}
+						>
+							<CodeOutline class="me-2" />
+							<span>Source</span>
+						</Button>
+					{/if}
 				</ButtonGroup>
 				<!-- tags -->
-				<div class="mb-2 h-fit w-fit self-center">
-					{#each project.tags.toSorted(tagSort) as tag}
-						<Button
-							color="light"
-							class="ml-2 p-1 text-primary-600 dark:bg-zinc-800 dark:text-primary-600 dark:hover:bg-primary-900 dark:hover:text-white"
-							onclick={() => (selectedTags = [tag])}>{tag}</Button
-						>
-					{/each}
-				</div>
 			</div>
 		</Card>
 	{/each}
