@@ -182,6 +182,6 @@
 
 <style>
 	#netdir-logo {
-		filter: hue-rotate(120deg) saturate(200%) brightness(0.75) contrast(1);
+		filter: hue-rotate(90deg) saturate(400%) brightness(0.72);
 	}
 </style>
