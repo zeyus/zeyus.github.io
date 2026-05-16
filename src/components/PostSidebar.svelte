@@ -19,8 +19,6 @@
 
 	let { sidebarItems }: { sidebarItems: App.VaultEntries[] } = $props();
 
-	// sort sidebar items by year,month, day descending
-	(() => sidebarItems)().sort(sortPosts);
 	const sidebarUi = uiHelpers();
 	const closeSidebar = sidebarUi.close;
 	const openSidebar = sidebarUi.open;
@@ -66,6 +64,7 @@
 		let currentYear: number = 0;
 		let currentMonth: number = 0;
 		const items: Record<string, App.VaultEntries[]> = {};
+		sidebarItems.sort(sortPosts);
 		for (const item of sidebarItems) {
 			const date = item.props.date;
 			if (currentYear !== date.getFullYear() || currentMonth !== date.getMonth()) {
@@ -121,14 +120,14 @@
 			>zeyus dot com</SidebarBrand
 		>
 		<SidebarGroup class="dark:bg-none">
-			{#each Object.entries(sidebarItemsGrouped) as [key, sidebarItems]}
+			{#each Object.entries(sidebarItemsGrouped) as [key, sidebarItem]}
 				<SidebarItem
 					spanClass="text-slate-400 font-bold border-b-2 border-slate-700 w-full text-right mt-4 mb-2"
 					activeClass="flex flex-row-reverse"
 					nonActiveClass="flex flex-row-reverse"
 					label={key}
 				/>
-				{#each sidebarItems as item}
+				{#each sidebarItem as item}
 					<SidebarItem
 						spanClass="basis-11/12 self-center"
 						activeClass="bg-gradient-to-r from-zinc-900 via-75% via-zinc-400/[.15] to-zinc-900 current-post flex text-sm flex-row font-bold text-primary-500 ps-0"

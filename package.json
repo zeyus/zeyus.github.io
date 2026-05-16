@@ -78,7 +78,7 @@
 			"sharp"
 		]
 	},
-	"packageManager": "pnpm@10.20.0",
+	"packageManager": "pnpm@11.1.2",
 	"engines": {
 		"pnpm": ">=10",
 		"node": ">=24"
