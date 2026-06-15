@@ -1,3 +1,9 @@
 allowBuilds:
-  esbuild: set this to true or false
-  sharp: set this to true or false
+  esbuild: true
+  sharp: true
+  '@tailwindcss/oxide': true
+overrides:
+  cookie: '>=1.0.0'
+  '@types/cookie': '-'
+  esbuild: '>=0.28.1'
+  'brace-expansion': '>=2.0.2'
