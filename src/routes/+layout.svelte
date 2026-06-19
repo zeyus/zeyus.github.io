@@ -112,7 +112,7 @@
 				{year}
 				copyrightMessage="(MIT license)"
 			/>
-			<div class="my-0 mt-1 flex items-center text-sm">
+			<!-- <div class="my-0 mt-1 flex items-center text-sm">
 				<a
 					href="https://netdir.org/nav/8/prev"
 					title="previous website in the netdir.org webring"
@@ -143,7 +143,7 @@
 					aria-label="random website from the netdir.org webring"
 					><RocketOutline class="h-6 w-6 fill-mauve-900 text-primary-600" strokeWidth="1" /></a
 				>
-			</div>
+			</div> -->
 			<FooterLinkGroup class="my-0 mt-1 flex flex-wrap items-center text-sm">
 				<FooterLink href="https://github.com/zeyus/zeyus.github.io">
 					<FooterIcon>
@@ -180,8 +180,8 @@
 	</div>
 </Footer>
 
-<style>
+<!-- <style>
 	#netdir-logo {
 		filter: hue-rotate(90deg) saturate(400%) brightness(0.72);
 	}
-</style>
+</style> -->
