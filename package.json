@@ -44,7 +44,7 @@
 		"gh-pages": "^6.3.0",
 		"node-addon-api": "^8.8.0",
 		"node-gyp": "^12.4.0",
-		"postcss": "^8.5.15",
+		"postcss": "^8.5.18",
 		"prettier": "^3.8.4",
 		"prettier-plugin-svelte": "^3.5.2",
 		"prettier-plugin-tailwindcss": "^0.7.4",
