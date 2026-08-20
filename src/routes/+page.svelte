@@ -8,6 +8,10 @@
 	import { createFootnote } from '$components/BoringReference.svelte';
 	import { WebGlShader } from 'svader';
 	import storage from '$lib/store';
+	import DumbTicker from '$components/DumbTicker.svelte';
+	import type { PageData } from './$types';
+
+	let { data }: { data: PageData } = $props();
 
 	const shaderLimits = {
 		x: { min: -100.0, max: 100.0, default: 0.0 },
@@ -570,6 +574,8 @@
 		</div>
 	{/if}
 </div>
+<DumbTicker posts={data.posts} label="_vault" />
+
 <P class="md:mt-4 dark:text-gray-200">
 	If you're interested in some stuff I write about, check out <A href="/_vault/">the _vault</A>, if
 	you'd like to see some of the open source projects I've worked on, take a look at

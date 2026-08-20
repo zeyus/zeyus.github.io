@@ -32,22 +32,19 @@ function codeBlockPreprocessor() {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte'],
-	preprocess: [
-		codeBlockPreprocessor(),
-		vitePreprocess({ script: true })
-	],
+	preprocess: [codeBlockPreprocessor(), vitePreprocess({ script: true })],
 	kit: {
 		alias: {
 			$components: './src/components',
 			$assets: './src/_assets',
 			$images: './src/_assets/images',
-			$media: './src/_assets/media',
+			$media: './src/_assets/media'
 		},
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
 			fallback: '404.html',
-			
+
 			precompress: false,
 			strict: true
 		}),
@@ -60,9 +57,8 @@ const config = {
 		prerender: {
 			handleHttpError: 'warn',
 			crawl: true,
-			handleMissingId: 'warn',
-
-		},
+			handleMissingId: 'warn'
+		}
 	}
 };
 

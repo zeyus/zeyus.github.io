@@ -13,13 +13,13 @@ declare global {
 			path: string;
 			props: VaultPageProps;
 		}
-	};
+	}
 	interface VaultGallery {
 		id?: string;
 		name?: string;
-		position?: "start" | "end" | "none";
+		position?: 'start' | 'end' | 'none';
 		images: HTMLImgAttributes[];
-	};
+	}
 	interface VaultPageProps {
 		title: string;
 		date: Date;
@@ -27,14 +27,14 @@ declare global {
 		short_title?: string;
 		feature_image?: HTMLImgAttributes;
 		gallery?: VaultGallery;
-	};
+	}
 
 	interface Footnote {
 		text: string;
 		url: string;
 		year?: number;
 		occurrences: number;
-	};
+	}
 
 	type CommonBibTeXFields = {
 		author?: string;
@@ -66,12 +66,12 @@ declare global {
 		type USB = {
 			getDevices: () => Promise<USBDevice[]>;
 			requestDevice: (options: USBDeviceRequestOptions) => Promise<USBDevice>;
-		}
+		};
 		type Serial = {
 			getPorts: () => Promise<SerialPort[]>;
 			requestPort: () => Promise<SerialPort>;
-		}
+		};
 	}
 }
 
-export { };
+export {};

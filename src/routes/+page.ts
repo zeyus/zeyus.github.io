@@ -1,10 +1,13 @@
 import type { PageLoad } from './$types';
+import { loadVaultEntries } from '$lib/vault.ts';
 
-export const load: PageLoad = () => {
-    return {
-        props: {
-            title: 'home',
-            excerpt: 'Hi, I\'m zeyus, the epitome of a generalist. I left industry to study cognitive science and now I\'m working on my PhD so I can specialize in generalism.',
-        }
-    }
+export const load: PageLoad = async () => {
+	return {
+		props: {
+			title: 'home',
+			excerpt:
+				"Hi, I'm zeyus, the epitome of a generalist. I left industry to study cognitive science and now I'm working on my PhD so I can specialize in generalism."
+		},
+		posts: await loadVaultEntries()
+	};
 };

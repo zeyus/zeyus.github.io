@@ -16,11 +16,6 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"isolatedModules": true,
-		"lib": [
-			"ES2024",
-			"ESNext",
-			"DOM",
-			"DOM.Iterable"
-		]
+		"lib": ["ES2024", "ESNext", "DOM", "DOM.Iterable"]
 	}
 }

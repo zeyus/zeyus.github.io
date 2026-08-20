@@ -480,8 +480,7 @@ monitored if unauthorized usage is suspected.`,
 			autocapitalize="off"
 			oninput={handleVirtualInput}
 			name="mobileinput"
-			id="touchinput"
-		></textarea>
+			id="touchinput"></textarea>
 		{#if serialMode}
 			<pre class="input">{serialIO}</pre>
 			<span class="cursor"></span>
