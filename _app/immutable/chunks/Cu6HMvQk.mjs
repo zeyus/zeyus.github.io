@@ -1,0 +1,1 @@
+import{Wt as e}from"./BkFQlMHx.mjs";var t=e({load:()=>n}),n=()=>({props:{title:`Building Ardour on OSX 15.3 for an M3 MacBook Pro`,date:new Date(`2025-01-13`),excerpt:`A rough guide to build and install Ardour on OSX`,short_title:`OSX Ardour Build`}});export{t};

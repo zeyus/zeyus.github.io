@@ -1,0 +1,1 @@
+var e=(e,t)=>`/_assets/images${t}${t.endsWith(`/`)?``:`/`}${e}`;export{e as t};
