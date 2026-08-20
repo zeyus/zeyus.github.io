@@ -15,13 +15,7 @@ export const nth = (d: number) => {
 };
 
 export const sortPosts = (a: App.VaultEntries, b: App.VaultEntries): number => {
-	if (b.props.date.getFullYear() !== a.props.date.getFullYear()) {
-		return a.props.date.getFullYear() < b.props.date.getFullYear() ? 1 : -1;
-	} else if (a.props.date.getMonth() !== b.props.date.getMonth()) {
-		return b.props.date.getMonth() < a.props.date.getMonth() ? 1 : -1;
-	} else {
-		return b.props.date.getDay() < a.props.date.getDay() ? 1 : -1;
-	}
+	return b.props.date.getTime() - a.props.date.getTime();
 };
 
 export function findInSet<Type>(set: Set<Type>, test: (o: Type) => boolean): Type | undefined {
