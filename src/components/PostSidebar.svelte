@@ -108,7 +108,7 @@
 	breakpoint="2xl"
 	position="fixed"
 	backdrop={false}
-	class="top-1/3 m-0 max-h-1/2 w-66 rounded-lg border-2 p-0 2xl:top-56 dark:border-primary-900 dark:bg-zinc-900"
+	class="top-1/3 m-0 max-h-1/2 w-66 overflow-y-scroll rounded-lg border-2 p-0 2xl:top-56 dark:border-primary-900 dark:bg-zinc-900"
 >
 	<CloseButton
 		onclick={closeSidebar}

@@ -3,10 +3,12 @@
 
 	let {
 		items = $bindable([]),
-		highlightClass = 'bg-primary-800/50'
+		highlightClass = 'bg-primary-800/50',
+		hline = true
 	}: {
 		items: Footnote[];
 		highlightClass?: string;
+		hline?: boolean;
 	} = $props();
 
 	const transitionClass = ['transition', 'ease-in-out', 'duration-300', 'delay-150'];
@@ -66,9 +68,11 @@
 </script>
 
 {#if items.length > 0}
-	<div class="mt-12 mb-4 w-full">
-		<div class="-ml-4 w-64 border-t border-slate-400"></div>
-	</div>
+	{#if hline}
+		<div class="mt-12 mb-4 w-full">
+			<div class="-ml-4 w-64 border-t border-slate-400"></div>
+		</div>
+	{/if}
 	<List class="flex w-full flex-col" position="inside">
 		{#each items as item, index}
 			<Li

@@ -14,6 +14,15 @@
 		path = null,
 		sizes = '',
 		transform = []
+	}: {
+		image: App.EnhancedImageDef;
+		figClass?: string;
+		imgClass?: string;
+		captionClass?: string;
+		hideTitle?: boolean;
+		path?: string | null;
+		sizes?: string;
+		transform?: string[];
 	} = $props();
 	// let srcSuffix = transform.length > 0 ? "?" + transform.join("&") : "";
 	// let imgSrc = imageToModuleDefault(image.src + srcSuffix, page.url.pathname, page.data.imageModules);
@@ -24,7 +33,7 @@
 </script>
 
 <figure class={figClass}>
-	<img src={imgSrc} alt={image.alt} class={imgClass} />
+	<img src={imgSrc} alt={image.alt} class={imgClass + ' ' + (image.extraImgClasses ?? '')} />
 	{#if image.title && !hideTitle}
 		<figcaption class={captionClass}>{image.title}</figcaption>
 	{/if}
