@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import autoSlug from '@svelte-put/preprocess-auto-slug';
 
 /**
  * Transforms <CodeBlock ...>raw code</CodeBlock> → <CodeBlock ... code={`raw code`} />
@@ -32,7 +33,16 @@ function codeBlockPreprocessor() {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte'],
-	preprocess: [codeBlockPreprocessor(), vitePreprocess({ script: true })],
+	preprocess: [
+		codeBlockPreprocessor(),
+    vitePreprocess({ script: true }),
+    autoSlug({
+      anchor: {
+        position: 'append',
+        content: '🔗',
+      }
+		})
+	],
 	kit: {
 		alias: {
 			$components: './src/components',

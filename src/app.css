@@ -99,6 +99,26 @@ body {
 	letter-spacing: 0.005rem;
 }
 
+*[data-auto-slug], *[data-toc] {
+    position: relative;
+    display: inline-block;
+}
+
+a[data-auto-slug-anchor], a[data-toc-anchor] {
+    opacity: 0;
+    transition: opacity .5s var(--default-transition-timing-function);
+    position: absolute;
+    left: 100%;
+    font-size: 80%;
+    bottom: 10%;
+    alignment-baseline: central;
+    padding-inline-start: 0.3rem;
+}
+
+*[data-auto-slug]:hover > a[data-auto-slug-anchor], *[data-toc]:hover > a[data-toc-anchor] {
+    opacity: 1;
+}
+
 .font-bold,
 h1,
 h2,
@@ -173,9 +193,10 @@ article {
 			margin-right: 0.5rem;
 		}
 
-		li::marker {
-			content: '\003E';
-			font-weight: 900;
-		}
-	}
+
+    li::marker {
+      content: "\003E";
+      font-weight: 900;
+    }
+  }
 }
