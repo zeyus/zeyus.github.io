@@ -2,6 +2,13 @@
 	import type { MetadataContext } from '$lib/metadata.svelte';
 	import { getContext } from 'svelte';
 
+	// explicit ids, otherwise auto-slug gives every card the same id ("project-name")
+	const projectId = (name: string) =>
+		name
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-|-$/g, '');
+
 	let metaCtx = getContext<MetadataContext>('metadata');
 
 	metaCtx.setMetadata({
@@ -309,7 +316,7 @@
 <div class="w-full columns-1 gap-4 sm:columns-2 xl:columns-3">
 	{#each projects as project (project.name)}
 		<article class="term-card project">
-			<h2 class="project-name">{project.name}</h2>
+			<h2 class="project-name" id={projectId(project.name)}>{project.name}</h2>
 			<p class="project-desc">{@html project.description}</p>
 			<div class="project-tags">
 				{#each project.tags.toSorted(tagSort) as tag (tag)}

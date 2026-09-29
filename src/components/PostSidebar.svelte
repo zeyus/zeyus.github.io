@@ -89,7 +89,7 @@
 	breakpoint="2xl"
 	position="fixed"
 	backdrop={false}
-	class="top-1/3 m-0 max-h-1/2 w-66 overflow-y-auto rounded-lg border border-line bg-surface! p-0 shadow-lg 2xl:top-56"
+	class="top-1/3 m-0 max-h-1/2 w-66 overflow-y-auto rounded-lg border border-line bg-surface! p-0 shadow-lg 2xl:sticky 2xl:top-6 2xl:z-auto 2xl:mt-2 2xl:max-h-[calc(100vh-3rem)] 2xl:shrink-0 2xl:self-start 2xl:shadow-none"
 >
 	<CloseButton
 		onclick={closeSidebar}

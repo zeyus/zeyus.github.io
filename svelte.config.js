@@ -39,7 +39,7 @@ const config = {
 		autoSlug({
 			anchor: {
 				position: 'append',
-				content: '🔗'
+				content: '#'
 			}
 		})
 	],

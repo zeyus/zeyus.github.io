@@ -45,10 +45,15 @@
 
 <div id="fixedNavWrapper" class="relative z-30 h-11 w-full md:h-14">
 	<!-- pseudo app top bar -->
-	<div class="inset-s-0 top-0 z-20 h-5 w-full rounded-t-md bg-surface-2">
-		<!-- centered site name and page title -->
-		<div class="container mx-auto flex h-full items-center justify-center">
-			<span id="nav-prompt" class="text-sm text-fg-muted">&nbsp;anon@zeyus&nbsp;</span>
+	<div class="inset-s-0 top-0 z-20 h-9 w-full rounded-t-md bg-surface-2 md:h-5">
+		<!-- centered site name and page title; one line, the path truncates on small
+		     screens and leaves room on the right for the menu button -->
+		<div
+			class="container mx-auto flex h-full min-w-0 items-center justify-center overflow-hidden ps-2 pe-12 whitespace-nowrap md:px-0"
+		>
+			<span id="nav-prompt" class="hidden text-sm text-fg-muted sm:inline"
+				>&nbsp;anon@zeyus&nbsp;</span
+			>
 			<BreadcrumbTrail />
 			<span class="text-sm text-fg-muted" id="nav-title">$</span>
 			<ThemeToggle />
@@ -65,10 +70,10 @@
 					>{metaCtx.title(false)}</span
 				>
 			</NavBrand> -->
+		<!-- sits in the top bar on small screens; 36px so it's actually tappable -->
 		<NavHamburger
-			size="xs"
-			class="absolute inset-e-0 -mt-5 h-3 w-3 justify-self-end rounded-none bg-primary-600 text-white after:absolute after:-inset-4 after:content-[''] md:hidden"
-			classes={{ menu: 'h-3 w-3' }}
+			class="absolute inset-e-1 -top-9 m-0 flex h-8 w-9 items-center justify-center rounded bg-primary-600 p-0 text-white md:hidden"
+			classes={{ menu: 'h-5 w-5' }}
 		/>
 		<NavUl
 			{activeUrl}

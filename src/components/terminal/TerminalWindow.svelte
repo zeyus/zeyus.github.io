@@ -30,7 +30,9 @@
 	// (except on touch devices, where focusing pops up the keyboard)
 	const refocus = () => {
 		if (matchMedia('(pointer: coarse)').matches) return;
-		requestAnimationFrame(() => frame.querySelector<HTMLElement>('.xterm textarea')?.focus());
+		requestAnimationFrame(() =>
+			frame.querySelector<HTMLElement>('.xterm textarea')?.focus({ preventScroll: true })
+		);
 	};
 
 	const save = () => {
@@ -264,7 +266,9 @@
 		box-shadow:
 			0 0 0 1px color-mix(in oklab, var(--color-accent) 25%, transparent),
 			0 0 24px var(--color-glow);
-		overflow: hidden;
+		/* clip, not hidden: a hidden box can still be scrolled when something inside it
+		   (xterm's input textarea) is focused, which shoves the whole window up */
+		overflow: clip;
 		font-family: var(--font-mono);
 	}
 	.term-window.floating {
@@ -356,6 +360,7 @@
 	}
 
 	.body {
+		overflow: clip;
 		display: flex;
 		flex-direction: column;
 		flex: 1 1 auto;

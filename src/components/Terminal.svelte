@@ -429,6 +429,7 @@ monitored if unauthorized usage is suspected.`;
 
 <style>
 	.screen {
+		overflow: clip;
 		display: flex;
 		flex: 1 1 auto;
 		min-height: 0;

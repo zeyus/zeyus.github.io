@@ -48,14 +48,15 @@
 	};
 </script>
 
-<div class="flex flex-row">
+<!-- on 2xl the sidebar is a sticky column here; below that it's a slide-out drawer -->
+<div class="flex flex-row 2xl:gap-10">
 	<PostSidebar sidebarItems={data.posts} />
-	<div class="d-none w-0 2xl:block 2xl:w-72">
-		<!-- spacer to account for the sidebar -->
-	</div>
 	<article class="mx-auto w-full 2xl:w-(--article-max)">
 		<div class="mb-4 flex w-full flex-row flex-wrap justify-between">
-			<Heading class="post-title mb-0 max-w-max">{page.data.props.title}</Heading>
+			<Heading
+				class="post-title mb-0 max-w-max text-3xl/tight! [overflow-wrap:anywhere] sm:text-4xl/tight! md:text-5xl/tight!"
+				>{page.data.props.title}</Heading
+			>
 			<span class="post-meta self-end font-mono text-xs text-fg-subtle"
 				><span class="text-accent">$</span> stat {slug} → {new Date(
 					page.data.props.date

@@ -16,8 +16,8 @@
 
 <Breadcrumb
 	id="breadcrumb-trail"
-	classes={{ list: 'flex text-fg-muted' }}
-	class="mt-2 mb-2"
+	classes={{ list: 'flex flex-nowrap min-w-0 text-fg-muted' }}
+	class="mt-2 mb-2 min-w-0"
 	aria-label="Breadcrumb"
 >
 	<BreadcrumbItem href="/" home={true}
@@ -40,5 +40,23 @@
 	}
 	:global(#breadcrumb-trail) {
 		font-family: 'Mechanical Bold', monospace;
+	}
+	/* long paths stay on one line: the last segment gets cut off with an ellipsis */
+	:global(#breadcrumb-trail li) {
+		flex-shrink: 0;
+		white-space: nowrap;
+	}
+	:global(#breadcrumb-trail li:last-child) {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		flex-shrink: 1;
+		min-width: 0;
+	}
+	:global(#breadcrumb-trail li:last-child a) {
+		display: block;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 </style>

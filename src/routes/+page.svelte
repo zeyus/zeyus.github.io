@@ -1,3 +1,4 @@
+<!-- ignore @svelte-put/preprocess-auto-slug -->
 <script lang="ts">
 	import { P, A, Range, Label, Button } from 'flowbite-svelte';
 	import { UndoOutline, EyeOutline } from 'flowbite-svelte-icons';

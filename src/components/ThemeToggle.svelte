@@ -33,11 +33,11 @@
 <button
 	type="button"
 	onclick={cycle}
-	class="theme-toggle ms-2 cursor-pointer text-xs text-fg-muted hover:text-accent-strong"
+	class="theme-toggle ms-2 shrink-0 cursor-pointer text-xs text-fg-muted hover:text-accent-strong"
 	aria-label="Colour theme: {$theme}. Click to change."
 	title="Colour theme: auto (system) → light → dark"
 >
-	[theme:{$theme}]
+	[<span class="hidden sm:inline">theme:</span>{$theme}]
 </button>
 
 <style>

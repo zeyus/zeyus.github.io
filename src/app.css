@@ -80,7 +80,18 @@
 	--color-glow: color-mix(in oklab, var(--color-primary-500) 55%, transparent);
 }
 
-/* @source "../node_modules/flowbite-svelte/dist"; */
+/* only the flowbite components this site uses; scanning all of flowbite-svelte/dist
+   makes the CSS ~5x bigger, and scanning none drops classes flowbite relies on
+   (e.g. inline-flex, which centres Button contents) */
+@source '../node_modules/flowbite-svelte/dist/breadcrumb';
+@source '../node_modules/flowbite-svelte/dist/buttons';
+@source '../node_modules/flowbite-svelte/dist/footer';
+@source '../node_modules/flowbite-svelte/dist/forms/label';
+@source '../node_modules/flowbite-svelte/dist/forms/range';
+@source '../node_modules/flowbite-svelte/dist/navbar';
+@source '../node_modules/flowbite-svelte/dist/sidebar';
+@source '../node_modules/flowbite-svelte/dist/typography';
+@source '../node_modules/flowbite-svelte/dist/utils';
 /* @source "../node_modules/flowbite-svelte-icons/dist"; */
 
 @layer base {
@@ -160,18 +171,47 @@ body {
 *[data-toc] {
 	position: relative;
 	display: inline-block;
+	max-width: 100%;
+	/* long unbroken names (snake_case etc.) wrap instead of widening the page */
+	overflow-wrap: anywhere;
 }
 
+/* inline (not absolutely positioned past the heading's edge), so a full-width
+   heading can't push the page wider than the screen */
 a[data-auto-slug-anchor],
 a[data-toc-anchor] {
 	opacity: 0;
 	transition: opacity 0.5s var(--default-transition-timing-function);
-	position: absolute;
-	left: 100%;
+	font-family: var(--font-mono);
 	font-size: 80%;
-	bottom: 10%;
-	alignment-baseline: central;
-	padding-inline-start: 0.3rem;
+	font-weight: normal;
+	color: var(--color-accent);
+	text-decoration: none;
+	padding-inline-start: 0.4rem;
+	white-space: nowrap;
+}
+
+/* no hover on touch screens, so the anchors are just clutter there */
+@media (hover: none) {
+	a[data-auto-slug-anchor],
+	a[data-toc-anchor] {
+		display: none;
+	}
+}
+
+/* flowbite's <A> is inline-flex, which stops a long link wrapping with the
+   sentence around it; keep links in running text inline */
+:where(p, li, td, blockquote) > a.inline-flex {
+	display: inline;
+}
+
+/* embeds (e.g. YouTube) scale down to fit narrow screens */
+iframe {
+	max-width: 100%;
+}
+iframe[src*='youtube'] {
+	height: auto;
+	aspect-ratio: 16 / 9;
 }
 
 *[data-auto-slug]:hover > a[data-auto-slug-anchor],
