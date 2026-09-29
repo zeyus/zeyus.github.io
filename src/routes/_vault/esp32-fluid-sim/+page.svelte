@@ -1,14 +1,5 @@
 <script lang="ts">
-	import type { HTMLImgAttributes } from 'svelte/elements';
-	import { page } from '$app/state';
 	import { P, List, Li, A } from 'flowbite-svelte';
-	import BoringReference from '$components/BoringReference.svelte';
-	import BoringBibliography from '$components/BoringBibliography.svelte';
-	import { createFootnote } from '$components/BoringReference.svelte';
-	import EnhancedImg from '$components/EnhancedImg.svelte';
-
-	// let images = page.data.props.gallery.images as HTMLImgAttributes[];
-	let items: Footnote[] = [];
 </script>
 
 <P class="text-right">

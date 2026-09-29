@@ -11,7 +11,8 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		// "types": ["vidstack/globals"],
+		// TS 6 no longer auto-includes @types/*; list the ambient ones we rely on
+		"types": ["node", "w3c-web-serial", "w3c-web-usb"],
 		"noEmit": true,
 		"target": "ESNext",
 		"module": "ESNext",

@@ -6,6 +6,7 @@
 	import { resolve } from '$app/paths';
 	import { Toc } from '@svelte-put/toc';
 	import EnhancedImg from '$components/EnhancedImg.svelte';
+	import Callout from '$components/Callout.svelte';
 
 	const toc = new Toc({
 		selector: ':where(h1, h2)',
@@ -15,23 +16,21 @@
 </script>
 
 <main use:toc.actions.root>
-	<section
-		class="mb-8 ml-4 max-w-fit rounded-4xl border-2 p-0 ps-4 pe-8 pb-8 dark:border-primary-800"
-	>
-		<h2 class="mt-0 mb-0 py-0" data-toc-ignore="true">Table of Contents</h2>
+	<nav class="post-toc" aria-label="Table of contents">
+		<span class="post-toc-label">$ grep '^##' rise-together</span>
 		{#if toc.items.size}
-			<ul class="toc-items list-disc">
+			<ol>
 				{#each toc.items.values() as tocItem (tocItem.id)}
-					<li class="ml-8">
+					<li>
 						<!-- svelte-ignore a11y_missing_attribute -->
-						<a class="dark:text-primary-600" use:toc.actions.link={tocItem}>
+						<a use:toc.actions.link={tocItem}>
 							<!-- textContent injected by toc -->
 						</a>
 					</li>
 				{/each}
-			</ul>
+			</ol>
 		{/if}
-	</section>
+	</nav>
 	<section>
 		<P
 			>First up, I want to say that this post will hopefully evolve, I think it's useful practice in
@@ -49,7 +48,7 @@
 	</section>
 	<section>
 		<Heading tag="h2">Some of the moving parts...</Heading>
-		<div class="my-4 rounded-4xl border-2 p-4 dark:border-primary-800">
+		<div class="my-4 rounded-4xl border-2 border-accent-soft p-4">
 			<List class="grid list-none grid-flow-row grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
 				<Li
 					><Heading tag="h4">Fields & Theories:</Heading>
@@ -110,9 +109,9 @@
 	<section>
 		<P>With that done, let's start from the beginning.</P>
 		<Heading tag="h2">What am I trying to do?</Heading>
-		<P class="border-l-4 border-primary-500 pl-4 text-lg italic"
-			>TL;DR: I want to understand if we can identify group membership based on neural synchrony</P
-		>
+		<Callout label="TL;DR">
+			<P>I want to understand if we can identify group membership based on neural synchrony</P>
+		</Callout>
 		<P
 			>I'm fascinated by group behaviour<BoringReference
 				bind:items
@@ -216,6 +215,75 @@
 				extraImgClasses: 'invert-90'
 			}}
 		/>
+	</section>
+
+	<section>
+		<Heading tag="h2">So what's wrong with synchrony?</Heading>
+		<P
+			>Well, there's nothing wrong with synchrony really, but you can find neural synchrony in
+			larger groups of people when you ask them to do something together at the same time in the
+			same setting. This makes a lot of sense, and we naturally do things like falling into step
+			when we walk with someone, mirroring people's gestures, and so on. This synchrony arises from
+			some combination of "shared stimulus", "shared action", and "shared attention". In order to
+			get a little further towards the understanding if there is such a thing as "this is your brain
+			in a group", there has to be a way to pull apart some of the contributing factors. Maybe then,
+			whatever is left, might be some kind of indication of a "group identity" signal, and that
+			would be fascinating. This is something that should not be able to be explained away by people
+			doing the same thing at the same time in the same place (if everyone on the train to work has
+			the same level of synchrony, then we haven't explained anything).
+		</P>
+		<Heading tag="h3">Tools? What tools?</Heading>
+		<P
+			>Part of the problem is that simultaneous neuroimaging of multiple people (a.k.a.
+			hyperscanning) is complex, there are a lot of moving parts, and the majority of experimental
+			paradigms that are around do not really work at a group level. So, the solution was to build
+			my own experiment and tools around it. Luckily, one of my supervisors is from the <A
+				href="https://ece.au.dk/en/research/research-centres/center-for-ear-eeg/"
+				>Center for Ear-EEG</A
+			> at Aarhus University, and they have developed an EEG hyperscanning platform that uses super cool
+			custom EEG amplifiers in a space that can record up to 10 people at the same time. All of that is
+			huge, but it's one step towards having an working experiment.
+		</P>
+		<EnhancedImg
+			figClass="w-full p-0 md:float-right md:w-5/12 md:p-4"
+			image={{
+				src: 'rise-together.png',
+				alt: 'Screenshot of the Rise Together game, showing a ball being lifted by a paddle.',
+				title: 'Rise Together game screenshot'
+			}}
+		/>
+		<P
+			>To get at this group identity idea, I knew I wanted to look at real-time interactions, and
+			something like a videogame seemed like a good idea, as long as it was simple to play and could
+			have sub-groups of players. Taking some inspiration from the field of joint action, I figured
+			that a task where people work together is a good start, but there should also be competition.
+			This duality of cooperation and competition happens a lot in daily life, sports and other
+			games, and it is one way to have people working together, and at the same time competing
+			against another team. This all led me to design and iteratively work on a game where people
+			work together to lift a ball using a paddle, while they are doing that the other team is
+			trying to do the same thing, and whoever gets furthest, wins. There are only two buttons, one
+			to lift the paddle on the left side, and one to lift the paddle on the right side, but the
+			ball and game are physics based so it is deceptively difficult.
+		</P>
+
+		<P
+			>Riiight, so, in a very short time I had a working demo of the game for one player using <A
+				href="https://flame-engine.org/">Flame</A
+			>, but really, that was the easy part. If I want to run an experiment with 4, 6 or 10
+			participants, each with their own iPad, interacting in real-time, then there needed to be a
+			lot more work put in.</P
+		>
+		<Callout label="TRY IT">
+			<P>
+				Would you like to try the game out? I have a more game-like version that you can play in
+				your browser: <A
+					href="https://rt-lobby.nexusdynamic.org/"
+					target="_blank"
+					rel="noopener noreferrer">Rise Together game edition</A
+				>
+			</P>
+		</Callout>
+
 	</section>
 
 	<section>

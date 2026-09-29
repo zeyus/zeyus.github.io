@@ -13,7 +13,7 @@
 >
 <List
 	id="pkg-list"
-	class="mb-4 ml-8 grid  grid-cols-2 space-y-1 text-gray-500 md:grid-cols-3 dark:text-gray-400"
+	class="mb-4 ml-8 grid  grid-cols-2 space-y-1 text-fg-muted md:grid-cols-3"
 	position="inside"
 >
 	<Li>gtk+</Li>

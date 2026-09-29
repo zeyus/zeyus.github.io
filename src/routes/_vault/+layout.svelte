@@ -8,7 +8,8 @@
 
 	import EnhancedImg from '$components/EnhancedImg.svelte';
 
-	import { getContext } from 'svelte';
+	import { getContext, tick } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import type { MetadataContext } from '$lib/metadata.svelte';
 
 	let metaCtx = getContext<MetadataContext>('metadata');
@@ -26,6 +27,19 @@
 		});
 	});
 
+	// rough reading time from the rendered post body (~230 wpm)
+	let postBody: HTMLElement | undefined = $state();
+	let readMinutes: number | null = $state(null);
+	afterNavigate(async () => {
+		await tick();
+		const words = postBody?.innerText.trim().split(/\s+/).length ?? 0;
+		readMinutes = words ? Math.max(1, Math.round(words / 230)) : null;
+	});
+
+	let slug = $derived(page.url.pathname.split('/').filter(Boolean).at(-1));
+	// the index is a listing, not a post: no reading column or reading time
+	let isIndex = $derived(slug === '_vault');
+
 	// make date human readable
 	const dateOptions: Intl.DateTimeFormatOptions = {
 		year: 'numeric',
@@ -41,12 +55,12 @@
 	</div>
 	<article class="mx-auto w-full 2xl:w-(--article-max)">
 		<div class="mb-4 flex w-full flex-row flex-wrap justify-between">
-			<Heading class="mb-0 max-w-max">{page.data.props.title}</Heading>
-			<span class="date self-end whitespace-nowrap text-gray-500"
-				>Published on: {new Date(page.data.props.date).toLocaleDateString(
-					undefined,
-					dateOptions
-				)}</span
+			<Heading class="post-title mb-0 max-w-max">{page.data.props.title}</Heading>
+			<span class="post-meta self-end font-mono text-xs text-fg-subtle"
+				><span class="text-accent">$</span> stat {slug} → {new Date(
+					page.data.props.date
+				).toLocaleDateString(undefined, dateOptions)}{#if readMinutes && !isIndex}
+					· ~{readMinutes} min read{/if}</span
 			>
 		</div>
 		{#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
@@ -59,6 +73,8 @@
 			/>
 		{/if}
 
-		{@render children()}
+		<div class:post-body={!isIndex} bind:this={postBody}>
+			{@render children()}
+		</div>
 	</article>
 </div>

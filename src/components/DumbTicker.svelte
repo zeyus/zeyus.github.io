@@ -38,7 +38,7 @@
 	>
 		{#each items as post (post.path)}
 			<li class="flex items-center gap-2 text-sm whitespace-nowrap">
-				<span class="text-xs text-gray-500 dark:text-gray-400"
+				<span class="font-mono text-xs text-fg-subtle"
 					>{post.props.date.toLocaleDateString(undefined, dateOptions)}</span
 				>
 				<A href={post.path} tabindex={duplicate ? -1 : undefined}
@@ -51,11 +51,10 @@
 
 {#if items.length}
 	<div
-		class="ticker mx-auto my-4 flex w-1/2 items-center overflow-hidden rounded-lg border border-gray-200 bg-white/50 dark:border-zinc-700 dark:bg-zinc-900/50"
+		class="ticker my-6 flex w-full items-center overflow-hidden rounded-lg border border-line bg-surface-2"
 	>
-		<span
-			class="shrink-0 border-e border-gray-200 px-3 py-2 text-xs font-bold tracking-wide text-primary-600 uppercase dark:border-zinc-700 dark:text-primary-500"
-			>{label}</span
+		<span class="shrink-0 border-e border-line px-3 py-2 font-mono text-xs text-accent"
+			>tail -f {label}</span
 		>
 		<div class="ticker-viewport flex-1 overflow-hidden py-2 ps-4">
 			<div class="ticker-track flex w-max" style="--ticker-duration: {duration}s">

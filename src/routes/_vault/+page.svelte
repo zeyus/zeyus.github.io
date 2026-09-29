@@ -3,8 +3,6 @@
 	// import type { PageData } from './$types';
 	import { sortPosts } from '$lib/utils.ts';
 	import EnhancedImg from '$components/EnhancedImg.svelte';
-	import { Heading } from 'flowbite-svelte';
-	import { ArrowRightOutline } from 'flowbite-svelte-icons';
 
 	// let { data }: { data: PageData } = $props();
 	import { page } from '$app/state';
@@ -14,36 +12,85 @@
 	posts.sort(sortPosts);
 </script>
 
-<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-	{#each posts as post}
-		<a href={post.path}>
-			<div class="rounded-lg bg-white p-4 shadow-lg dark:bg-zinc-800">
-				<Heading tag="h2" class="mb-0 text-2xl font-bold text-primary-900 dark:text-primary-100"
-					>{post.props.title}</Heading
-				>
-				<p class="text-sm text-gray-500 dark:text-gray-400">
-					{post.props.date.toLocaleDateString(undefined, {
-						year: 'numeric',
-						month: 'long',
-						day: 'numeric'
-					})}
-				</p>
-				{#if post.props.feature_image && post.props.feature_image?.src}
-					<EnhancedImg
-						image={post.props.feature_image}
-						path={post.path}
-						hideTitle={true}
-						imgClass="w-full h-48 object-cover object-center rounded-lg"
-					/>
-				{/if}
-				{#if post.props.excerpt}
-					<p class="mt-3 text-gray-700 dark:text-gray-300">{post.props.excerpt}</p>
-				{/if}
-				<div class="mt-4 flex items-center justify-end">
-					<span class="text-primary-500 dark:text-primary-400">Read more</span>
-					<ArrowRightOutline class="h-6 w-6 text-primary-500 dark:text-primary-400" />
-				</div>
-			</div>
+<p class="term-prompt">
+	<span class="text-accent">anon@zeyus</span>:~/_vault$ ls -lt
+	<span class="text-fg-subtle">({posts.length} entries)</span>
+</p>
+<div class="vault-grid">
+	{#each posts as post (post.path)}
+		<a href={post.path} class="term-card vault-card">
+			{#if post.props.feature_image && post.props.feature_image?.src}
+				<EnhancedImg
+					image={post.props.feature_image}
+					path={post.path}
+					hideTitle={true}
+					figClass="vault-card-img"
+					imgClass="w-full h-44 object-cover object-center rounded-md"
+				/>
+			{/if}
+			<span class="vault-card-date"
+				>{post.props.date.toLocaleDateString(undefined, {
+					year: 'numeric',
+					month: 'short',
+					day: '2-digit'
+				})}</span
+			>
+			<span class="vault-card-title" role="heading" aria-level="2">{post.props.title}</span>
+			{#if post.props.excerpt}
+				<p class="vault-card-excerpt">{post.props.excerpt}</p>
+			{/if}
+			<span class="vault-card-more">cat {post.path.split('/').filter(Boolean).at(-1)} →</span>
 		</a>
 	{/each}
 </div>
+
+<style>
+	.vault-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+		gap: 1.5rem;
+	}
+
+	.vault-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 1.5rem;
+		font-size: 1rem;
+	}
+
+	:global(.vault-card-img) {
+		margin: -0.5rem -0.5rem 0.5rem !important;
+	}
+
+	.vault-card-date {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--color-fg-subtle);
+	}
+
+	.vault-card-title {
+		margin: 0;
+		font-family: 'Mechanical Bold', serif;
+		font-size: 1.5rem;
+		line-height: 1.2;
+		color: var(--color-fg-strong);
+	}
+
+	.vault-card-excerpt {
+		flex: 1;
+		margin: 0.25rem 0 0.5rem;
+		line-height: 1.6;
+		color: var(--color-fg-muted);
+	}
+
+	.vault-card-more {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--color-accent-strong);
+	}
+
+	.vault-card:hover .vault-card-more {
+		text-shadow: 0 0 8px var(--color-glow);
+	}
+</style>

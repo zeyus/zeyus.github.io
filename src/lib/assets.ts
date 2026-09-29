@@ -23,7 +23,7 @@ export const imageToSrc = (src: string, path: string) => {
 export const imageToModuleDefault = (
 	src: string,
 	path: string,
-	imageModules: Record<string, any>
+	imageModules: Record<string, { default: string }>
 ) => {
 	const imagePath = imageToSrc(src, path);
 	const module = imageModules[imagePath];

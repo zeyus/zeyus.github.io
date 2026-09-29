@@ -16,7 +16,7 @@
 
 {#if show}
 	<button
-		class="fixed right-6 bottom-4 z-50 rounded-full bg-primary-600 p-2 text-white shadow-lg dark:bg-primary-600"
+		class="fixed right-6 bottom-4 z-50 rounded-full bg-primary-600 p-2 text-white shadow-lg"
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 		aria-label="Scroll to top"
 	>

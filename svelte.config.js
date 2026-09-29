@@ -35,12 +35,12 @@ const config = {
 	extensions: ['.svelte'],
 	preprocess: [
 		codeBlockPreprocessor(),
-    vitePreprocess({ script: true }),
-    autoSlug({
-      anchor: {
-        position: 'append',
-        content: '🔗',
-      }
+		vitePreprocess({ script: true }),
+		autoSlug({
+			anchor: {
+				position: 'append',
+				content: '🔗'
+			}
 		})
 	],
 	kit: {

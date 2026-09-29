@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { HTMLImgAttributes } from 'svelte/elements';
 	import { page } from '$app/state';
 	import { P } from 'flowbite-svelte';
 	import BoringReference from '$components/BoringReference.svelte';
@@ -7,7 +6,7 @@
 	import { createFootnote } from '$components/BoringReference.svelte';
 	import EnhancedImg from '$components/EnhancedImg.svelte';
 
-	let images = page.data.props.gallery.images as HTMLImgAttributes[];
+	let images = page.data.props.gallery.images as App.EnhancedImageDef[];
 	let items: Footnote[] = [];
 </script>
 
@@ -194,7 +193,7 @@
 		<source src="/_assets/media/_vault/sauna/sauna_nosound.mp4" type="video/mp4" />
 		Your browser does not support the video tag.
 	</video>
-	<figcaption class="mt-2 h-1/6 text-center text-sm text-gray-500 dark:text-gray-400">
+	<figcaption class="mt-2 h-1/6 text-center text-sm text-fg-muted">
 		The sauna in action 🔥🔥🤘
 	</figcaption>
 </figure>

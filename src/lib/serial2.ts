@@ -809,7 +809,7 @@ export const WebSerial = class {
 			this.close();
 			this.port = null;
 		}
-		for (let port of ports) {
+		for (const port of ports) {
 			console.log(port);
 			try {
 				await port.close();
@@ -866,7 +866,7 @@ export const WebSerial = class {
 		}
 
 		await this.writer?.ready; // wait for any outstanding writes to finish
-		/** @ts-ignore */
+		// @ts-expect-error buffer type is looser than the writer's chunk type
 		await this.writer?.write(buffer);
 		return true;
 	}

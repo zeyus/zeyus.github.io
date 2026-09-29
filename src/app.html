@@ -1,12 +1,27 @@
 <!doctype html>
-<html class="dark" lang="en" data-theme="dark">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/png" href="%sveltekit.assets%/favicon.png" />
 		<link rel="me" href="https://corteximplant.com/@zeyus" />
 		<meta name="fediverse:creator" content="@zeyus@corteximplant.com" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="color-scheme" content="dark" />
+		<meta name="color-scheme" content="dark light" />
+		<meta name="darkreader-lock" />
+		<script>
+			// apply the theme before first paint; keep in sync with ThemeToggle.svelte
+			(function () {
+				var theme = 'auto';
+				try {
+					theme = JSON.parse(localStorage.getItem('theme')) || 'auto';
+				} catch (e) {}
+				var dark =
+					theme === 'auto'
+						? !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches
+						: theme === 'dark';
+				document.documentElement.classList.toggle('dark', dark);
+			})();
+		</script>
 		<link rel="human-json" href="%sveltekit.assets%/human.json" />
 		%sveltekit.head%
 	</head>

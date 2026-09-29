@@ -1,3 +1,4 @@
+import { SvelteSet } from 'svelte/reactivity';
 import { findInSet, indexOfSet, filterSet } from './utils';
 
 export interface FootnotesContext {
@@ -11,7 +12,7 @@ export interface FootnotesContext {
 }
 
 export const createFootnotesContext = (
-	items: Set<Footnote> | undefined = new Set<Footnote>()
+	items: Set<Footnote> | undefined = new SvelteSet<Footnote>()
 ): FootnotesContext => {
 	return {
 		addFootnote: (fn: Footnote): void => {
@@ -39,7 +40,7 @@ export const createFootnotesContext = (
 
 		incrementFootnote: (which: Footnote): (() => void) => {
 			return () => {
-				let fn = findInSet(items, (o: Footnote) => o.text === which.text && o.url === which.url);
+				const fn = findInSet(items, (o: Footnote) => o.text === which.text && o.url === which.url);
 				if (fn) fn.occurrences++;
 			};
 		},

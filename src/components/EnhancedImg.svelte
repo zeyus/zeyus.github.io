@@ -9,11 +9,12 @@
 		image,
 		figClass = 'max-w-full',
 		imgClass = 'rounded-lg object-cover max-w-full w-full',
-		captionClass = 'mt-2 text-sm text-center text-gray-500 dark:text-gray-400',
+		captionClass = 'mt-2 text-sm text-center text-fg-muted',
 		hideTitle = false,
 		path = null,
-		sizes = '',
-		transform = []
+		// accepted for enhanced:img compatibility, currently unused
+		sizes: _sizes = '',
+		transform: _transform = []
 	}: {
 		image: App.EnhancedImageDef;
 		figClass?: string;
@@ -26,9 +27,7 @@
 	} = $props();
 	// let srcSuffix = transform.length > 0 ? "?" + transform.join("&") : "";
 	// let imgSrc = imageToModuleDefault(image.src + srcSuffix, page.url.pathname, page.data.imageModules);
-	// svelte-ignore state_referenced_locally
 	let pagePath = (() => path)() || page.url.pathname;
-	// svelte-ignore state_referenced_locally
 	let imgSrc = imageToSrc((() => image)().src, pagePath);
 </script>
 

@@ -1,3 +1,4 @@
+import { SvelteMap } from 'svelte/reactivity';
 export interface Metadata {
 	title?: string;
 	date?: Date;
@@ -14,7 +15,7 @@ export interface MetadataContext {
 }
 
 export const createMetadataContext = (
-	metaCtx: Map<string, string> | undefined = new Map<string, string>(),
+	metaCtx: Map<string, string> | undefined = new SvelteMap<string, string>(),
 	opts?: { defaultMeta?: Metadata; titleSuffix?: string }
 ): MetadataContext => {
 	function cleanUp() {
@@ -73,6 +74,7 @@ export const createMetadataContext = (
 		},
 		date: () => {
 			if (metaCtx.get('date')) {
+				// eslint-disable-next-line svelte/prefer-svelte-reactivity -- formatted once, never mutated
 				return new Date(metaCtx.get('date') || '').toISOString();
 			}
 			if (opts?.defaultMeta?.date) {

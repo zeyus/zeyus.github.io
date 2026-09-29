@@ -3,13 +3,13 @@
 import type { HTMLImgAttributes } from 'svelte/elements';
 
 declare global {
-  namespace App {
-    interface EnhancedImageDef {
-      src: string,
-      alt: string,
-      title?: string,
-      extraImgClasses?: string;
-    }
+	namespace App {
+		interface EnhancedImageDef {
+			src: string;
+			alt: string;
+			title?: string;
+			extraImgClasses?: string;
+		}
 		interface VaultPageModule {
 			load: () => Promise<{
 				props: VaultPageProps;
@@ -24,7 +24,7 @@ declare global {
 		id?: string;
 		name?: string;
 		position?: 'start' | 'end' | 'none';
-		images: HTMLImgAttributes[];
+		images: App.EnhancedImageDef[];
 	}
 	interface VaultPageProps {
 		title: string;

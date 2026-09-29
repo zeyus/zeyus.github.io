@@ -70,11 +70,11 @@
 {#if items.length > 0}
 	{#if hline}
 		<div class="mt-12 mb-4 w-full">
-			<div class="-ml-4 w-64 border-t border-slate-400"></div>
+			<div class="-ml-4 w-64 border-t border-fg-subtle"></div>
 		</div>
 	{/if}
 	<List class="flex w-full flex-col" position="inside">
-		{#each items as item, index}
+		{#each items as item, index (item.text)}
 			<Li
 				id="footnote-{index + 1}"
 				class="footnote d-block mb-2 w-full basis-full list-none content-start justify-start text-sm {transitionClass.join(

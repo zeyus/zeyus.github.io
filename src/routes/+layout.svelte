@@ -18,10 +18,7 @@
 		HeadphonesOutline,
 		CodeOutline,
 		UsersGroupOutline,
-		VideoCameraOutline,
-		ChevronDoubleLeftOutline,
-		ChevronDoubleRightOutline,
-		RocketOutline
+		VideoCameraOutline
 	} from 'flowbite-svelte-icons';
 
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
@@ -102,7 +99,7 @@
 	</div>
 {/if}
 <Footer
-	class="sticky inset-s-0 z-20 w-full rounded-t-none rounded-b-md bg-zinc-800 p-2 shadow sm:flex-nowrap sm:px-4 sm:pt-0 dark:border-gray-700 dark:bg-zinc-800"
+	class="sticky inset-s-0 z-20 w-full rounded-t-none rounded-b-md bg-surface-2! p-2 shadow sm:flex-nowrap sm:px-4 sm:pt-0"
 >
 	<div class="container mx-auto">
 		<div class="align-center flex flex-wrap items-center justify-center sm:justify-between">

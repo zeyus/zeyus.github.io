@@ -1,11 +1,4 @@
 <script lang="ts">
-	import { ButtonGroup, Button, Card, P, A } from 'flowbite-svelte';
-	import {
-		CaretDownSolid,
-		CaretUpSolid,
-		CloseCircleSolid,
-		CodeOutline
-	} from 'flowbite-svelte-icons';
 	import type { MetadataContext } from '$lib/metadata.svelte';
 	import { getContext } from 'svelte';
 
@@ -265,94 +258,203 @@
 	// });
 </script>
 
-<div class="flex w-full flex-row justify-end">
-	<div class="flex w-1/12 flex-row justify-between self-end p-0 md:w-4/12">
+<div class="projects-head">
+	<p class="term-prompt">
+		<span class="text-accent">anon@zeyus</span>:~$ ls ~/projects --sort=name{orderDirection ===
+		'desc'
+			? ' --reverse'
+			: ''}
+		<span class="projects-count">({projects.length}/{allProjects.length})</span>
+	</p>
+	<div class="projects-controls">
 		<button
+			type="button"
+			class="term-btn"
 			aria-label="Toggle sort order (ascending/descending)"
 			title="Toggle sort order (ascending/descending)"
-			class="me-2 mb-3 h-2 w-2 cursor-pointer p-0 text-xl text-gray-800 dark:bg-none dark:text-gray-300"
 			onclick={() => (orderDirection = orderDirection === 'asc' ? 'desc' : 'asc')}
-			>{#if orderDirection === 'asc'}
-				<CaretUpSolid size="xs" />
-			{:else}
-				<CaretDownSolid size="xs" />
-			{/if}
-		</button>
+			>[{orderDirection === 'asc' ? 'a→z' : 'z→a'}]</button
+		>
 		{#if selectedTags.length > 0 || excludedTags.length > 0}
 			<button
+				type="button"
+				class="term-btn"
 				aria-label="Clear filters"
 				title="Clear filters"
-				class="me-2 mb-3 h-2 w-2 cursor-pointer p-0 text-xl text-red-800 dark:bg-none dark:text-red-800"
-				onclick={() => ((selectedTags = []), (excludedTags = []))}
-				><CloseCircleSolid size="xs" /></button
+				onclick={() => ((selectedTags = []), (excludedTags = []))}>[clear]</button
 			>
 		{/if}
 	</div>
-	<div class="flex w-11/12 flex-[1_1_auto] flex-row flex-wrap justify-end md:w-8/12">
-		{#each allTags as tag}
-			{@const excluded = excludedTags.includes(tag)}
-			{@const checked = selectedTags.includes(tag) || excluded}
-			{@const colorClasses = checked
-				? !excluded
-					? 'dark:bg-primary-800 dark:text-black dark:hover:bg-primary-900 dark:border-primary-900'
-					: 'dark:bg-mauve-900 dark:text-gray-500 dark:hover:bg-mauve-950 dark:border-mauve-800'
-				: 'dark:bg-none dark:text-gray-300 dark:hover:bg-primary-900 dark:hover:text-white dark:border-primary-900'}
-			<Button
-				size="xs"
-				color="light"
-				pill={false}
-				outline={true}
-				shadow={false}
-				class="mb-2 ml-2 min-w-10 p-2 hover:bg-gray-700 dark:border-2 {colorClasses}"
-				onclick={() => toggleTag(tag)}
-				{checked}>{tag}</Button
-			>
-		{/each}
-	</div>
 </div>
-<div class="w-full columns-1 sm:columns-2 xl:columns-3">
-	{#each projects as project}
-		<Card
-			class="mx-auto mb-4 w-full max-w-lg break-inside-avoid-column p-4 sm:mx-0 dark:bg-zinc-800"
+
+<div class="projects-tags" role="group" aria-label="Filter by tag">
+	{#each allTags as tag (tag)}
+		{@const excluded = excludedTags.includes(tag)}
+		{@const included = selectedTags.includes(tag)}
+		<button
+			type="button"
+			class="tag-chip"
+			class:included
+			class:excluded
+			title={included
+				? `showing ${tag}; click to hide`
+				: excluded
+					? `hiding ${tag}; click to reset`
+					: `click to filter by ${tag}`}
+			onclick={() => toggleTag(tag)}>{included ? '+' : excluded ? '-' : '#'}{tag}</button
 		>
-			<h5 class="mb-0 truncate text-2xl font-bold whitespace-normal text-white">{project.name}</h5>
-			<div class="m-0 mb-4 h-fit w-fit self-start p-0">
-				{#each project.tags.toSorted(tagSort) as tag}
-					<Button
-						size="xs"
-						color="light"
-						class="me-2 p-1 text-primary-600 dark:bg-zinc-800 dark:text-primary-600 dark:hover:bg-primary-900 dark:hover:text-white"
-						onclick={() => (selectedTags = [tag])}>{tag}</Button
+	{/each}
+</div>
+
+<div class="w-full columns-1 gap-4 sm:columns-2 xl:columns-3">
+	{#each projects as project (project.name)}
+		<article class="term-card project">
+			<h2 class="project-name">{project.name}</h2>
+			<p class="project-desc">{@html project.description}</p>
+			<div class="project-tags">
+				{#each project.tags.toSorted(tagSort) as tag (tag)}
+					<button
+						type="button"
+						class="tag-chip small"
+						class:included={selectedTags.includes(tag)}
+						title="Show only {tag}"
+						onclick={() => ((selectedTags = [tag]), (excludedTags = []))}>#{tag}</button
 					>
 				{/each}
 			</div>
-			<p class="mx-2 mb-0 leading-tight font-normal text-gray-300">{@html project.description}</p>
-			<div class="flex w-full flex-col justify-between">
-				<ButtonGroup class="project-buttons mt-4 mb-0 flex h-8 justify-end gap-2">
+			{#if project.link || project.source}
+				<div class="project-links">
 					{#if project.link}
-						<Button color="primary" class="my-0 inline-flex h-8" href={project.link}>
-							{project.linkText ? project.linkText : 'Go'}
-						</Button>
+						<a href={project.link}>[{project.linkText ? project.linkText : 'open'}]</a>
 					{/if}
 					{#if project.source}
-						<Button
-							color="alternative"
-							class="my-0 inline-flex h-8 dark:bg-zinc-800 dark:hover:bg-zinc-500"
-							href={project.source}
-						>
-							<CodeOutline class="me-2" />
-							<span>Source</span>
-						</Button>
+						<a href={project.source}>[source]</a>
 					{/if}
-				</ButtonGroup>
-				<!-- tags -->
-			</div>
-		</Card>
+				</div>
+			{/if}
+		</article>
 	{/each}
 </div>
 
 <style>
-	:global(.project-buttons svg) {
-		display: inline-flex;
+	.projects-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.5rem 1rem;
+		margin-top: 1.5rem;
+	}
+
+	.projects-count {
+		margin-left: 0.5em;
+		color: var(--color-fg-subtle);
+	}
+
+	.projects-controls {
+		display: flex;
+		gap: 0.75rem;
+	}
+
+	.term-btn {
+		cursor: pointer;
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		color: var(--color-accent-strong);
+
+		&:hover {
+			text-shadow: 0 0 8px var(--color-glow);
+		}
+	}
+
+	.projects-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 1.75rem;
+	}
+
+	.tag-chip {
+		cursor: pointer;
+		padding: 0.15rem 0.6rem;
+		border: 1px solid var(--color-line);
+		border-radius: 999px;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--color-fg-muted);
+		transition:
+			border-color 0.15s,
+			color 0.15s,
+			background-color 0.15s;
+
+		&:hover {
+			border-color: var(--color-accent);
+			color: var(--color-accent-strong);
+		}
+
+		&.included {
+			border-color: var(--color-accent);
+			background-color: var(--color-accent-faint);
+			color: var(--color-accent-strong);
+			box-shadow: 0 0 10px -3px var(--color-glow);
+		}
+
+		&.excluded {
+			color: var(--color-fg-subtle);
+			text-decoration: line-through;
+			opacity: 0.7;
+		}
+
+		&.small {
+			padding: 0 0.45rem;
+			font-size: 0.72rem;
+		}
+	}
+
+	.project {
+		break-inside: avoid;
+		margin-bottom: 1rem;
+
+		/* the card itself isn't a link, so glow but don't lift */
+		&:hover {
+			transform: none;
+		}
+	}
+
+	.project-name {
+		margin-bottom: 0.5rem;
+		font-size: 1.35rem;
+		line-height: 1.25;
+		color: var(--color-fg-strong);
+	}
+
+	.project-desc {
+		margin-bottom: 1rem;
+		line-height: 1.55;
+		color: var(--color-fg);
+	}
+
+	.project-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+
+	.project-links {
+		display: flex;
+		gap: 1rem;
+		margin-top: 1rem;
+		padding-top: 0.75rem;
+		border-top: 1px dashed var(--color-line);
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+
+		a {
+			color: var(--color-accent-strong);
+
+			&:hover {
+				text-shadow: 0 0 8px var(--color-glow);
+			}
+		}
 	}
 </style>

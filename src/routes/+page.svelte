@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { P, List, Li, A, Range, Label, Button } from 'flowbite-svelte';
+	import { P, A, Range, Label, Button } from 'flowbite-svelte';
 	import { UndoOutline, EyeOutline } from 'flowbite-svelte-icons';
 	import { getContext, onMount } from 'svelte';
 	import type { MetadataContext } from '$lib/metadata.svelte';
-	import BoringReference from '$components/BoringReference.svelte';
-	import BoringBibliography from '$components/BoringBibliography.svelte';
-	import { createFootnote } from '$components/BoringReference.svelte';
 	import { WebGlShader } from 'svader';
 	import storage from '$lib/store';
 	import DumbTicker from '$components/DumbTicker.svelte';
@@ -323,8 +320,6 @@
 			'Check out my projects, art, and other work.'
 	});
 
-	let items: Footnote[] = $state([]);
-
 	let loading = $state(true);
 
 	onMount(() => {
@@ -332,28 +327,24 @@
 	});
 </script>
 
-<P class="mt-4 mb-2 dark:text-gray-200"
-	>Hi, I'm zeyus, the epitome of a generalist. I left industry to study <A
-		href="https://en.wikipedia.org/wiki/Cognitive_science">cognitive science</A
-	> and now I'm working on my PhD so I can specialize in generalism.</P
->
-<div class="flex flex-col md:w-full md:flex-row md:items-start md:justify-around">
-	<!-- position list vertically centered -->
-	<div class="mb-4 flex content-start md:m-0 md:justify-start md:self-center md:p-0">
-		<List
-			class="home-list mb-4 ml-3 flex list-['>'] flex-col md:m-0 md:p-0 dark:text-gray-200"
-			position="inside"
+<div class="home-hero flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+	<div class="max-w-2xl">
+		<p class="term-prompt"><span class="text-accent">anon@zeyus</span>:~$ whoami</p>
+		<h1 class="home-title">zeyus<span class="home-cursor" aria-hidden="true">▌</span></h1>
+		<P class="home-intro text-fg!"
+			>Hi, I'm zeyus, the epitome of a generalist. I left industry to study <A
+				href="https://en.wikipedia.org/wiki/Cognitive_science">cognitive science</A
+			> and now I'm working on my PhD so I can specialize in generalism.</P
 		>
-			<Li class="ps-2">Cognitive Scientist</Li>
-			<Li class="ps-2">PhD student</Li>
-			<Li class="ps-2"
-				><A href="https://github.com/zeyus">Open-source contributor and developer</A></Li
-			>
-			<Li class="ps-2"><A href="https://soundcloud.com/zeyus">Musician</A></Li>
-			<Li class="ps-2"
-				>You can follow me around the internet via my <A href="https://me.zys.im/">link list</A></Li
-			>
-		</List>
+		<ul class="home-roles">
+			<li>Cognitive Scientist</li>
+			<li>PhD student</li>
+			<li><A href="https://github.com/zeyus">Open-source contributor and developer</A></li>
+			<li><A href="https://soundcloud.com/zeyus">Musician</A></li>
+			<li>
+				You can follow me around the internet via my <A href="https://me.zys.im/">link list</A>
+			</li>
+		</ul>
 	</div>
 
 	{#if showShader && !loading}
@@ -369,7 +360,7 @@
 						forceAnimation={true}
 						parameters={shaderParameters}
 					>
-						<div class="fallback dark:text-gray-500">Enable WebGL to see an awesome shader.</div>
+						<div class="fallback text-fg-subtle">Enable WebGL to see an awesome shader.</div>
 					</WebGlShader>
 				{/key}
 			</div>
@@ -383,9 +374,7 @@
 						title="Adjust the position of the camera on the X axis"
 						class="mb-0 pb-0">Cam X:</Label
 					>
-					<span class="mb-0 pb-0 text-sm text-gray-500 dark:text-gray-400"
-						>{shaderX.toFixed(2)}</span
-					>
+					<span class="mb-0 pb-0 text-sm text-fg-muted">{shaderX.toFixed(2)}</span>
 				</div>
 				<Range
 					id="shaderX"
@@ -405,9 +394,7 @@
 						title="Adjust the position of the camera on the Y axis"
 						class="mb-0 pb-0">Cam Y:</Label
 					>
-					<span class="mb-0 pb-0 text-sm text-gray-500 dark:text-gray-400"
-						>{shaderY.toFixed(2)}</span
-					>
+					<span class="mb-0 pb-0 text-sm text-fg-muted">{shaderY.toFixed(2)}</span>
 				</div>
 				<Range
 					id="shaderY"
@@ -423,9 +410,7 @@
 				/>
 				<div class="flex justify-between">
 					<Label for="shaderZ" title="Adjust the camera zoom level" class="mb-0 pb-0">Zoom:</Label>
-					<span class="mb-0 pb-0 text-sm text-gray-500 dark:text-gray-400"
-						>{shaderZ.toFixed(2)}</span
-					>
+					<span class="mb-0 pb-0 text-sm text-fg-muted">{shaderZ.toFixed(2)}</span>
 				</div>
 				<Range
 					id="shaderZ"
@@ -443,9 +428,7 @@
 					<Label for="rotateXY" title="Adjust the spin speed around the XY axis" class="mb-0 pb-0"
 						>Spin XY:</Label
 					>
-					<span class="mb-0 pb-0 text-sm text-gray-500 dark:text-gray-400"
-						>{rotateXY.toFixed(2)}</span
-					>
+					<span class="mb-0 pb-0 text-sm text-fg-muted">{rotateXY.toFixed(2)}</span>
 				</div>
 				<Range
 					id="rotateXY"
@@ -463,9 +446,7 @@
 					<Label for="rotateXZ" title="Adjust the spin speed around the XZ axis" class="mb-0 pb-0"
 						>Spin XZ:</Label
 					>
-					<span class="mb-0 pb-0 text-sm text-gray-500 dark:text-gray-400"
-						>{rotateXZ.toFixed(2)}</span
-					>
+					<span class="mb-0 pb-0 text-sm text-fg-muted">{rotateXZ.toFixed(2)}</span>
 				</div>
 				<Range
 					id="rotateXZ"
@@ -485,9 +466,7 @@
 						title="Adjust the speed of time progression in the shader"
 						class="mb-0 pb-0">Mult:</Label
 					>
-					<span class="mb-0 pb-0 text-sm text-gray-500 dark:text-gray-400"
-						>{timeMultiplier.toFixed(3)}</span
-					>
+					<span class="mb-0 pb-0 text-sm text-fg-muted">{timeMultiplier.toFixed(3)}</span>
 				</div>
 				<Range
 					id="timeMultiplier"
@@ -518,12 +497,12 @@
 					<div class="m-0 flex flex-row items-center">
 						<Label for="framerate-select" class="md:sr-only">Framerate:</Label>
 						<select
-							class="ms-2 h-6 w-16 self-center rounded border border-gray-300 bg-white px-0.5 py-0.5 text-xs text-gray-900 focus:ring-2 focus:ring-blue-500 md:ms-0 md:mt-2 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:focus:ring-blue-600"
+							class="ms-2 h-6 w-16 self-center rounded border border-line bg-surface-2 px-0.5 py-0.5 text-xs text-fg focus:ring-2 focus:ring-accent md:ms-0 md:mt-2"
 							bind:value={framerate}
 							aria-label="Select shader frame rate"
 							title="Select shader frame rate"
 						>
-							{#each shaderLimits.frameRate.options as option}
+							{#each shaderLimits.frameRate.options as option (option)}
 								<option value={option}>{option === 'unlimited' ? '∞ FPS' : option + ' FPS'}</option>
 							{/each}
 						</select>
@@ -571,22 +550,105 @@
 </div>
 <DumbTicker posts={data.posts} label="_vault" />
 
-<P class="md:mt-4 dark:text-gray-200">
-	If you're interested in some stuff I write about, check out <A href="/_vault/">the _vault</A>, if
-	you'd like to see some of the open source projects I've worked on, take a look at
-	<A href="/projects/">the projects page</A>. If you just want to connect to your Arduino or other
-	serial device directly from your browser, check out
-	<A href="/terminal/">the terminal</A><BoringReference
-		bind:items
-		item={createFootnote(
-			"Requires a browser that supports the <a class='inline-flex items-center hover:underline " +
-				"text-primary-600 dark:text-primary-500 mx-1' " +
-				"href='https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility'>" +
-				"WebSerial</a> or <a class='inline-flex items-center hover:underline text-primary-600 " +
-				"dark:text-primary-500 mx-1' href='" +
-				"https://developer.mozilla.org/en-US/docs/Web/API/USB#browser_compatibility'>USB</a> APIs"
-		)}
-	/>.
-</P>
+<nav class="home-dirs" aria-label="Site sections">
+	<p class="term-prompt"><span class="text-accent">anon@zeyus</span>:~$ ls</p>
+	<div class="grid gap-4 md:grid-cols-3">
+		<a href="/_vault/" class="term-card home-dir">
+			<span class="home-dir-name">_vault/</span>
+			<span class="home-dir-desc"
+				>Stuff I write about: research, builds, and the occasional rabbit hole.</span
+			>
+		</a>
+		<a href="/projects/" class="term-card home-dir">
+			<span class="home-dir-name">projects/</span>
+			<span class="home-dir-desc">Some of the open source projects I've worked on.</span>
+		</a>
+		<a href="/terminal/" class="term-card home-dir">
+			<span class="home-dir-name">terminal/</span>
+			<span class="home-dir-desc"
+				>Connect to your Arduino or other serial device directly from your browser.</span
+			>
+		</a>
+	</div>
+	<p class="home-footnote">
+		The terminal requires a browser that supports the <A
+			href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility"
+			>WebSerial</A
+		> or <A href="https://developer.mozilla.org/en-US/docs/Web/API/USB#browser_compatibility">USB</A
+		> APIs.
+	</p>
+</nav>
 
-<BoringBibliography bind:items />
+<style>
+	.home-hero {
+		margin-block: 2rem 1rem;
+	}
+
+	.home-title {
+		font-size: clamp(3rem, 2rem + 5vw, 5.5rem);
+		line-height: 1;
+		margin-bottom: 1.25rem;
+		color: var(--color-fg-strong);
+		text-shadow:
+			0 0 18px var(--color-glow),
+			0 0 2px var(--color-glow);
+	}
+
+	.home-cursor {
+		margin-left: 0.05em;
+		color: var(--color-accent);
+		animation: cursor-blink 1.1s steps(1) infinite;
+	}
+
+	:global(.home-intro) {
+		font-size: 1.2rem;
+		line-height: 1.6;
+		margin-bottom: 1.25rem;
+	}
+
+	.home-roles {
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
+		line-height: 1.9;
+		margin: 0;
+
+		li::before {
+			content: '> ';
+			color: var(--color-accent);
+		}
+	}
+
+	.home-dirs {
+		margin-block: 2.5rem 1rem;
+	}
+
+	.home-dir {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.home-dir-name {
+		font-family: var(--font-mono);
+		font-size: 1.1rem;
+		color: var(--color-accent-strong);
+	}
+
+	.home-dir-desc {
+		color: var(--color-fg-muted);
+		font-size: 0.95rem;
+		line-height: 1.5;
+	}
+
+	.home-footnote {
+		margin-top: 1rem;
+		font-size: 0.8rem;
+		color: var(--color-fg-subtle);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.home-cursor {
+			animation: none;
+		}
+	}
+</style>

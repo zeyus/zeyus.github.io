@@ -53,6 +53,7 @@
 	interface Props {
 		lang?: string | LanguageType<string>;
 		code?: string;
+		// only for type-checking: codeBlockPreprocessor (svelte.config.js) turns children into `code`
 		children?: import('svelte').Snippet;
 		langtagColor?: string;
 		langtagTop?: string;
@@ -64,6 +65,7 @@
 	let {
 		lang = 'bash',
 		code = '',
+		children: _children,
 		langtagColor = 'rgb(192 38 211)',
 		langtagTop = '-2.5rem',
 		langtagRight = '-.50rem',
@@ -104,7 +106,7 @@
 			class="absolute inset-e-4 top-4 z-10 h-8 w-8 p-0"
 		>
 			<ClipboardCleanOutline
-				class="m-0 h-8 w-8 cursor-pointer p-1 text-gray-500 dark:text-gray-400 dark:hover:text-white"
+				class="m-0 h-8 w-8 cursor-pointer p-1 text-gray-400 hover:text-white"
 			/>
 		</Button>
 		{#if copied}

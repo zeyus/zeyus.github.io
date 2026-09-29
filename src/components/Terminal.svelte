@@ -21,7 +21,7 @@
          .'----------\`.                              
          | .--------. |                             
          | |########| |       __________              
-         | |########| |      /__________\             
+         | |########| |      /__________\\             
 .--------| \`--------' |------|    --=-- |-------------.
 |        \`----,-.-----'      |o ======  |             | 
 |       ______|_|_______     |__________|             | 
@@ -46,7 +46,6 @@ monitored if unauthorized usage is suspected.`,
 	let currentInput = $state('');
 	let currentPort: number | null = $state(null);
 	let serialMode = $state(false);
-	let inputElementValue = '';
 	let terminalDiv: HTMLDivElement;
 	let serialIO = $state('');
 	const serialTerminal = createSerial() || null;
@@ -67,7 +66,6 @@ monitored if unauthorized usage is suspected.`,
 			handleCommand(currentInput);
 			currentInput = '';
 			touchdevice.value = '';
-			inputElementValue = '';
 			// Scroll to bottom after a slight delay
 			setTimeout(() => {
 				terminalDiv.scrollTop = terminalDiv.scrollHeight;
@@ -273,7 +271,7 @@ monitored if unauthorized usage is suspected.`,
 		const args = input.split(' ');
 		const command = args[0];
 		switch (command) {
-			case 'echo':
+			case 'echo': {
 				const echoarg: string = args.slice(1).join(' ');
 				// Ansi escape codes are not parsed from the input
 				// before using ansi_to_html, we need to parse them
@@ -292,13 +290,14 @@ monitored if unauthorized usage is suspected.`,
 				);
 				addLine(output, 'output');
 				break;
+			}
 			case 'clear':
 				lines = [];
 				break;
 			case 'help':
 				addLine('Commands: echo, clear, help, serial', 'output');
 				break;
-			case 'serial':
+			case 'serial': {
 				if (!serialTerminal) {
 					addLine("Uh, uh uh! You didn't say the magic word!", 'error');
 					addLine(':( Unfortunately serial not supported in this browser', 'error');
@@ -324,7 +323,7 @@ monitored if unauthorized usage is suspected.`,
 							);
 						}
 						break;
-					case 'open':
+					case 'open': {
 						if (args.length < 7) {
 							const txt =
 								'Usage: serial open BAUD_RATE DATA_BITS STOP_BITS PARITY FLOW_CONTROL' +
@@ -395,6 +394,7 @@ monitored if unauthorized usage is suspected.`,
 								addLine(`Error opening serial port: ${err}`, 'error');
 							});
 						break;
+					}
 					case 'close':
 						addLine('Closing serial port...', 'serial');
 						serialTerminal.close();
@@ -420,6 +420,7 @@ monitored if unauthorized usage is suspected.`,
 						break;
 				}
 				break;
+			}
 			default:
 				addLine(`Unknown command: ${command}`, 'error');
 				break;
@@ -456,7 +457,7 @@ monitored if unauthorized usage is suspected.`,
 	id="terminal-wrapper"
 	ontouchend={handleTerminalTouch}
 >
-	{#each lines as line}
+	{#each lines as line, i (i)}
 		<div class="terminal-line">
 			{#if line.type === 'output'}
 				<pre class={line.type}>{@html line.text}</pre>

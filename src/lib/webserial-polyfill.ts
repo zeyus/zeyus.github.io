@@ -21,7 +21,7 @@
  */
 
 export enum SerialPolyfillProtocol {
-	UsbCdcAcm // eslint-disable-line no-unused-vars
+	UsbCdcAcm
 }
 
 export interface SerialPolyfillOptions {
@@ -313,7 +313,7 @@ export class SerialPort {
 			if (this.device_.opened) {
 				await this.device_.close();
 			}
-			throw new Error('Error setting up device: ' + error.toString());
+			throw new Error('Error setting up device: ' + error.toString(), { cause: error });
 		}
 	}
 
@@ -578,7 +578,7 @@ class Serial {
 			try {
 				const port = new SerialPort(device, polyfillOptions);
 				ports.push(port);
-			} catch (e) {
+			} catch {
 				// Skip unrecognized port.
 			}
 		});
