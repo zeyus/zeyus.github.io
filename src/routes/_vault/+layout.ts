@@ -1,7 +1,11 @@
 import type { LayoutLoad } from './$types';
-import { loadVaultEntries } from '$lib/vault.ts';
+import { error } from '@sveltejs/kit';
+import { isUnpublishedVaultPath, loadVaultEntries } from '$lib/vault.ts';
 
-export const load: LayoutLoad = async () => {
+export const load: LayoutLoad = async ({ url }) => {
+	if (await isUnpublishedVaultPath(url.pathname)) {
+		error(404, 'Not found');
+	}
 	return {
 		posts: await loadVaultEntries()
 	};

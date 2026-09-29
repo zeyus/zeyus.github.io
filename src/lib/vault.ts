@@ -1,11 +1,7 @@
+import { dev } from '$app/environment';
 import { sortPosts } from '$lib/utils.ts';
 
-/**
- * Load every _vault post entry, sorted.
- * Shared by the _vault layout (sidebar + post list) and anything else that
- * wants the post list, e.g. the ticker on the home page.
- */
-export const loadVaultEntries = async (): Promise<App.VaultEntries[]> => {
+const loadAllVaultEntries = async (): Promise<App.VaultEntries[]> => {
 	const vaultEntries: App.VaultEntries[] = [];
 	const vaultPages: Record<string, App.VaultPageModule> = import.meta.glob(
 		'/src/routes/_vault/*/+page.ts',
@@ -20,5 +16,30 @@ export const loadVaultEntries = async (): Promise<App.VaultEntries[]> => {
 		});
 	}
 
-	return vaultEntries.sort(sortPosts);
+	return vaultEntries;
+};
+
+/**
+ * Drafts (props.draft === true) are visible in dev, but hidden from
+ * production builds (post lists, ticker, and the page itself 404s).
+ */
+const isPublished = (entry: App.VaultEntries): boolean => dev || !entry.props.draft;
+
+/**
+ * Load every published _vault post entry, sorted.
+ * Shared by the _vault layout (sidebar + post list) and anything else that
+ * wants the post list, e.g. the ticker on the home page.
+ */
+export const loadVaultEntries = async (): Promise<App.VaultEntries[]> => {
+	return (await loadAllVaultEntries()).filter(isPublished).sort(sortPosts);
+};
+
+/**
+ * True if the given pathname is a _vault post that should not be published.
+ */
+export const isUnpublishedVaultPath = async (pathname: string): Promise<boolean> => {
+	const normalised = pathname.endsWith('/') ? pathname : pathname + '/';
+	return (await loadAllVaultEntries()).some(
+		(entry) => entry.path === normalised && !isPublished(entry)
+	);
 };

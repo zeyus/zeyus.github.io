@@ -6,7 +6,8 @@ export const load: PageLoad = () => {
 		date: new Date('2026-09-10'),
 		excerpt:
 			'Just some notes on my experience at a conference for Flutter developers from the perspective of someone who is no longer in industry.',
-		short_title: 'Flutter & Friends 2026'
+		short_title: 'Flutter & Friends 2026',
+		draft: true
 	};
 	return {
 		props: certRenewal

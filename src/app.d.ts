@@ -33,6 +33,8 @@ declare global {
 		short_title?: string;
 		feature_image?: HTMLImgAttributes;
 		gallery?: VaultGallery;
+		/** Drafts show up in `pnpm dev` but are excluded from production builds. */
+		draft?: boolean;
 	}
 
 	interface Footnote {
