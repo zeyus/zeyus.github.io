@@ -575,7 +575,7 @@
 			href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility"
 			>WebSerial</A
 		> or <A href="https://developer.mozilla.org/en-US/docs/Web/API/USB#browser_compatibility">USB</A
-		> APIs.
+		> APIs (Chrome, Edge or latest Firefox).
 	</p>
 </nav>
 

@@ -6,6 +6,7 @@
  * Based on documentation: https://web.dev/serial/
  *
  * converted to typescript and modified by zeyus 2025
+ * synced with upstream bdf5249 (2026-05-26): CH340 Arduino preset, print(), println()
  */
 
 import { serial, SerialPort as SPFill, type SerialPort as SPFillType } from './webserial-polyfill';
@@ -102,7 +103,9 @@ export const WebSerial = class {
 		} else if ('usb' in navigator) {
 			console.log('Using WebUSB polyfill for WebSerial');
 		} else {
-			throw new Error('WebSerial is not supported in your browser (try Chrome or Edge)');
+			throw new Error(
+				'WebSerial is not supported in your browser (try Chrome, Edge or latest Firefox)'
+			);
 		}
 	}
 
@@ -169,17 +172,79 @@ export const WebSerial = class {
 		this.inLen = 0;
 	}
 
+	// resolves once the read loop in start() has exited and the port is closed
+	finished: Promise<void> = Promise.resolve();
+
 	/**
 	 * Closes the serial port.
+	 * Resolves once the port is actually closed, so it can be reopened.
 	 * @method close
 	 */
-	close() {
+	async close() {
+		this.keepReading = false;
 		if (this.reader) {
-			this.keepReading = false;
-			this.reader.cancel();
+			try {
+				await this.reader.cancel();
+			} catch (error: any) {
+				console.warn(error.message);
+			}
 		} else {
 			console.log('Serial port is already closed');
 		}
+		await this.finished;
+	}
+
+	/**
+	 * Asserts the break signal for the given duration.
+	 * @param {Number} ms duration in milliseconds
+	 */
+	async sendBreak(ms: number = 250) {
+		if (!this.port) {
+			throw new Error('No serial port selected.');
+		}
+		await this.port.setSignals({ break: true });
+		await new Promise((resolve) => setTimeout(resolve, ms));
+		await this.port.setSignals({ break: false });
+	}
+
+	/**
+	 * Reads the input signals (CTS, DSR, DCD, RI) of the port.
+	 */
+	async signals(): Promise<SerialInputSignals | null> {
+		// the WebUSB polyfill can't read input signals
+		if (!this.port || !this.opened() || !('getSignals' in this.port)) {
+			return null;
+		}
+		return this.port.getSignals();
+	}
+
+	/**
+	 * Returns a human readable label for a port, e.g. "2341:0043 (Arduino)"
+	 */
+	portLabel(port: SerialPort | SPFillType | null = this.port): string {
+		if (!port) {
+			return 'none';
+		}
+		const info = port.getInfo();
+		if (info.usbVendorId === undefined) {
+			return 'serial (no USB info)';
+		}
+		const hex = (n: number) => n.toString(16).padStart(4, '0');
+		let label = hex(info.usbVendorId);
+		if (info.usbProductId !== undefined) {
+			label += ':' + hex(info.usbProductId);
+		}
+		const presets = Object.keys(this.presets).filter((name) =>
+			this.presets[name].some(
+				(f) =>
+					f.usbVendorId === info.usbVendorId &&
+					(f.usbProductId === undefined || f.usbProductId === info.usbProductId)
+			)
+		);
+		if (presets.length) {
+			label += ' (' + presets.join('/') + ')';
+		}
+		return label;
 	}
 
 	/**
@@ -324,7 +389,8 @@ export const WebSerial = class {
 			{ usbVendorId: 0x2341 }, // Arduino SA
 			{ usbVendorId: 0x239a }, // Adafruit
 			{ usbVendorId: 0x2a03 }, // dog hunter AG
-			{ usbVendorId: 0x3343, usbProductId: 0x0043 } // DFRobot UNO R3
+			{ usbVendorId: 0x3343, usbProductId: 0x0043 }, // DFRobot UNO R3
+			{ usbVendorId: 0x1a86, usbProductId: 0x7523 } // CH340 serial converter, used on Sparkfun RedBoard and others
 		],
 		MicroPython: [
 			// from mu-editor as of 9/4/22
@@ -719,12 +785,22 @@ export const WebSerial = class {
 
 	/**
 	 * Opens this.port and read from it indefinitely.
+	 * @param consumer receives decoded UTF-8 text (via the input buffer)
+	 * @param onBytes receives raw chunks directly, bypassing the input buffer
+	 *   (faster, and the caller is responsible for decoding)
+	 * @param onOpen called once the port has been opened, before reading starts
 	 */
-	async start(consumer?: (data: string) => Promise<void>) {
+	async start(
+		consumer?: ((data: string) => Promise<void>) | null,
+		onBytes?: (data: Uint8Array) => void,
+		onOpen?: () => void
+	) {
 		if (!this.port) {
 			console.error('No serial port selected.');
 			return;
 		}
+
+		await this.finished; // a previous session may still be closing
 
 		try {
 			await this.port.open(this.options);
@@ -739,22 +815,45 @@ export const WebSerial = class {
 			throw error;
 		}
 
-		while (this.port.readable && this.keepReading) {
-			this.reader = this.port.readable.getReader();
-			this.writer = this.port.writable?.getWriter();
+		let markFinished: () => void = () => {};
+		this.finished = new Promise((resolve) => (markFinished = resolve));
+		onOpen?.();
+
+		try {
+			await this.readLoop(this.port, consumer, onBytes);
+		} finally {
+			try {
+				await this.port.close();
+			} catch (error: any) {
+				console.warn(error.message);
+			}
+			this.reader = null;
+			this.writer = undefined;
+			console.log('Disconnected from serial port');
+			markFinished();
+		}
+	}
+
+	private async readLoop(
+		port: SerialPort | SPFillType,
+		consumer?: ((data: string) => Promise<void>) | null,
+		onBytes?: (data: Uint8Array) => void
+	) {
+		while (port.readable && this.keepReading) {
+			this.reader = port.readable.getReader();
+			this.writer = port.writable?.getWriter();
 
 			try {
 				while (true) {
 					let { value, done } = await this.reader.read();
 
 					if (done) {
-						await this.writer?.ready; // wait for any outstanding writes to finish
-						this.writer?.releaseLock(); // allow the serial port to be closed later
-						this.reader.releaseLock();
 						break;
 					}
 
-					if (value) {
+					if (value && onBytes) {
+						onBytes(value);
+					} else if (value) {
 						// take the most recent bytes if the newly-read buffer was
 						// to instantly overflow the input buffer (unlikely)
 						if (this.inBuf.byteLength < value.length) {
@@ -792,21 +891,26 @@ export const WebSerial = class {
 				}
 			} catch (error: any) {
 				// if a non-fatal (e.g. framing) error occurs, continue w/ new Reader
-				this.reader.releaseLock();
 				console.warn(error.message);
+			} finally {
+				// release both locks, otherwise getWriter() throws on the next iteration
+				// and the port can't be closed
+				try {
+					await this.writer?.ready; // wait for any outstanding writes to finish
+				} catch {
+					// writer errored, nothing to wait for
+				}
+				this.writer?.releaseLock();
+				this.reader.releaseLock();
 			}
 		}
-
-		this.port.close();
-		this.reader = null;
-		console.log('Disconnected from serial port');
 	}
 
 	async forget() {
-		getPorts();
+		await getPorts();
 		if (this.port) {
 			console.log('Forgetting current serial port');
-			this.close();
+			await this.close();
 			this.port = null;
 		}
 		for (const port of ports) {
@@ -817,6 +921,42 @@ export const WebSerial = class {
 				console.warn(error.message);
 			}
 			await port.forget();
+		}
+	}
+
+	/**
+	 * Prints data as a string to the serial port.
+	 * @method print
+	 * @param {String|Number} data to send
+	 * @return {Boolean} true if the port was open, false if not
+	 */
+	async print(out: string | number): Promise<boolean> {
+		if (typeof out === 'number') {
+			return this.write(String(out));
+		} else if (typeof out === 'string') {
+			return this.write(out);
+		} else {
+			throw new TypeError(
+				'print expects a string or a number as its argument. Use write() instead to send a byte or an array of bytes.'
+			);
+		}
+	}
+
+	/**
+	 * Prints data as a string to the serial port, followed by a \n newline character.
+	 * @method println
+	 * @param {String|Number} data to send
+	 * @return {Boolean} true if the port was open, false if not
+	 */
+	async println(out: string | number): Promise<boolean> {
+		if (typeof out === 'number') {
+			return this.write(String(out) + '\n');
+		} else if (typeof out === 'string') {
+			return this.write(out + '\n');
+		} else {
+			throw new TypeError(
+				'println expects a string or a number as its argument. Use write() instead to send a byte or an array of bytes.'
+			);
 		}
 	}
 
@@ -839,7 +979,7 @@ export const WebSerial = class {
 		} else if (typeof out === 'number' && Number.isInteger(out)) {
 			if (out < 0 || 255 < out) {
 				throw new TypeError(
-					'Write expects a number between 0 and 255 for sending it as a byte. To send any number as a sequence of digits instead, first convert it to a string before passing it to write().'
+					'write expects a number between 0 and 255 to send it as a byte. To send any number as a sequence of digits, use print() or println() instead.'
 				);
 			}
 			buffer = new Uint8Array([out]);

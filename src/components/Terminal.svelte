@@ -1,578 +1,484 @@
 <script lang="ts">
-	import { AnsiUp } from 'ansi_up';
-	import { Button } from 'flowbite-svelte';
-	import { createSerial, getPorts, usedSerialPorts } from '$lib/serial2';
+	import type { Terminal as XTermTerminal } from '@xterm/xterm';
+	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
+	import TerminalWindow from '$components/terminal/TerminalWindow.svelte';
+	import XTerm from '$components/terminal/XTerm.svelte';
+	import KeyBar from '$components/terminal/KeyBar.svelte';
+	import { Shell } from '$lib/terminal/shell';
+	import {
+		c,
+		completeLine,
+		createCommands,
+		parseLine,
+		pushHistory,
+		type CommandContext
+	} from '$lib/terminal/commands';
+	import { SerialSession } from '$lib/terminal/session.svelte';
+	import { describeConfig, history, lastProfile, prefs } from '$lib/terminal/settings';
+	import { ctrl as ctrlChar, hexDump, NEWLINES } from '$lib/terminal/keys';
 
-	const ansi_up = new AnsiUp();
-	const shellprompt = 'anon@zeyus&gt;';
-
-	type Line = {
-		text: string;
-		type: 'input' | 'output' | 'error' | 'serial';
-	};
-	let lines: Line[] = $state([]);
-
-	function addLine(text: string, type: 'input' | 'output' | 'error' | 'serial') {
-		lines = [...lines, { text, type }];
-	}
-
-	addLine(
-		`            __________                                 
-         .'----------\`.                              
-         | .--------. |                             
-         | |########| |       __________              
-         | |########| |      /__________\\             
+	const PROMPT = '\x1b[32manon@zeyus>\x1b[0m ';
+	const BANNER = `            __________
+         .'----------\`.
+         | .--------. |
+         | |########| |       __________
+         | |########| |      /__________\\
 .--------| \`--------' |------|    --=-- |-------------.
-|        \`----,-.-----'      |o ======  |             | 
-|       ______|_|_______     |__________|             | 
-|      /  %%%%%%%%%%%%  \\                             | 
-|     /  %%%%%%%%%%%%%%  \\                            | 
-|     ^^^^^^^^^^^^^^^^^^^^                            | 
-+-----------------------------------------------------+`,
-		'output'
-	);
-	addLine('\n', 'output');
-	addLine(
-		`WARNING:  Unauthorized access to this system is
+|        \`----,-.-----'      |o ======  |             |
+|       ______|_|_______     |__________|             |
+|      /  %%%%%%%%%%%%  \\                             |
+|     /  %%%%%%%%%%%%%%  \\                            |
+|     ^^^^^^^^^^^^^^^^^^^^                            |
++-----------------------------------------------------+`;
+	const WARNING = `WARNING:  Unauthorized access to this system is
 forbidden and will be prosecuted by law. By accessing
 this system, you agree that your actions may be
-monitored if unauthorized usage is suspected.`,
-		'output'
-	);
-	addLine('\n', 'output');
-	addLine('Type "help" for a list of commands.', 'output');
-	addLine('\n', 'output');
+monitored if unauthorized usage is suspected.`;
+	const INTRO = 'echo 👋\\x1b[31mHello\\x1b[0m👋\\n🌍\\x1b[32mWorld\\x1b[0m🌍';
+	// cap on output kept while detached from an open port (Ctrl+])
+	const DETACHED_MAX = 1024 * 1024;
 
-	let currentInput = $state('');
-	let currentPort: number | null = $state(null);
+	const session = new SerialSession();
+	const commands = createCommands();
+
+	let term = $state.raw<XTermTerminal | null>(null);
+	let shell: Shell | null = null;
 	let serialMode = $state(false);
-	let terminalDiv: HTMLDivElement;
-	let serialIO = $state('');
-	const serialTerminal = createSerial() || null;
+	let ctrlSticky = $state(false);
+	let coarse = $state(false);
+	let composeText = $state('');
+	let composeInput = $state<HTMLInputElement>();
+	let toast = $state('');
+	let toastTimer: ReturnType<typeof setTimeout> | undefined;
+	let detached: Uint8Array[] = [];
+	let detachedBytes = 0;
 
-	// For handling input
-	function handleInput(e: KeyboardEvent) {
-		e.preventDefault();
-		const touchdevice = document.getElementById('touchinput') as HTMLTextAreaElement;
-		if (serialMode) {
-			handleSerialKey(e);
-			return;
-		}
-		if (!touchdevice) {
-			return;
-		}
-		if (e.key === 'Enter') {
-			lines = [...lines, { text: currentInput, type: 'input' }];
-			handleCommand(currentInput);
-			currentInput = '';
-			touchdevice.value = '';
-			// Scroll to bottom after a slight delay
-			setTimeout(() => {
-				terminalDiv.scrollTop = terminalDiv.scrollHeight;
-			}, 0);
-		} else if (e.key === 'Backspace') {
-			currentInput = currentInput.slice(0, -1);
-		} else if (e.key.length === 1) {
-			currentInput += e.key;
-		}
+	let showCompose = $derived($prefs.compose ?? coarse);
+	let showKeyBar = $derived(serialMode || coarse || showCompose);
+	let title = $derived(
+		session.connected && session.config
+			? `⚡ ${session.portLabel} · ${describeConfig(session.config)}${serialMode ? '' : ' (detached)'}`
+			: 'anon@zeyus: ~/terminal'
+	);
+
+	const nl = (s: string) => s.replace(/\r?\n/g, '\r\n');
+
+	function flash(message: string) {
+		toast = message;
+		clearTimeout(toastTimer);
+		toastTimer = setTimeout(() => (toast = ''), 1800);
 	}
 
-	function handleVirtualInput(e: Event) {
-		const input = e.target as HTMLTextAreaElement;
-		currentInput = input.value;
-		if (serialMode) {
-			handleSerial(currentInput);
-			return;
-		}
-		// if \r or \n is in the input, handle it as an enter
-		if (currentInput.includes('\r') || currentInput.includes('\n')) {
-			if (typeof KeyboardEvent === 'undefined') return;
-			handleInput(new KeyboardEvent('keydown', { key: 'Enter' }));
-		}
-	}
-
-	function typeInput(input: string, delay: number = 25) {
-		if (typeof KeyboardEvent === 'undefined') return;
-		for (let i = 0; i < input.length; i++) {
-			setTimeout(() => {
-				currentInput += input[i];
-			}, delay * i);
-		}
-		setTimeout(() => {
-			handleInput(new KeyboardEvent('keydown', { key: 'Enter' }));
-		}, delay * input.length);
-	}
-
-	async function handleSerial(input: string) {
-		await serialRequest(input);
-	}
-
-	async function handleSerialKey(e: KeyboardEvent) {
-		// Handle serial input
-		const key = e.key;
-		if (key === 'Control' || key === 'Shift' || key === 'Alt' || key === 'Meta') {
-			return;
-		}
-		let transformedKey: string;
-		let hiddenChar = false;
-		switch (key) {
-			case 'Enter':
-				hiddenChar = true;
-				transformedKey = '\n';
-				addLine(serialIO, 'serial');
-				serialIO = '';
-				break;
-			case 'Backspace':
-				transformedKey = '\x08';
-				break;
-			case 'Escape':
-				if (currentPort !== null) {
-					serialMode = false;
-					serialTerminal?.close();
-				}
-				return;
-			default:
-				if (e.ctrlKey) {
-					hiddenChar = true;
-					switch (key) {
-						case '@':
-							transformedKey = '\x00';
-							break;
-						case 'a':
-							transformedKey = '\x01';
-							break;
-						case 'b':
-							transformedKey = '\x02';
-							break;
-						case 'c':
-							transformedKey = '\x03';
-							break;
-						case 'd':
-							transformedKey = '\x04';
-							break;
-						case 'e':
-							transformedKey = '\x05';
-							break;
-						case 'f':
-							transformedKey = '\x06';
-							break;
-						case 'g':
-							transformedKey = '\x07';
-							break;
-						case 'h':
-							transformedKey = '\x08';
-							break;
-						case 'i':
-							transformedKey = '\x09';
-							break;
-						case 'j':
-							transformedKey = '\x0a';
-							break;
-						case 'k':
-							transformedKey = '\x0b';
-							break;
-						case 'l':
-							transformedKey = '\x0c';
-							break;
-						case 'm':
-							transformedKey = '\x0d';
-							break;
-						case 'n':
-							transformedKey = '\x0e';
-							break;
-						case 'o':
-							transformedKey = '\x0f';
-							break;
-						case 'p':
-							transformedKey = '\x10';
-							break;
-						case 'q':
-							transformedKey = '\x11';
-							break;
-						case 'r':
-							transformedKey = '\x12';
-							break;
-						case 's':
-							transformedKey = '\x13';
-							break;
-						case 't':
-							transformedKey = '\x14';
-							break;
-						case 'u':
-							transformedKey = '\x15';
-							break;
-						case 'v':
-							transformedKey = '\x16';
-							break;
-						case 'w':
-							transformedKey = '\x17';
-							break;
-						case 'x':
-							transformedKey = '\x18';
-							break;
-						case 'y':
-							transformedKey = '\x19';
-							break;
-						case 'z':
-							transformedKey = '\x1a';
-							break;
-						case '[':
-							transformedKey = '\x1b';
-							break;
-						case '\\':
-							transformedKey = '\x1c';
-							break;
-						case ']':
-							transformedKey = '\x1d';
-							break;
-						case '^':
-							transformedKey = '\x1e';
-							break;
-						case '_':
-							transformedKey = '\x1f';
-							break;
-						case '?':
-							transformedKey = '\x7f';
-							break;
-						default:
-							return;
-					}
-				} else {
-					transformedKey = key;
-					break;
-				}
-		}
-		await serialRequest(transformedKey, hiddenChar);
-	}
-
-	async function serialRequest(data: string, hidden: boolean = false) {
-		if (!hidden) {
-			serialIO += data;
-		}
-		serialTerminal?.write(data);
-	}
-
-	async function serialResponse(data: string) {
-		const rlines = data.split('\n');
-		if (rlines.length === 1) {
-			serialIO += rlines[0];
-			return;
-		}
-		for (let i = 0; i < rlines.length; i++) {
-			const line = rlines[i];
-			serialIO += line;
-			addLine(line, 'serial');
-			serialIO = '';
-		}
-	}
-
-	function handleCommand(input: string) {
-		input = input.trim().replace(/\s+/g, ' ');
-		const args = input.split(' ');
-		const command = args[0];
-		switch (command) {
-			case 'echo': {
-				const echoarg: string = args.slice(1).join(' ');
-				// Ansi escape codes are not parsed from the input
-				// before using ansi_to_html, we need to parse them
-				const output: string = ansi_up.ansi_to_html(
-					echoarg
-						.replace(/\\033/g, '\x1b')
-						.replace(/\\e/g, '\x1b')
-						.replace(/\\n/g, '\n')
-						.replace(/\\t/g, '\t')
-						.replace(/\\r/g, '\r')
-						.replace(/\\b/g, '\b')
-						.replace(/\\f/g, '\f')
-						.replace(/\\v/g, '\v')
-						.replace(/\\0/g, '\0')
-						.replace(/\\x1b/g, '\x1b')
-				);
-				addLine(output, 'output');
-				break;
+	const ctx: CommandContext = {
+		println: (text = '') => term?.write(text + '\r\n'),
+		error: (text) => term?.write(c.red(text) + '\r\n'),
+		clear: () => term?.write('\x1b[H\x1b[2J\x1b[3J'),
+		scrollback() {
+			if (!term) return '';
+			const buffer = term.buffer.active;
+			const lines: string[] = [];
+			for (let i = 0; i < buffer.length; i++) {
+				const line = buffer.getLine(i);
+				if (!line) continue;
+				// join soft-wrapped rows back into one line
+				const text = line.translateToString(true);
+				if (line.isWrapped && lines.length) lines[lines.length - 1] += text;
+				else lines.push(text);
 			}
-			case 'clear':
-				lines = [];
-				break;
-			case 'help':
-				addLine('Commands: echo, clear, help, serial', 'output');
-				break;
-			case 'serial': {
-				if (!serialTerminal) {
-					addLine("Uh, uh uh! You didn't say the magic word!", 'error');
-					addLine(':( Unfortunately serial not supported in this browser', 'error');
-					addLine('You need a browser that supports Web Serial API or the USB API', 'error');
-					break;
-				}
-				if (args.length < 2) {
-					addLine('Serial commands: list, open, close, forget', 'output');
-					break;
-				}
-				const serialcommand = args[1];
-				switch (serialcommand) {
-					case 'list':
-						addLine('Listing serial ports...', 'output');
-						ports = usedSerialPorts();
-						ports.forEach((_, i) => {
-							addLine('Allowed port ' + i.toString(), 'serial');
-						});
-						if (ports.length === 0) {
-							addLine(
-								'No serial ports permitted, to use them from your browser please request them using "serial open ..."',
-								'serial'
-							);
-						}
-						break;
-					case 'open': {
-						if (args.length < 7) {
-							const txt =
-								'Usage: serial open BAUD_RATE DATA_BITS STOP_BITS PARITY FLOW_CONTROL' +
-								'\nBAUD_RATE: The baud rate to use (default: 9600)' +
-								'\nDATA_BITS: The number of data bits (default: 8)' +
-								'\nSTOP_BITS: The number of stop bits (default: 1)' +
-								'\nPARITY: The parity to use (default: none)' +
-								'\nFLOW_CONTROL: The flow control to use (default: none)' +
-								'\nExample: serial open 9600 8 1 none none';
-
-							addLine(txt, 'output');
-							break;
-						}
-						// const port = parseInt(args[2]);
-						const baudRate = parseInt(args[2]);
-						const dataBits = parseInt(args[3]);
-						const stopBits = parseInt(args[4]);
-						const parity = args[5];
-						const flowControl = args[6];
-						serialTerminal
-							.open(baudRate)
-							.then(() => {
-								const port = serialTerminal.port;
-
-								if (port === null) {
-									addLine('No serial ports available', 'error');
-									return;
-								}
-								getPorts().then(() => {
-									ports = usedSerialPorts();
-									currentPort = usedSerialPorts().indexOf(port);
-								});
-
-								addLine(`Opening serial port, to exit press Escape...`, 'serial');
-								serialMode = true;
-
-								serialIO = '';
-								serialTerminal
-									.selectPort(port, {
-										baudRate: baudRate,
-										dataBits: dataBits,
-										stopBits: stopBits,
-										parity: parity as ParityType,
-										flowControl: flowControl as FlowControlType
-									})
-									.then(() => {
-										serialTerminal
-											.start(serialResponse)
-											.then(() => {
-												serialMode = false;
-												addLine('Serial port closed', 'serial');
-											})
-											.catch((err) => {
-												serialMode = false;
-												addLine(`Error starting serial port: ${err}`, 'error');
-												addLine(
-													'Try refreshing the browser tab or ensuring the port is not used by another program.',
-													'error'
-												);
-											});
-									})
-									.catch((err) => {
-										serialMode = false;
-										addLine(`Error opening serial port: ${err}`, 'error');
-									});
-							})
-							.catch((err) => {
-								addLine(`Error opening serial port: ${err}`, 'error');
-							});
-						break;
-					}
-					case 'close':
-						addLine('Closing serial port...', 'serial');
-						serialTerminal.close();
-						addLine('Closed serial port', 'serial');
-						break;
-					case 'forget':
-						addLine('Forgetting serial ports...', 'serial');
-						serialTerminal
-							.forget()
-							.then(() => {
-								addLine('Serial ports forgotten.', 'serial');
-								getPorts().then(() => {
-									ports = usedSerialPorts();
-									currentPort = null;
-								});
-							})
-							.catch((err) => {
-								addLine(`Error forgetting serial ports: ${err}`, 'error');
-							});
-						break;
-					default:
-						addLine(`Unknown serial command: ${serialcommand}`, 'error');
-						break;
-				}
-				break;
-			}
-			default:
-				addLine(`Unknown command: ${command}`, 'error');
-				break;
-		}
-	}
-
-	// Add handler for touch devices:
-	// Focus on hidden input if touch happens anywhere on the terminal
-	const handleTerminalTouch = (event: TouchEvent) => {
-		event.preventDefault();
-		const touchdevice = document.getElementById('touchinput');
-		if (touchdevice) {
-			touchdevice.focus();
-		}
+			return lines.join('\n').trimEnd() + '\n';
+		},
+		session,
+		enterSerial
 	};
 
-	// For typing out the intro
-	const intro = 'echo 👋\\x1b[31mHello\\x1b[0m👋\\n🌍\\x1b[32mWorld\\x1b[0m🌍';
-	typeInput(intro);
-	let ports = $state<SerialPort[]>([]);
+	async function runLine(line: string) {
+		const { name, args, raw } = parseLine(line);
+		if (!name) return;
+		const cmd = commands.find((x) => x.name === name);
+		if (!cmd) {
+			ctx.error(`Unknown command: ${name} (try "help")`);
+			return;
+		}
+		await cmd.run(args, ctx, raw);
+	}
+
+	function enterSerial() {
+		if (!term || !shell) return;
+		serialMode = true;
+		shell.active = false;
+		for (const chunk of detached) writeDevice(chunk);
+		detached = [];
+		detachedBytes = 0;
+		term.focus();
+	}
+
+	function detach() {
+		if (!term || !shell) return;
+		serialMode = false;
+		shell.active = true;
+		term.write(
+			'\r\n' +
+				c.dim('[detached, the port is still open: "fg" resumes, "serial close" disconnects]') +
+				'\r\n'
+		);
+		shell.prompt();
+	}
+
+	async function disconnect() {
+		await session.close();
+	}
+
+	function onClosed(reason: 'user' | 'lost', error?: unknown) {
+		const wasAttached = serialMode;
+		serialMode = false;
+		detached = [];
+		detachedBytes = 0;
+		let message = '';
+		if (reason === 'lost') {
+			const detail = error instanceof Error ? `: ${error.message}` : '';
+			message = c.red(`Connection lost${detail}.`) + c.dim(' "serial r" reconnects.');
+		}
+		if (!shell) return;
+		if (wasAttached) {
+			shell.active = true;
+			term?.write('\r\n' + (message || c.dim('Serial port closed.')) + '\r\n');
+			shell.prompt();
+		} else if (message) {
+			shell.printAbove(message + '\r\n');
+		}
+	}
+
+	function writeDevice(bytes: Uint8Array) {
+		term?.write(get(prefs).hex ? hexDump(bytes) : bytes);
+	}
+
+	function onBytes(bytes: Uint8Array) {
+		if (serialMode) {
+			writeDevice(bytes);
+			return;
+		}
+		// detached: keep the newest output for when we resume
+		detached.push(bytes);
+		detachedBytes += bytes.length;
+		while (detachedBytes > DETACHED_MAX && detached.length > 1) {
+			detachedBytes -= detached.shift()!.length;
+		}
+	}
+
+	function sendSerial(data: string) {
+		if (data === '\x1d') {
+			// Ctrl+], like telnet's escape character
+			detach();
+			return;
+		}
+		const p = get(prefs);
+		if (p.echo) term?.write(data.replace(/\r/g, '\r\n'));
+		session.write(data.replace(/\r/g, NEWLINES[p.newline])).catch((error) => {
+			term?.write('\r\n' + c.red(`write failed: ${error?.message ?? error}`) + '\r\n');
+		});
+	}
+
+	/** Routes input to the device or the local shell. */
+	function input(data: string) {
+		if (serialMode) {
+			sendSerial(data);
+		} else if (shell) {
+			shell.finishTyping();
+			shell.handleData(data);
+		}
+	}
+
+	function onData(data: string) {
+		if (ctrlSticky && data.length === 1) {
+			ctrlSticky = false;
+			data = ctrlChar(data) ?? data;
+		}
+		input(data);
+	}
+
+	function virtualKey(key: string) {
+		const arrows: Record<string, string> = { up: 'A', down: 'B', right: 'C', left: 'D' };
+		if (key in arrows) {
+			// full-screen programs on the device may switch to application cursor keys
+			const prefix = term?.modes.applicationCursorKeysMode ? '\x1bO' : '\x1b[';
+			key = prefix + arrows[key];
+		}
+		input(key);
+	}
+
+	async function copy() {
+		const text = term?.getSelection();
+		if (!text) {
+			flash('nothing selected');
+			return;
+		}
+		try {
+			await navigator.clipboard.writeText(text);
+			flash('copied');
+		} catch {
+			flash('clipboard blocked');
+		}
+	}
+
+	async function paste() {
+		try {
+			const text = await navigator.clipboard.readText();
+			if (text) term?.paste(text);
+		} catch {
+			flash('clipboard blocked, try Ctrl+V');
+		}
+	}
+
+	const isMac = () => /Mac|iPhone|iPad/.test(navigator.platform);
+
+	// returning false stops xterm handling the key
+	function onKey(e: KeyboardEvent): boolean {
+		if (e.type !== 'keydown' || !term) return true;
+		const key = e.key.toLowerCase();
+		const mod = e.ctrlKey || e.metaKey;
+		if (mod && !e.altKey && key === 'c' && (e.shiftKey || term.hasSelection())) {
+			e.preventDefault();
+			void copy();
+			return false;
+		}
+		if (e.ctrlKey && e.shiftKey && key === 'v') {
+			e.preventDefault();
+			void paste();
+			return false;
+		}
+		// let the browser fire a native paste event, which xterm picks up
+		if ((e.metaKey || (e.ctrlKey && !isMac())) && key === 'v') {
+			return false;
+		}
+		return true;
+	}
+
+	function onContextMenu(e: MouseEvent) {
+		// shift+right-click (and touch devices) keep the browser menu
+		if (!term || coarse || e.shiftKey) return;
+		e.preventDefault();
+		if (term.hasSelection()) {
+			void copy();
+			term.clearSelection();
+		} else {
+			void paste();
+		}
+	}
+
+	function submitCompose(e: SubmitEvent) {
+		e.preventDefault();
+		const text = composeText;
+		composeText = '';
+		if (ctrlSticky && [...text].length === 1) {
+			ctrlSticky = false;
+			const code = ctrlChar(text);
+			if (code) {
+				input(code);
+				return;
+			}
+		}
+		if (serialMode) sendSerial(text + '\r');
+		else shell?.submit(text);
+		composeInput?.focus();
+	}
+
+	function toggleCompose() {
+		prefs.update((p) => ({ ...p, compose: !showCompose }));
+	}
+
+	async function toggleSignal(which: 'dtr' | 'rts') {
+		try {
+			if (which === 'dtr') await session.setDtr(!session.dtr);
+			else await session.setRts(!session.rts);
+			flash(`${which} ${session[which] ? 'on' : 'off'}`);
+		} catch (error) {
+			flash(`${which} failed: ${error instanceof Error ? error.message : error}`);
+		}
+	}
+
+	async function sendBreak() {
+		try {
+			await session.sendBreak(250);
+			flash('break sent');
+		} catch (error) {
+			flash(`break failed: ${error instanceof Error ? error.message : error}`);
+		}
+	}
+
+	function reconnect() {
+		term?.focus();
+		shell?.submit('serial r');
+	}
+
+	function ready(t: XTermTerminal) {
+		term = t;
+		t.options.convertEol = get(prefs).lfcr;
+		shell = new Shell(
+			{
+				write: (s) => t.write(s),
+				cols: () => t.cols,
+				clear: ctx.clear
+			},
+			{
+				prompt: PROMPT,
+				onLine: runLine,
+				complete: (before) => completeLine(commands, before),
+				history: { get: () => get(history), push: pushHistory }
+			}
+		);
+		t.onData(onData);
+		t.attachCustomKeyEventHandler(onKey);
+		t.onSelectionChange(() => {
+			if (get(prefs).copyOnSelect && t.hasSelection()) void copy();
+		});
+		session.onBytes = onBytes;
+		session.onClosed = onClosed;
+
+		t.write(nl(BANNER) + '\r\n\r\n' + nl(WARNING) + '\r\n\r\n');
+		t.write('Type "help" for a list of commands.\r\n\r\n');
+		shell.prompt();
+		void shell.type(INTRO);
+		// don't pop up the on-screen keyboard on page load
+		if (!coarse) t.focus();
+	}
 
 	$effect(() => {
-		// ensure the terminal is scrolled to the bottom on new lines
-		const nLines = lines.length;
-		terminalDiv.scrollTop = terminalDiv.scrollHeight + 0 * nLines;
+		const lfcr = $prefs.lfcr;
+		if (term) term.options.convertEol = lfcr;
+	});
+
+	onMount(() => {
+		coarse = window.matchMedia('(pointer: coarse)').matches;
+		return () => {
+			clearTimeout(toastTimer);
+			void session.close();
+		};
 	});
 </script>
 
-<div
-	aria-label="Terminal emulator"
-	role="application"
-	bind:this={terminalDiv}
-	class="terminal"
-	id="terminal-wrapper"
-	ontouchend={handleTerminalTouch}
->
-	{#each lines as line, i (i)}
-		<div class="terminal-line">
-			{#if line.type === 'output'}
-				<pre class={line.type}>{@html line.text}</pre>
-			{:else if line.type === 'serial'}
-				<pre class="output">{line.text}</pre>
-			{:else if line.type === 'error'}
-				<pre class={line.type}>{line.text}</pre>
-			{:else}
-				<span class="prompt">{@html shellprompt}</span>
-				<pre class={line.type}>{line.text}</pre>
+<TerminalWindow {title}>
+	{#snippet actions()}
+		{#if toast}
+			<span class="toast" role="status">{toast}</span>
+		{/if}
+		{#if term}
+			{#if session.connecting}
+				<span class="status">connecting…</span>
+			{:else if session.connected}
+				<button type="button" class="tb-btn" onclick={disconnect}>⏏ disconnect</button>
+			{:else if $lastProfile && session.supported}
+				<button
+					type="button"
+					class="tb-btn"
+					title="Reconnect: {describeConfig($lastProfile)}"
+					onclick={reconnect}>↻ reconnect</button
+				>
 			{/if}
-		</div>
-	{/each}
-	<div class="terminal-line">
-		{#if !serialMode}
-			<span class="prompt">{@html shellprompt}</span>
 		{/if}
-		<textarea
-			autocomplete="off"
-			spellcheck="false"
-			autocapitalize="off"
-			oninput={handleVirtualInput}
-			name="mobileinput"
-			id="touchinput"></textarea>
-		{#if serialMode}
-			<pre class="input">{serialIO}</pre>
-			<span class="cursor"></span>
-		{:else}
-			<pre class="input">{currentInput}</pre>
-			<span class="cursor"></span>
-		{/if}
+	{/snippet}
+
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="screen" oncontextmenu={onContextMenu}>
+		<XTerm onready={ready} />
 	</div>
-</div>
-{#if serialMode}
-	<Button
-		name="Disconnect"
-		onclick={() => {
-			serialMode = false;
-			serialTerminal?.close();
-		}}>Disconnect</Button
-	>
+	{#if term && showKeyBar}
+		<KeyBar
+			serial={serialMode}
+			bind:ctrl={ctrlSticky}
+			dtr={session.dtr}
+			rts={session.rts}
+			compose={showCompose}
+			onkey={virtualKey}
+			onbreak={sendBreak}
+			ondtr={() => toggleSignal('dtr')}
+			onrts={() => toggleSignal('rts')}
+			ondetach={detach}
+			ondisconnect={disconnect}
+			oncopy={copy}
+			onpaste={paste}
+			onselectall={() => term?.selectAll()}
+			oncompose={toggleCompose}
+		/>
+	{/if}
+	{#if term && showCompose}
+		<form class="compose" onsubmit={submitCompose}>
+			<span class="compose-prompt">{serialMode ? '⚡' : '>'}</span>
+			<input
+				bind:this={composeInput}
+				bind:value={composeText}
+				type="text"
+				name="line"
+				aria-label={serialMode ? 'Line to send to the device' : 'Command'}
+				placeholder={serialMode ? 'send a line to the device…' : 'type a command…'}
+				autocomplete="off"
+				autocapitalize="off"
+				spellcheck="false"
+				enterkeyhint="send"
+			/>
+			<button type="submit">send</button>
+		</form>
+	{/if}
+</TerminalWindow>
+{#if !showKeyBar && term}
+	<p class="hint">
+		Tip: <code>serial open 115200</code> to connect, Ctrl+] detaches, <code>help</code> for more. Select
+		to copy, right-click to paste.
+	</p>
 {/if}
-<svelte:window on:keydown={handleInput} />
 
 <style>
-	@font-face {
-		font-family: 'HackNerdFont';
-		src: url('/HackNerdFont-Regular.woff2') format('woff2');
-	}
-	.terminal {
-		/* background-color: #000; */
-		border: 2px inset #999999;
-		color: #fff;
-		padding: 1rem;
-		overflow-y: scroll;
-		max-height: 27rem;
-		height: 27rem;
-		width: 100%;
-		position: relative;
-		background-color: #030303;
-		/* use HackNerdFont-Regular.woff in static folder */
-		font-family: 'HackNerdFont', monospace;
-		font-size: 0.9rem;
-		line-height: 1rem;
-	}
-
-	.terminal-line {
+	.screen {
 		display: flex;
-		flex-direction: row;
+		flex: 1 1 auto;
+		min-height: 0;
+		background: #050507;
+	}
+	.toast,
+	.status {
+		font-size: 0.7rem;
+		color: var(--color-accent-strong);
+	}
+	.compose {
+		display: flex;
 		align-items: center;
+		gap: 0.4rem;
+		padding: 0.35rem 0.5rem;
+		background: var(--color-surface-2);
+		border-top: 1px solid var(--color-line);
 	}
-	.terminal pre {
-		margin: 0;
-		font-family: 'HackNerdFont', monospace;
-		font-size: 0.9rem;
-		line-height: 1rem;
-		min-height: 1rem;
-		white-space: pre;
-		tab-size: 4;
+	.compose-prompt {
+		color: var(--color-accent);
+		font-size: 0.85rem;
 	}
-	.prompt {
-		color: #00ff00;
-		font-family: 'HackNerdFont', monospace;
-		font-size: 0.9rem;
-		line-height: 1.1rem;
+	.compose input {
+		flex: 1;
+		min-width: 0;
+		padding: 0.3rem 0.5rem;
+		border: 1px solid var(--color-line);
+		border-radius: 0.25rem;
+		background: var(--color-surface);
+		color: var(--color-fg);
+		font-family: var(--font-mono);
+		/* 16px avoids iOS zooming into the field */
+		font-size: 16px;
 	}
-	.cursor {
-		display: inline-block;
-		width: 7px;
-		height: 1rem;
-		background-color: #00ff00;
-		animation: blink 1.5s infinite;
+	.compose input:focus {
+		outline: none;
+		border-color: var(--color-accent);
 	}
-	#touchinput {
-		position: absolute;
-		left: -9999px;
-		clip: rect(1px, 1px, 1px, 1px);
-		width: 10px;
-		height: 10px;
+	.compose button {
+		padding: 0.3rem 0.7rem;
+		border-radius: 0.25rem;
+		background: var(--color-accent);
+		color: #fff;
+		font-size: 0.8rem;
+		cursor: pointer;
 	}
-	@keyframes blink {
-		0% {
-			opacity: 1;
-		}
-		49% {
-			opacity: 1;
-		}
-		50% {
-			opacity: 0;
-		}
-		99% {
-			opacity: 0;
-		}
-		100% {
-			opacity: 1;
-		}
+	.hint {
+		margin: 0.5rem 0 0;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--color-fg-subtle);
 	}
 </style>

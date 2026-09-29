@@ -18,6 +18,9 @@
 /*
  * Modified by: zeyus https://github.com/zeyus
  * Modifications licensed under the MIT licence
+ *
+ * Functionally in sync with google/web-serial-polyfill 1.0.15 (a209091, 2023-11-21,
+ * the latest upstream release; later upstream changes are packaging only).
  */
 
 export enum SerialPolyfillProtocol {
