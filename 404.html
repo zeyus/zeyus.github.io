@@ -1,31 +1,46 @@
 <!doctype html>
-<html class="dark" lang="en" data-theme="dark">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<link rel="me" href="https://corteximplant.com/@zeyus" />
 		<meta name="fediverse:creator" content="@zeyus@corteximplant.com" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="color-scheme" content="dark" />
+		<meta name="color-scheme" content="dark light" />
+		<meta name="darkreader-lock" />
+		<script>
+			// apply the theme before first paint; keep in sync with ThemeToggle.svelte
+			(function () {
+				var theme = 'auto';
+				try {
+					theme = JSON.parse(localStorage.getItem('theme')) || 'auto';
+				} catch (e) {}
+				var dark =
+					theme === 'auto'
+						? !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches
+						: theme === 'dark';
+				document.documentElement.classList.toggle('dark', dark);
+			})();
+		</script>
 		<link rel="human-json" href="/human.json" />
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/entry/start.HWqZFl74.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/CwSVFjBN.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/BkFQlMHx.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/DSsNPvBZ.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/entry/app.DYa_baI5.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/HclGiUj8.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/entry/start.Bjg2TawG.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/BFKfvDcr.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/SKx8kQ6a.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/jr96zTHP.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/entry/app.CnyGHPeY.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/uBIymjUX.mjs">
 		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/xihTtKlq.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/nodes/0.DQxtig5z.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/dTeUzN3Z.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/B3q1TijA.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/DZpmYaF6.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/Cy7oZKVv.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/D18h33df.mjs">
-		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/DND9tJTA.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/nodes/0.C1NcKTCG.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/BnitRHRy.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/BSfPkDG0.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/VKrGdCS2.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/CnP7a91j.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/Cnl63CbN.mjs">
+		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/Cnlp47rI.mjs">
 		<link rel="preload" as="script" crossorigin="anonymous" href="/_app/immutable/chunks/SmFG-ChP.mjs">
 		
 		<link href="/_app/immutable/assets/dist.CD54FDqW.css" rel="stylesheet">
-		<link href="/_app/immutable/assets/0.DOhvUNzx.css" rel="stylesheet">
+		<link href="/_app/immutable/assets/0.BqaQtJj1.css" rel="stylesheet">
 	</head>
 
 	<body data-sveltekit-preload-data="hover">
@@ -33,15 +48,15 @@
 		<div style="display: contents">
 			<script>
 				{
-					__sveltekit_y1p6f2 = {
+					__sveltekit_uynkup = {
 						base: ""
 					};
 
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("/_app/immutable/entry/start.HWqZFl74.mjs"),
-						import("/_app/immutable/entry/app.DYa_baI5.mjs")
+						import("/_app/immutable/entry/start.Bjg2TawG.mjs"),
+						import("/_app/immutable/entry/app.CnyGHPeY.mjs")
 					]).then(([kit, app]) => {
 						kit.start(app, element);
 					});
