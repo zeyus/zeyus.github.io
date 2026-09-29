@@ -171,7 +171,7 @@
 				'An experimental paradigm designed for studying group social interactions with simultaneous competition and collaboration. This version is similar to the reserach paradigm, but without any of the experiment-oriented components. It is just the game part, and can be played solo or with others.',
 			source: 'https://github.com/NexusDynamic/RTGame',
 			linkText: 'Play',
-			link: 'https://nexusdynamic.org/liblsl.dart/',
+			link: 'https://rt-lobby.nexusdynamic.org/',
 			tags: ['research', 'game', 'flutter', 'dart', 'flame']
 		},
 		{
