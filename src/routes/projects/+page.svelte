@@ -166,12 +166,12 @@
 			tags: ['research', 'simulation']
 		},
 		{
-			name: 'WIP Novel social paradigm',
+			name: 'RiseTogether - Videogame edition',
 			description:
-				'Current development of a novel paradigm for studying the brain during simultaneous cooperative and competitive tasks. It is targeted at joint action, social interaction, and social cognition research, and will be combined with EEG hyperscanning and neuro-/bio-feedback.',
-			/** source: 'https://github.com/NexusDynamic/RiseTogether', **/
-			linkText: 'Poster',
-			link: 'https://nexusdynamic.org/FINAL-Coop_comp_paradigm-A0Poster_reduced.pdf',
+				'An experimental paradigm designed for studying group social interactions with simultaneous competition and collaboration. This version is similar to the reserach paradigm, but without any of the experiment-oriented components. It is just the game part, and can be played solo or with others.',
+			source: 'https://github.com/NexusDynamic/RTGame',
+			linkText: 'Play',
+			link: 'https://nexusdynamic.org/liblsl.dart/',
 			tags: ['research', 'game', 'flutter', 'dart', 'flame']
 		},
 		{
@@ -211,6 +211,15 @@
 			link: 'https://pub.dev/packages/android_libcpp_shared',
 			source: 'https://github.com/NexusDynamic/android_libcpp_shared',
 			tags: ['tool', 'library', 'dart', 'flutter', 'android']
+		},
+		{
+			name: 'LSL viewer',
+			description:
+				'A cross-platform (Linux, MacOS, Android, Web) viewer for XDF and LSL streams with useful features for all kinds of data streams. While LSL is not directly supported on the web, the supporting tools allow bridging LSL streams via WebSockets',
+			link: 'https://nexusdynamic.org/liblsl.dart/',
+			linkText: 'Open',
+			source: 'https://github.com/NexusDynamic/liblsl.dart/tree/main/apps/lsl_viewer',
+			tags: ['tool', 'research', 'dart', 'lsl', 'xdf', 'flutter', 'web', 'android', 'desktop']
 		}
 	];
 
