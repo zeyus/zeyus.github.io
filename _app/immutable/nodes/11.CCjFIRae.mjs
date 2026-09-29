@@ -1,1 +1,0 @@
-import{Kt as e}from"../chunks/SKx8kQ6a.mjs";import{t}from"../chunks/DgGCQn41.mjs";var n=e({load:()=>r}),r=()=>({props:{title:`projects`,excerpt:`A selection of projects that I have worked on, from apps to research, all open source!`}});export{t as component,n as universal};
