@@ -54,7 +54,7 @@
 	const keepFocus = (e: PointerEvent) => e.preventDefault();
 </script>
 
-<div class="keybar" role="toolbar" aria-label="Special keys">
+<div class="keybar" data-pan-x role="toolbar" aria-label="Special keys">
 	<button
 		type="button"
 		class:active={ctrl}
@@ -125,6 +125,8 @@
 		gap: 0.3rem;
 		padding: 0.35rem 0.5rem;
 		overflow-x: auto;
+		/* sideways only: a vertical swipe here must not scroll the page */
+		touch-action: pan-x;
 		scrollbar-width: none;
 		background: var(--color-surface-3);
 		border-top: 1px solid var(--color-line);

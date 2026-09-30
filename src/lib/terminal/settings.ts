@@ -33,7 +33,8 @@ export type WindowState = {
 	y: number;
 	w: number;
 	h: number;
-	dockedHeight: number;
+	/** null = auto: tall enough for the intro (see TerminalWindow autoHeight) */
+	dockedHeight: number | null;
 };
 
 export type Prefs = {
@@ -54,7 +55,7 @@ export const WINDOW_DEFAULT: WindowState = {
 	y: 80,
 	w: 760,
 	h: 460,
-	dockedHeight: 432
+	dockedHeight: null
 };
 
 export const windowState = storage<WindowState>('terminal.window', WINDOW_DEFAULT);

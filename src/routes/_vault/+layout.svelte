@@ -54,7 +54,7 @@
 	<article class="mx-auto w-full 2xl:w-(--article-max)">
 		<div class="mb-4 flex w-full flex-row flex-wrap justify-between">
 			<Heading
-				class="post-title mb-0 max-w-max text-3xl/tight! [overflow-wrap:anywhere] sm:text-4xl/tight! md:text-5xl/tight!"
+				class="post-title mb-0 max-w-max text-3xl/tight! wrap-anywhere sm:text-4xl/tight! md:text-5xl/tight!"
 				>{page.data.props.title}</Heading
 			>
 			<span class="post-meta self-end font-mono text-xs text-fg-subtle"

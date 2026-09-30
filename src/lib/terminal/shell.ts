@@ -16,6 +16,8 @@ export interface ShellOptions {
 		get(): string[];
 		push(line: string): void;
 	};
+	/** Called with the recalled line when stepping through history. */
+	onHistory?(line: string): void;
 }
 
 // an escape sequence (CSI / SS3 / alt+key) or a single character
@@ -338,6 +340,7 @@ export class Shell {
 		this.chars = [...line];
 		this.cursor = this.chars.length;
 		this.redraw();
+		this.options.onHistory?.(line);
 	}
 
 	private complete() {

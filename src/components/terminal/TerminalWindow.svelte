@@ -5,16 +5,20 @@
 
 	let {
 		title,
+		autoHeight,
 		actions,
 		children
 	}: {
 		title: string;
+		/** docked height (px) until the user resizes it */
+		autoHeight?: number;
 		actions?: Snippet;
 		children: Snippet;
 	} = $props();
 
 	const MIN_W = 360;
 	const MIN_H = 220;
+	const AUTO_FALLBACK = 432;
 	const EDGES = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'] as const;
 
 	// the saved state is applied on mount so the prerendered markup matches hydration
@@ -112,9 +116,10 @@
 
 	function startResize(e: PointerEvent, edge: (typeof EDGES)[number]) {
 		const start = { ...win };
+		const startHeight = frame.offsetHeight;
 		track(e, (dx, dy) => {
 			if (!floating) {
-				win.dockedHeight = clamp(start.dockedHeight + dy, MIN_H, innerHeight * 0.9);
+				win.dockedHeight = clamp((start.dockedHeight ?? startHeight) + dy, MIN_H, innerHeight * 0.9);
 				return;
 			}
 			if (edge.includes('e')) win.w = clamp(start.w + dx, MIN_W, innerWidth - start.x);
@@ -142,11 +147,40 @@
 		if (floating) {
 			return `left:${win.x}px;top:${win.y}px;width:${win.w}px;height:${win.minimized ? 'auto' : win.h + 'px'}`;
 		}
-		return win.minimized ? '' : `height:${win.dockedHeight}px`;
+		if (win.minimized) return '';
+		if (win.dockedHeight !== null) return `height:${win.dockedHeight}px`;
+		// leave room for the page around it on short screens
+		return `height:min(${autoHeight ?? AUTO_FALLBACK}px, 85svh)`;
+	});
+
+	// a maximised terminal covers the page, so the page must not scroll behind it
+	$effect(() => {
+		if (!win.maximized) return;
+		const root = document.documentElement;
+		const prev = root.style.overflow;
+		root.style.overflow = 'hidden';
+		return () => {
+			root.style.overflow = prev;
+		};
+	});
+
+	// touches on a fixed window (maximised or floating) never scroll the page;
+	// the terminal handles its own scrollback and cancels the moves it uses
+	$effect(() => {
+		if (!win.maximized && !floating) return;
+		const block = (e: TouchEvent) => {
+			// sideways scrollers (the key bar) still need their own pans
+			if ((e.target as Element).closest('[data-pan-x]')) return;
+			if (e.cancelable) e.preventDefault();
+		};
+		frame.addEventListener('touchmove', block, { passive: false });
+		return () => frame.removeEventListener('touchmove', block);
 	});
 
 	onMount(() => {
 		win = { ...WINDOW_DEFAULT, ...get(windowState) };
+		// 432 was the old fixed default, not a height anyone chose
+		if (win.dockedHeight === AUTO_FALLBACK) win.dockedHeight = null;
 		const mq = window.matchMedia('(min-width: 768px)');
 		const onMq = () => (wide = mq.matches);
 		onMq();
@@ -285,6 +319,7 @@
 		left: 0;
 		width: 100vw;
 		border-radius: 0;
+		overscroll-behavior: none;
 	}
 	.term-window.minimized {
 		height: auto;

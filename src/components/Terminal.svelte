@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Terminal as XTermTerminal } from '@xterm/xterm';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { get } from 'svelte/store';
 	import TerminalWindow from '$components/terminal/TerminalWindow.svelte';
 	import XTerm from '$components/terminal/XTerm.svelte';
@@ -19,23 +19,26 @@
 	import { ctrl as ctrlChar, hexDump, NEWLINES } from '$lib/terminal/keys';
 
 	const PROMPT = '\x1b[32manon@zeyus>\x1b[0m ';
-	const BANNER = `            __________
-         .'----------\`.
-         | .--------. |
-         | |########| |       __________
-         | |########| |      /__________\\
-.--------| \`--------' |------|    --=-- |-------------.
-|        \`----,-.-----'      |o ======  |             |
-|       ______|_|_______     |__________|             |
-|      /  %%%%%%%%%%%%  \\                             |
-|     /  %%%%%%%%%%%%%%  \\                            |
-|     ^^^^^^^^^^^^^^^^^^^^                            |
-+-----------------------------------------------------+`;
+	const BANNER = `     .------------.
+     | .--------. |
+     | | ACCESS | |
+     | | DENIED | |
+.----| \`--------' |-------------------.
+|    \`----,-.-----'                   |
+|   ______|_|_______    ⎡⎧⎺⎺⎺⎺⎺⎺⎺⎺⎫⎤  |
+|  /  %%%%%%%%%%%%  \\   ⎮⎩ MS-DOS ⎭⎮  |
+| /  %%%%%%%%%%%%%%  \\  ⎮ ⎡‾‾‾‾‾⎤  ⎮  |
+| ^^^^^^^^^^^^^^^^^^^^  ⎣_⎣___⎡⎤⎦__⎦  |
++-------------------------------------+`;
 	const WARNING = `WARNING:  Unauthorized access to this system is
 forbidden and will be prosecuted by law. By accessing
 this system, you agree that your actions may be
 monitored if unauthorized usage is suspected.`;
 	const INTRO = 'echo 👋\\x1b[31mHello\\x1b[0m👋\\n🌍\\x1b[32mWorld\\x1b[0m🌍';
+	// rows the docked terminal should show by default: the banner and warning,
+	// the blank and help lines between them, the intro command, its two lines
+	// of output, the next prompt, and one spare row
+	const INTRO_ROWS = BANNER.split('\n').length + WARNING.split('\n').length + 9;
 	// cap on output kept while detached from an open port (Ctrl+])
 	const DETACHED_MAX = 1024 * 1024;
 
@@ -50,6 +53,8 @@ monitored if unauthorized usage is suspected.`;
 	let composeText = $state('');
 	let composeInput = $state<HTMLInputElement>();
 	let toast = $state('');
+	let screen = $state<HTMLDivElement>();
+	let autoHeight = $state<number>();
 	let toastTimer: ReturnType<typeof setTimeout> | undefined;
 	let detached: Uint8Array[] = [];
 	let detachedBytes = 0;
@@ -324,7 +329,10 @@ monitored if unauthorized usage is suspected.`;
 				prompt: PROMPT,
 				onLine: runLine,
 				complete: (before) => completeLine(commands, before),
-				history: { get: () => get(history), push: pushHistory }
+				history: { get: () => get(history), push: pushHistory },
+				// the compose bar replaces the shell line on submit, so it has to follow
+				// history recalls (arrow keys) or sending would run an empty command
+				onHistory: (line) => (composeText = line)
 			}
 		);
 		t.onData(onData);
@@ -343,6 +351,28 @@ monitored if unauthorized usage is suspected.`;
 		if (!coarse) t.focus();
 	}
 
+	// window height that fits INTRO_ROWS, measured from the real cell size and
+	// whatever bars are showing (the window's chrome doesn't depend on its height)
+	function measureAutoHeight() {
+		const win = screen?.closest<HTMLElement>('.term-window');
+		const xterm = screen?.querySelector<HTMLElement>('.xterm');
+		const cells = screen?.querySelector<HTMLElement>('.xterm-screen');
+		if (!term || !screen || !win || !xterm || !cells || !screen.clientHeight) return;
+		const cell = cells.clientHeight / term.rows;
+		const style = getComputedStyle(xterm);
+		const padding = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+		const chrome = win.offsetHeight - screen.clientHeight;
+		autoHeight = Math.ceil(chrome + padding + INTRO_ROWS * cell) + 2;
+	}
+
+	$effect(() => {
+		// re-measure when the bars under the screen come and go
+		void showKeyBar;
+		void showCompose;
+		if (!term) return;
+		void tick().then(() => requestAnimationFrame(measureAutoHeight));
+	});
+
 	$effect(() => {
 		const lfcr = $prefs.lfcr;
 		if (term) term.options.convertEol = lfcr;
@@ -357,7 +387,7 @@ monitored if unauthorized usage is suspected.`;
 	});
 </script>
 
-<TerminalWindow {title}>
+<TerminalWindow {title} {autoHeight}>
 	{#snippet actions()}
 		{#if toast}
 			<span class="toast" role="status">{toast}</span>
@@ -379,7 +409,7 @@ monitored if unauthorized usage is suspected.`;
 	{/snippet}
 
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="screen" oncontextmenu={onContextMenu}>
+	<div class="screen" bind:this={screen} oncontextmenu={onContextMenu}>
 		<XTerm onready={ready} />
 	</div>
 	{#if term && showKeyBar}
