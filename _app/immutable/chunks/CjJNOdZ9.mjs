@@ -1,1 +1,0 @@
-import{Kt as e}from"./SKx8kQ6a.mjs";var t=e({load:()=>n}),n=()=>({props:{title:`My PhD Project: EEG Hyperscanning, Videogames, Cooperation and Competition`,date:new Date(`2026-09-10`),excerpt:`It is complex, it is fun and challenging, and I hope that we can push the field towards more naturalistic experiments.`,short_title:`PhD Project`,draft:!0}});export{t};
