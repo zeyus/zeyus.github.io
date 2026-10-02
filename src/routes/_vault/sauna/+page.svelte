@@ -8,9 +8,11 @@
 
 	let images = page.data.props.gallery.images as App.EnhancedImageDef[];
 	let items: Footnote[] = [];
+	// four across on desktop, two on tablets, full width on phones
+	const gridSizes = '(min-width: 1024px) 240px, (min-width: 640px) 480px, 100vw';
 </script>
 
-<EnhancedImg image={images[0]} figClass="w-full max-w-96 float-end" />
+<EnhancedImg image={images[0]} sizes="425px" figClass="w-full max-w-96 float-end" />
 <P>
 	So, one side of my family is from Finland, and one of the consistencies of both places I lived
 	during my childhood was the presence of a sauna.<BoringReference
@@ -42,10 +44,26 @@
 	which saved a bit of money.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[1]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[2]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[3]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[4]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[1]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[2]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[3]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[4]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	After the materials arrived, I<BoringReference
@@ -60,10 +78,26 @@
 	for the noggins.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[5]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[6]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[7]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[8]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[5]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[6]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[7]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[8]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	Next up was the framing. I started with the back and sides, and it went fairly well, and
@@ -78,10 +112,26 @@
 	quite well just framing around it, and the existing window was already double-glazed.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[9]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[10]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[11]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[12]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[9]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[10]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[11]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[12]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	Once the walls were done, it was time for the insulation. Inside is a layer of plastic moisture
@@ -92,10 +142,26 @@
 	ceiling getting in the way.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[13]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[14]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[15]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[16]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[13]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[14]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[15]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[16]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	Around this time the stove arrived<BoringReference
@@ -110,10 +176,26 @@
 	panelling could begin.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[17]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[18]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[19]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[20]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[17]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[18]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[19]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[20]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	After the panelling was the bench construction. I wanted to make the benches without legs, which
@@ -123,10 +205,26 @@
 	in the sauna at the same time and the whole thing is solid as a rock (benches and frame).
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[21]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[22]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[23]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[24]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[21]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[22]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[23]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[24]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	For the inside work, I still needed a pad for the stove to sit on, which I just formed up and
@@ -140,10 +238,26 @@
 	handle but it looks nice.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[25]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[26]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[27]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[28]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[25]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[26]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[27]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[28]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	With all that out of the way, it was time to make some holes for the vent, I just used a holesaw
@@ -156,10 +270,26 @@
 	part with heatproof black paint which definitely finishes it off nicely.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[29]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[30]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[31]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[32]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[29]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[30]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[31]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[32]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	And that's basically it. There were a few finishing touches that needed to be done, like oiling
@@ -167,10 +297,26 @@
 	coating to protect it from the moisture.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[33]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[34]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[35]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[36]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[33]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[34]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[35]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[36]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	After a lot of hard work, we could enjoy the sauna. I added a cheap waterproof rechargeable
@@ -178,10 +324,26 @@
 	along with the lantern candles outside.
 </P>
 <div class="flex flex-row flex-wrap items-start">
-	<EnhancedImg image={images[37]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[38]} figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[39]} figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4" />
-	<EnhancedImg image={images[40]} figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4" />
+	<EnhancedImg
+		image={images[37]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[38]}
+		sizes={gridSizes}
+		figClass="mb-4 lg:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[39]}
+		sizes={gridSizes}
+		figClass="mb-4 sm:pe-2 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
+	<EnhancedImg
+		image={images[40]}
+		sizes={gridSizes}
+		figClass="mb-4 flex-full sm:basis-1/2 lg:basis-1/4"
+	/>
 </div>
 <P>
 	After all of that, I mounted a shower outside which can be connected via a hose connecting to an
@@ -189,7 +351,11 @@
 	Lidl and it's perfect.
 </P>
 <figure class="h-svh">
-	<video controls muted class="mx-auto h-5/6">
+	<video controls muted preload="metadata" class="mx-auto h-5/6">
+		<source
+			src="/_assets/media/_vault/sauna/sauna_nosound.av1.mp4"
+			type="video/mp4; codecs=&quot;av01.0.05M.10&quot;"
+		/>
 		<source src="/_assets/media/_vault/sauna/sauna_nosound.mp4" type="video/mp4" />
 		Your browser does not support the video tag.
 	</video>

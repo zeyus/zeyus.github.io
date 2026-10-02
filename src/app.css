@@ -111,10 +111,20 @@
 	src: url('/ClearSans-OP0p.woff2') format('woff2');
 }
 
+/* split by unicode-range so the ~9000 Nerd Font icons (private use area) are
+   only downloaded when one is actually rendered, e.g. by the terminal */
 @font-face {
 	font-family: 'Hack Nerd Font';
-	src: url('/HackNerdFont-Regular.woff2') format('woff2');
+	src: url('/HackNerdFont-Regular.core.woff2') format('woff2');
 	font-display: swap;
+	unicode-range: U+0000-DFFF, U+F900-EFFFF;
+}
+
+@font-face {
+	font-family: 'Hack Nerd Font';
+	src: url('/HackNerdFont-Regular.icons.woff2') format('woff2');
+	font-display: swap;
+	unicode-range: U+E000-F8FF, U+F0000-10FFFF;
 }
 
 div[role='presentation'] {

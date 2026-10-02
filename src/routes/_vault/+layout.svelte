@@ -66,11 +66,13 @@
 		</div>
 		{#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
 			<EnhancedImg
-				sizes="min(1200, 100vw)"
+				sizes="min(1200px, 100vw)"
+				loading="eager"
 				transform={['h=384', 'fit=cover']}
 				image={page.data.props.feature_image}
 				figClass="max-w-full mb-8"
-				imgClass="rounded-lg object-cover max-w-full w-full h-96"
+				imgClass={page.data.props.feature_image?.class ??
+					'rounded-lg object-cover max-w-full w-full h-96'}
 			/>
 		{/if}
 

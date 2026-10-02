@@ -2,55 +2,16 @@
 	import { Highlight } from 'svelte-highlight';
 	import LangTag from 'svelte-highlight/LangTag.svelte';
 	import { type LanguageType } from 'svelte-highlight/languages';
-	import { bash } from 'svelte-highlight/languages/bash';
-	import { diff } from 'svelte-highlight/languages/diff';
-	import { javascript } from 'svelte-highlight/languages/javascript';
-	import { typescript } from 'svelte-highlight/languages/typescript';
-	import { python } from 'svelte-highlight/languages/python';
-	import { css } from 'svelte-highlight/languages/css';
-	import { ini } from 'svelte-highlight/languages/ini';
-	import { xml } from 'svelte-highlight/languages/xml';
-	import { json } from 'svelte-highlight/languages/json';
-	import { yaml } from 'svelte-highlight/languages/yaml';
-	import { markdown } from 'svelte-highlight/languages/markdown';
-	import { rust } from 'svelte-highlight/languages/rust';
-	import { go } from 'svelte-highlight/languages/go';
-	import { c } from 'svelte-highlight/languages/c';
-	import { cpp } from 'svelte-highlight/languages/cpp';
+	import { plaintext } from 'svelte-highlight/languages/plaintext';
 	import { Button } from 'flowbite-svelte';
 	import { ClipboardCleanOutline } from 'flowbite-svelte-icons';
 	import { fade } from 'svelte/transition';
 	import 'svelte-highlight/styles/dark-violet.css';
 
-	const LANGS: Record<string, LanguageType<string>> = {
-		bash,
-		sh: bash,
-		shell: bash,
-		diff,
-		ini,
-		javascript,
-		js: javascript,
-		typescript,
-		ts: typescript,
-		python,
-		py: python,
-		css,
-		html: xml,
-		xml,
-		json,
-		yaml,
-		yml: yaml,
-		markdown,
-		md: markdown,
-		rust,
-		rs: rust,
-		go,
-		c,
-		cpp,
-		'c++': cpp
-	};
-
 	interface Props {
+		// codeBlockPreprocessor (svelte.config.js) swaps a lang="name" for the imported language
+		// object, so only the languages a page uses are bundled; a string only gets here if
+		// that didn't happen, and is shown without highlighting
 		lang?: string | LanguageType<string>;
 		code?: string;
 		// only for type-checking: codeBlockPreprocessor (svelte.config.js) turns children into `code`
@@ -74,7 +35,7 @@
 	}: Props = $props();
 
 	const language: LanguageType<string> = (() =>
-		typeof lang === 'string' ? (LANGS[lang] ?? bash) : lang)();
+		typeof lang === 'string' ? { ...plaintext, name: lang } : lang)();
 
 	let copied = $state(false);
 

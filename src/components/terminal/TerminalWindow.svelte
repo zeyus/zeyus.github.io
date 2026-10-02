@@ -119,7 +119,11 @@
 		const startHeight = frame.offsetHeight;
 		track(e, (dx, dy) => {
 			if (!floating) {
-				win.dockedHeight = clamp((start.dockedHeight ?? startHeight) + dy, MIN_H, innerHeight * 0.9);
+				win.dockedHeight = clamp(
+					(start.dockedHeight ?? startHeight) + dy,
+					MIN_H,
+					innerHeight * 0.9
+				);
 				return;
 			}
 			if (edge.includes('e')) win.w = clamp(start.w + dx, MIN_W, innerWidth - start.x);

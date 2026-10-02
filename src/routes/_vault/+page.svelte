@@ -24,6 +24,7 @@
 					image={post.props.feature_image}
 					path={post.path}
 					hideTitle={true}
+					sizes="(min-width: 640px) 560px, 100vw"
 					figClass="vault-card-img"
 					imgClass="w-full h-44 object-cover object-center rounded-md"
 				/>
