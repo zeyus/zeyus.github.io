@@ -58,8 +58,8 @@
 			onclick={scrollToFootnote}
 			href="#footnote-{index + 1}"
 			data-occurrence={occurrence}
-			class="footnote-ref footnote-{index + 1}-ref align-top text-xs text-primary-300"
-			>{index + 1}</a
+			class="footnote-ref footnote-{index +
+				1}-ref mt-1 inline-block align-top text-xs text-primary-300">{index + 1}</a
 		>
 	</sup>
 {/if}

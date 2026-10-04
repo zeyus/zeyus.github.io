@@ -8,11 +8,17 @@
 
 	let images = page.data.props.gallery.images as App.EnhancedImageDef[];
 	let items: Footnote[] = [];
-	// four across on desktop, two on tablets, full width on phones
-	const gridSizes = '(min-width: 1024px) 240px, (min-width: 640px) 480px, 100vw';
+	// four across on desktop, two on tablets, full width on phones; square crops of 4:3
+	// photos need about a third more width than the tile
+	const gridSizes = '(min-width: 1024px) 320px, (min-width: 640px) 640px, 100vw';
 </script>
 
-<EnhancedImg image={images[0]} sizes="425px" figClass="w-full max-w-96 float-end" />
+<EnhancedImg
+	image={images[0]}
+	sizes="425px"
+	figClass="w-full max-w-82 float-end ms-4"
+	imgClass="rounded-lg object-cover h-50 object-center"
+/>
 <P>
 	So, one side of my family is from Finland, and one of the consistencies of both places I lived
 	during my childhood was the presence of a sauna.<BoringReference
@@ -43,7 +49,7 @@
 	leftover fiberglass insulation and some plastic sheeting that I could use for the moisture barrier
 	which saved a bit of money.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[1]}
 		sizes={gridSizes}
@@ -77,7 +83,7 @@
 	beams to support the floor and the walls around the edges and the bearers were 50x150mm, and the same
 	for the noggins.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[5]}
 		sizes={gridSizes}
@@ -111,7 +117,7 @@
 	also wanted to make use of the existing window in the wood shed to let some light in. It worked
 	quite well just framing around it, and the existing window was already double-glazed.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[9]}
 		sizes={gridSizes}
@@ -141,7 +147,7 @@
 	because of the limited space above and it made it easier to fix everything in place without the
 	ceiling getting in the way.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[13]}
 		sizes={gridSizes}
@@ -175,7 +181,7 @@
 	with the addition of a plastic mesh for support. With all the framing and insulation done, the
 	panelling could begin.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[17]}
 		sizes={gridSizes}
@@ -204,7 +210,7 @@
 	front of the larger bench. I think it makes it look really nice, and so far we've had 10+ people
 	in the sauna at the same time and the whole thing is solid as a rock (benches and frame).
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[21]}
 		sizes={gridSizes}
@@ -237,7 +243,7 @@
 	used a piece of leftover bench wood and sanded it down. The outside handle is just a metal gate
 	handle but it looks nice.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[25]}
 		sizes={gridSizes}
@@ -269,7 +275,7 @@
 	and I made a custom chimney cap as well. But it all works, and again, we just sprayed the inside
 	part with heatproof black paint which definitely finishes it off nicely.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[29]}
 		sizes={gridSizes}
@@ -296,7 +302,7 @@
 	the benches, all the wall panels had sanua wax applied, and the floor was done with some deck
 	coating to protect it from the moisture.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[33]}
 		sizes={gridSizes}
@@ -323,7 +329,7 @@
 	bluetooth speaker and some LED pool lights that sit on the floor, it adds some nice atmosphere,
 	along with the lantern candles outside.
 </P>
-<div class="flex flex-row flex-wrap items-start">
+<div class="gallery flex flex-row flex-wrap items-start">
 	<EnhancedImg
 		image={images[37]}
 		sizes={gridSizes}
@@ -371,3 +377,21 @@
 </P>
 
 <BoringBibliography bind:items />
+
+<style>
+	/* even square tiles, the whole photo is a click away in the image viewer */
+	.gallery {
+		margin-inline: -0.25rem;
+	}
+
+	/* the same gutter on both sides of every tile, so the last one in a row isn't wider
+	   (and, being square, taller) than the rest */
+	.gallery > :global(figure) {
+		padding-inline: 0.25rem;
+	}
+
+	.gallery :global(img) {
+		aspect-ratio: 1;
+		object-fit: cover;
+	}
+</style>

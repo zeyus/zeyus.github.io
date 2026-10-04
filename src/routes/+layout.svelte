@@ -152,7 +152,7 @@
 						<GithubSolid class="h-6 w-6" />
 					</FooterIcon>
 				</FooterLink>
-				<FooterLink href="https://soundcloud.com/zeyus">
+				<FooterLink href="https://stage.tidal.com/@zeyus">
 					<FooterIcon>
 						<HeadphonesOutline class="h-6 w-6" />
 					</FooterIcon>
@@ -165,11 +165,6 @@
 				<FooterLink href="https://corteximplant.com/@zeyus">
 					<FooterIcon>
 						<UsersGroupOutline class="h-6 w-6" />
-					</FooterIcon>
-				</FooterLink>
-				<FooterLink href="https://twitch.tv/zeyusdotcom">
-					<FooterIcon>
-						<VideoCameraOutline class="h-6 w-6" />
 					</FooterIcon>
 				</FooterLink>
 			</FooterLinkGroup>

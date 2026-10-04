@@ -24,6 +24,7 @@
 					image={post.props.feature_image}
 					path={post.path}
 					hideTitle={true}
+					expand={false}
 					sizes="(min-width: 640px) 560px, 100vw"
 					figClass="vault-card-img"
 					imgClass="w-full h-44 object-cover object-center rounded-md"
@@ -47,17 +48,19 @@
 
 <style>
 	.vault-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
-		gap: 1.5rem;
+		columns: 22rem;
+		column-gap: 1.5rem;
+		margin-bottom: -1.5rem;
 	}
 
 	.vault-card {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+		margin-bottom: 1.5rem;
 		padding: 1.5rem;
 		font-size: 1rem;
+		break-inside: avoid;
 	}
 
 	:global(.vault-card-img) {
@@ -79,7 +82,6 @@
 	}
 
 	.vault-card-excerpt {
-		flex: 1;
 		margin: 0.25rem 0 0.5rem;
 		line-height: 1.6;
 		color: var(--color-fg-muted);

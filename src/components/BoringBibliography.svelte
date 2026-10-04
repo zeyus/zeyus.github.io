@@ -36,6 +36,10 @@
 			el = els[0] as HTMLElement;
 		}
 
+		// the reference might be inside a collapsed <Details>
+		const details = el.closest('details');
+		if (details) details.open = true;
+
 		el.scrollIntoView({
 			behavior: 'smooth',
 			block: 'center',

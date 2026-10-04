@@ -7,12 +7,17 @@
 	import PostSidebar from '$components/PostSidebar.svelte';
 
 	import EnhancedImg from '$components/EnhancedImg.svelte';
+	import ImageViewer from '$components/ImageViewer.svelte';
+	import { ImageViewerState, setImageViewer } from '$lib/image-viewer.svelte';
 
 	import { getContext, tick } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
 	import type { MetadataContext } from '$lib/metadata.svelte';
 
 	let metaCtx = getContext<MetadataContext>('metadata');
+
+	// post images open large in ImageViewer when clicked
+	setImageViewer(new ImageViewerState());
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
@@ -66,8 +71,10 @@
 		</div>
 		{#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
 			<EnhancedImg
+				figId="feature-image"
 				sizes="min(1200px, 100vw)"
 				loading="eager"
+				expand="inplace"
 				transform={['h=384', 'fit=cover']}
 				image={page.data.props.feature_image}
 				figClass="max-w-full mb-8"
@@ -76,8 +83,10 @@
 			/>
 		{/if}
 
-		<div class:post-body={!isIndex} bind:this={postBody}>
+		<div class:post-body={!isIndex} style:--post-slug={`"${slug}"`} bind:this={postBody}>
 			{@render children()}
 		</div>
 	</article>
 </div>
+
+<ImageViewer />

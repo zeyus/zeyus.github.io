@@ -127,8 +127,13 @@
 	unicode-range: U+E000-F8FF, U+F0000-10FFFF;
 }
 
-div[role='presentation'] {
-	display: none;
+/* flowbite's Sidebar puts a full-screen layer in front of the page while it's open. Below
+   the 2xl breakpoint that layer closes the post sidebar when you tap outside it, but at 2xl
+   and up the sidebar is pinned open and the layer does nothing except swallow every click */
+@media (min-width: 1536px) {
+	div[role='presentation']:has(+ #postSidebar) {
+		display: none;
+	}
 }
 
 .sr-only {
@@ -282,23 +287,17 @@ body a[href^='http']:not(footer a):not(a[href^='https://zeyus.com/'])::after {
 	background-color: var(--color-surface-2);
 	transition:
 		border-color 0.2s,
-		box-shadow 0.2s,
-		transform 0.2s;
+		box-shadow 0.2s;
 
+	/* lights up in place rather than lifting: moving the card by a couple of pixels makes
+	   each line of text snap to the pixel grid separately, so wrapped titles wobble */
 	&:hover,
 	&:focus-visible {
 		border-color: var(--color-accent);
 		box-shadow:
 			0 0 0 1px var(--color-accent-soft),
-			0 0 22px -6px var(--color-glow);
-		transform: translateY(-2px);
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.term-card:hover,
-	.term-card:focus-visible {
-		transform: none;
+			0 0 22px -6px var(--color-glow),
+			0 0.5rem 1rem -0.6rem rgb(0 0 0 / 0.35);
 	}
 }
 
@@ -329,6 +328,7 @@ article {
 
 	p {
 		margin-bottom: 1.4em;
+		text-align: justify;
 	}
 
 	:is(h1, h2, h3, h4, h5, h6)[class] {
@@ -432,6 +432,25 @@ article {
 
 	.post-toc-label {
 		color: var(--color-fg-subtle);
+	}
+
+	/* where the reading starts after a contents box (and any callouts near it): the toc is
+	   `grep`, the article itself is `cat` */
+	.post-toc + section::before {
+		content: '$ cat ' var(--post-slug);
+		display: block;
+		margin-bottom: 1.25em;
+		padding-bottom: 0.5em;
+		border-bottom: 1px dashed var(--color-line);
+		font-family: var(--font-mono);
+		font-size: 0.8em;
+		color: var(--color-accent);
+	}
+
+	/* the opening paragraph reads as a lead */
+	.post-toc + section > p:first-of-type {
+		font-size: 1.1em;
+		color: var(--color-fg-strong);
 	}
 
 	/* each section after the first gets a rule and a hex counter, e.g. // 0x02 */

@@ -341,7 +341,7 @@
 			<li>Cognitive Scientist</li>
 			<li>PhD student</li>
 			<li><A href="https://github.com/zeyus">Open-source contributor and developer</A></li>
-			<li><A href="https://soundcloud.com/zeyus">Musician</A></li>
+			<li><A href="https://stage.tidal.com/@zeyus">Musician</A></li>
 			<li>
 				You can follow me around the internet via my <A href="https://me.zys.im/">link list</A>
 			</li>

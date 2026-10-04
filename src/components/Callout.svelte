@@ -3,14 +3,16 @@
 
 	let {
 		label = 'NOTE',
+		id = undefined,
 		children
 	}: {
 		label?: string;
+		id?: string;
 		children: Snippet;
 	} = $props();
 </script>
 
-<aside class="callout">
+<aside class="callout" {id}>
 	<span class="callout-label">[{label}]</span>
 	<div class="callout-body">{@render children()}</div>
 </aside>
