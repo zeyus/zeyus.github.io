@@ -41,6 +41,32 @@
 		readMinutes = words ? Math.max(1, Math.round(words / 230)) : null;
 	});
 
+	// figure numbers are set here
+	function numberFigures(article: HTMLElement | null | undefined) {
+		if (!article) return;
+		const figures = [...article.querySelectorAll('figure')];
+		const label = (i: number) => String(i + 1).padStart(2, '0');
+		figures.forEach((figure, i) => figure.style.setProperty('--fig', `'${label(i)}'`));
+		// <Ref to="id" /> links get the number of the figure they point at
+		for (const ref of article.querySelectorAll<HTMLAnchorElement>('a[data-fig-ref]')) {
+			const figure = document.getElementById(ref.hash.slice(1))?.closest('figure');
+			const i = figure ? figures.indexOf(figure) : -1;
+			const text = `fig.${i < 0 ? '??' : label(i)}`;
+			// only when it changes: writing it is itself a mutation the observer below would see
+			if (ref.textContent !== text) ref.textContent = text;
+		}
+	}
+
+	// renumber whenever the post's content changes: navigation, and hot reloads while editing
+	$effect(() => {
+		const article = postBody?.closest('article');
+		if (!article) return;
+		numberFigures(article);
+		const observer = new MutationObserver(() => numberFigures(article));
+		observer.observe(article, { childList: true, subtree: true });
+		return () => observer.disconnect();
+	});
+
 	let slug = $derived(page.url.pathname.split('/').filter(Boolean).at(-1));
 	// the index is a listing, not a post: no reading column or reading time
 	let isIndex = $derived(slug === '_vault');

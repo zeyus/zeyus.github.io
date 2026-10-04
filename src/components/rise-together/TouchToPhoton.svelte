@@ -10,6 +10,16 @@
 	 *
 	 * bench: bela-lsl-timing session 20260909_114121_7882 (iPad Pro M4 at 120 Hz, n = 228)
 	 * lab:   RiseTogether test session of 18 September 2026 (six iPads, joint condition)
+	 *
+	 * Caveats, kept out of the caption (material for a deep dive):
+	 * - the touch and handler times come from the bench rig: a force sensor under the finger and
+	 *   a photodiode on the screen, both read by a Bela; the network, physics and display legs
+	 *   come from the lab session; only the wait for the next display frame is estimated
+	 * - the force sensor needs some pressure before it trips, so the real delay from first
+	 *   contact is, if anything, a little longer
+	 * - the split around the iOS timestamp depends on matching the iPad's clock to the Bela's
+	 * - when someone plays alone the physics runs on their own iPad, and the three middle lanes
+	 *   drop out
 	 */
 	const FINGER_TO_OS_STAMP = 12.1; // bench: FSR edge → OS touch timestamp
 	const OS_STAMP_TO_HANDLER = 9.6; // bench: OS touch timestamp → Dart handler (FSR → handler 21.7)
@@ -457,16 +467,9 @@
 	{/snippet}
 
 	{#snippet caption()}
-		One button press in the joint game, to scale, using the median of each step. No single
-		measurement covers the whole chain, so this is a sum of legs measured separately. The touch and
-		handler times come from a bench rig: a force sensor under the finger and a photodiode on the
-		screen, both read by a Bela. The network, physics and display legs come from a full six-iPad
-		test session. Only the wait for the next display frame is estimated. The force sensor needs some
-		pressure before it trips, so the real delay from first contact is, if anything, a little longer,
-		and the split around the iOS timestamp depends on matching the iPad's clock to the Bela's. When
-		someone plays alone the physics runs on their own iPad, and the three middle lanes drop out.
-		Press play to follow the press, slowed down about 170 times: down through the iPad, out to the
-		coordinator, and back up to the screen.
+		A lot happens each time you touch the screen. Here you can see each step along the way, from the
+		moment your finger lands until the game responds on screen. Press play to follow one press,
+		slowed down about 170 times.
 	{/snippet}
 </TimingFigure>
 

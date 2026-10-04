@@ -240,6 +240,7 @@
 		position: relative;
 		z-index: 0;
 		display: block;
+		cursor: zoom-in;
 		/* lets the image size itself against the frame's width (cqw) */
 		container-type: inline-size;
 		/* without a height class of its own the frame keeps the image's shape */
@@ -268,7 +269,7 @@
 		/* over the post, under the navigation */
 		z-index: 15;
 		transition-delay: 0s;
-
+		cursor: zoom-out;
 		/* the image's own shape, as wide as the frame but never taller than the screen */
 		:global(img) {
 			width: min(100cqw, 90svh * var(--ratio));

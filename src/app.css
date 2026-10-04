@@ -477,11 +477,15 @@ article {
 	/* figure captions as log lines */
 	figure {
 		counter-increment: figure;
+	}
+	figure:not(.floating) {
 		margin-block: 2em;
 	}
 
+	/* --fig is set on each figure by the vault layout; the counter is only the no-JS fallback,
+	   since it skips figures that aren't rendered (inside a closed <details>) */
 	figcaption::before {
-		content: 'fig.' counter(figure, decimal-leading-zero) ' > ';
+		content: 'fig.' var(--fig, counter(figure, decimal-leading-zero)) ' > ';
 		color: var(--color-accent);
 	}
 

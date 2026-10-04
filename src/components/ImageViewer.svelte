@@ -60,7 +60,7 @@
 
 	const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	function animate(
+	async function animate(
 		el: Element | undefined,
 		keyframes: Keyframe[],
 		options: KeyframeAnimationOptions = {}

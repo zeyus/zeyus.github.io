@@ -9,6 +9,15 @@
 	const RIGHT = 854;
 	const x = (ms: number) => 214 + ms * 256;
 
+	/*
+	 * Detail kept out of the caption (material for a deep dive):
+	 * - the fixed delays (0.33 ms inside the Bela, plus whatever the trigger box and cable add)
+	 *   are the same for every pulse, so a line fitted through thousands of pulses absorbs them
+	 * - what varies is sampling: up to 0.02 ms at the Bela, and up to 0.5 ms at the amplifier,
+	 *   or 2 ms when all of its boards run at 500 Hz
+	 * - the edge crosses each cable in an instant; the time goes in the boxes
+	 */
+
 	// one edge, in ms after the coordinator writes the pin
 	const tLogged = 0.02;
 	const tSampled = 0.0094; // the Bela's next 48 kHz sample
@@ -62,7 +71,7 @@
 	let waiting = $derived(t >= tBoxOut && t < tStamped);
 </script>
 
-<TimingFigure>
+<TimingFigure id="trigger-pulse-timeline">
 	<svg
 		viewBox="0 0 870 440"
 		role="img"
@@ -248,12 +257,9 @@
 	{/snippet}
 
 	{#snippet caption()}
-		One edge of one trigger pulse, drawn to scale, from the coordinator writing its GPIO pin to the
-		EEG amplifier stamping it. The fixed delays (0.33 ms inside the Bela, plus whatever the trigger
-		box and cable add) are the same for every pulse, so a line fitted through thousands of pulses
-		absorbs them. What varies is sampling: up to 0.02 ms at the Bela, and up to 0.5 ms at the
-		amplifier, or 2 ms when all of its boards run at 500 Hz. Press play to follow the edge, slowed
-		down about 6000 times. It crosses each cable in an instant; the time goes in the boxes.
+		The game marks moments in the brain recording by sending an electrical pulse down a wire to the
+		EEG amplifiers. Here is one pulse making that trip. Press play to follow it, slowed down about
+		6000 times.
 	{/snippet}
 </TimingFigure>
 

@@ -192,7 +192,8 @@
 	{#snippet caption()}
 		Overview of the game data and communication paths. Each participant has a participant station
 		(left panel), which are all connected via the central desk (right panel). Signals, events and
-		triggers need to all end up being recorded in a way that lets the be used in the EEG recordings.
+		triggers need to all end up being recorded in a way that lets them be used in the EEG
+		recordings.
 	{/snippet}
 </TimingFigure>
 
