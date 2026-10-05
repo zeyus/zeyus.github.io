@@ -584,7 +584,7 @@
 	</section>
 
 	<section>
-		<Heading tag="h2">Building the tools</Heading>
+		<Heading tag="h2" id="building-the-tools">Building the tools</Heading>
 		<Callout label="TL;DR">
 			<P
 				>There were no off-the-shelf tools for this experiment, so I built my own. This includes
@@ -980,7 +980,9 @@
 	</section>
 
 	<section>
-		<Heading tag="h2">My thoughts on Flutter as a Research Tool</Heading>
+		<Heading tag="h2" id="my-thoughts-on-flutter-as-a-research-tool"
+			>My thoughts on Flutter as a Research Tool</Heading
+		>
 		<Callout label="TL;DR">
 			<P
 				><Term def={terms.Flutter}>Flutter</Term> and <Term def={terms.Dart}>Dart</Term> turned out to
