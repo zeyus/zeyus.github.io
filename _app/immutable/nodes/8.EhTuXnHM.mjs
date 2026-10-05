@@ -1,1 +1,0 @@
-import"../chunks/C2DKF1qD.mjs";import"../chunks/xihTtKlq.mjs";import"../chunks/BDjrEt4P.mjs";import{t as e}from"../chunks/BvZvYa9h.mjs";function t(e){}export{t as component,e as universal};

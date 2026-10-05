@@ -1,1 +1,0 @@
-import{Yt as e}from"./C2DKF1qD.mjs";var t=e({load:()=>n}),n=()=>({props:{title:`My experience as a researcher at Flutter & Friends 2026`,date:new Date(`2026-09-10`),excerpt:`Just some notes on my experience at a conference for Flutter developers from the perspective of someone who is no longer in industry.`,short_title:`Flutter & Friends 2026`,draft:!0}});export{t};

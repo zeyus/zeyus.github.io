@@ -1,1 +1,0 @@
-import{Yt as e}from"../chunks/C2DKF1qD.mjs";import{t}from"../chunks/fB-bQvUf.mjs";var n=e({load:()=>r}),r=()=>({props:{title:`terminal`,excerpt:`A working web-based serial terminal that can be used to interact with a microcontroller or any other serial devices connected to your PC. Right from your browser!`}});export{t as component,n as universal};
