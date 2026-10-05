@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onMount, tick, type Snippet } from 'svelte';
 
 	let {
 		label = 'DEEP DIVE',
@@ -14,9 +14,31 @@
 		id?: string;
 		children: Snippet;
 	} = $props();
+
+	let el: HTMLDetailsElement;
+
+	// Expand when a link targets this element (or something inside it).
+	function reveal(hash: string) {
+		if (open || hash.length < 2) return;
+		const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+		if (!target || !el.contains(target)) return;
+		open = true;
+		// Content inside a closed <details> has no box to scroll to until it renders.
+		if (target !== el) tick().then(() => target.scrollIntoView());
+	}
+
+	// hashchange doesn't fire when the hash is already current, so watch clicks too.
+	function onclick(e: MouseEvent) {
+		const a = (e.target as Element).closest?.<HTMLAnchorElement>('a[href*="#"]');
+		if (a && a.pathname === location.pathname) reveal(a.hash);
+	}
+
+	onMount(() => reveal(location.hash));
 </script>
 
-<details class="details" {id} bind:open>
+<svelte:window onhashchange={() => reveal(location.hash)} {onclick} />
+
+<details class="details" {id} bind:open bind:this={el}>
 	<summary>
 		<span class="details-label">[{label}]</span>
 		<span class="details-title">{title}</span>
@@ -92,5 +114,27 @@
 
 	.details-body :global(p:last-child) {
 		margin-bottom: 0;
+	}
+
+	/* flowbite's P is text-base, but a List inherits the article's larger fluid size */
+	.details-body :global(:is(ul, ol)) {
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+
+	/* same `>` prompt marker that nested lists get from app.css, hanging outside the text */
+	.details-body :global(ul:not(.list-none)) {
+		list-style-position: outside;
+		margin-left: 1.5rem;
+	}
+
+	.details-body :global(ul:not(.list-none) > li::marker) {
+		content: '> ';
+		color: var(--color-accent);
+		font-weight: 900;
+	}
+
+	.details-body > :global(ul:not(.list-none) > li + li) {
+		margin-top: 0.5em;
 	}
 </style>

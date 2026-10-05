@@ -1,8 +1,5 @@
-<script lang="ts">
-	import { onDestroy } from 'svelte';
-	import TimingFigure from './TimingFigure.svelte';
-	import PlaybackControls from './PlaybackControls.svelte';
-	import { Playback, pointAlong, progress, type Point } from './playback.svelte';
+<script module lang="ts">
+	import { Playback } from './playback.svelte';
 
 	/*
 	 * Medians, in ms. Each leg is measured on its own, so the timeline is their sum rather than
@@ -42,6 +39,19 @@
 	const tPhoton = tPaint + PAINT_TO_PHOTON;
 	const tPhotonLate = tPaint + PAINT_TO_PHOTON_LATE;
 
+	/** The figure's clock. Make one yourself to drive the figure from outside, or to share it. */
+	export const createPlayback = () => new Playback({ start: -2, end: 70, seconds: 12 });
+
+	/** The end of each leg, in order: where a step-by-step walkthrough of the figure pauses. */
+	export const stops = [tStamp, tPress, tArrive, tBroadcast, tReceive, tPaint, tPhoton];
+</script>
+
+<script lang="ts">
+	import { onDestroy, untrack } from 'svelte';
+	import TimingFigure from './TimingFigure.svelte';
+	import PlaybackControls from './PlaybackControls.svelte';
+	import { pointAlong, progress, type Point } from './playback.svelte';
+
 	// sized to the reading column: 8 px per ms, lanes from LEFT to RIGHT, 0 ms at X0
 	const LEFT = 160;
 	const RIGHT = 850;
@@ -73,8 +83,25 @@
 		{ y: 518, name: 'Light', sub: 'at the photodiode' }
 	];
 
-	const playback = new Playback({ start: -2, end: 70, seconds: 12 });
-	onDestroy(playback.pause);
+	let {
+		playback = createPlayback(),
+		autoplay = false
+	}: {
+		playback?: Playback;
+		/** play from the start whenever this turns on, and pause when it turns off */
+		autoplay?: boolean;
+	} = $props();
+	onDestroy(() => playback.pause());
+
+	$effect(() => {
+		const on = autoplay && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+		// untracked: only `autoplay` changing should restart the clock, not the clock itself
+		untrack(() => {
+			if (!on) return playback.pause();
+			playback.seek(playback.start);
+			playback.play();
+		});
+	});
 
 	/*
 	 * Scene geometry. The iPad is a stack of planes; the press goes down through them on the left
@@ -467,9 +494,8 @@
 	{/snippet}
 
 	{#snippet caption()}
-		A lot happens each time you touch the screen. Here you can see each step along the way, from the
-		moment your finger lands until the game responds on screen. Press play to follow one press,
-		slowed down about 170 times.
+		A lot happens each time you touch the screen. Press play to follow one press, slowed down about
+		170 times, from the moment your finger lands until the game responds on screen.
 	{/snippet}
 </TimingFigure>
 

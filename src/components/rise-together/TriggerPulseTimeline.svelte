@@ -1,8 +1,25 @@
+<script module lang="ts">
+	import { Playback } from './playback.svelte';
+
+	// one edge, in ms after the coordinator writes the pin
+	const tLogged = 0.02;
+	const tSampled = 0.0094; // the Bela's next 48 kHz sample
+	const tForwarded = tSampled + 16 / 48; // copied to the output one 16-frame block later
+	const tBoxOut = tForwarded + 0.07; // δ, drawn at an arbitrary width: it is not measured
+	const tStamped = 0.65; // the hyperscanner's next 2 kHz tick
+
+	/** The figure's clock. Make one yourself to drive the figure from outside, or to share it. */
+	export const createPlayback = () => new Playback({ start: -0.25, end: 1, seconds: 8 });
+
+	/** The end of each leg, in order: where a step-by-step walkthrough of the figure pauses. */
+	export const stops = [tSampled, tForwarded, tBoxOut, tStamped];
+</script>
+
 <script lang="ts">
-	import { onDestroy } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import TimingFigure from './TimingFigure.svelte';
 	import PlaybackControls from './PlaybackControls.svelte';
-	import { Playback, pointAlong, progress, type Point } from './playback.svelte';
+	import { pointAlong, progress, type Point } from './playback.svelte';
 
 	// sized to the reading column: 256 px per ms, lanes from LEFT to RIGHT
 	const LEFT = 150;
@@ -18,21 +35,31 @@
 	 * - the edge crosses each cable in an instant; the time goes in the boxes
 	 */
 
-	// one edge, in ms after the coordinator writes the pin
-	const tLogged = 0.02;
-	const tSampled = 0.0094; // the Bela's next 48 kHz sample
-	const tForwarded = tSampled + 16 / 48; // copied to the output one 16-frame block later
-	const tBoxOut = tForwarded + 0.07; // δ, drawn at an arbitrary width: it is not measured
-	const tStamped = 0.65; // the hyperscanner's next 2 kHz tick
-
 	const belaSamples = Array.from({ length: 28 }, (_, i) => x(tSampled + (i - 12) / 48));
 	const stampTicks = [0.15, 0.65, 1.15, 1.65, 2.15].map(x);
 	const eegSamples = [-0.2, 1.8].map(x);
 	const axis = [0, 0.5, 1, 1.5, 2, 2.5];
 
 	// the animation covers the part of the timeline where the edge is still on its way
-	const playback = new Playback({ start: -0.25, end: 1, seconds: 8 });
-	onDestroy(playback.pause);
+	let {
+		playback = createPlayback(),
+		autoplay = false
+	}: {
+		playback?: Playback;
+		/** play from the start whenever this turns on, and pause when it turns off */
+		autoplay?: boolean;
+	} = $props();
+	onDestroy(() => playback.pause());
+
+	$effect(() => {
+		const on = autoplay && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+		// untracked: only `autoplay` changing should restart the clock, not the clock itself
+		untrack(() => {
+			if (!on) return playback.pause();
+			playback.seek(playback.start);
+			playback.play();
+		});
+	});
 
 	// scene geometry: four boxes on one wire
 	const WIRE_Y = 92;
@@ -62,8 +89,8 @@
 		if (t < tSampled) return 'pin written · the Bela sees it at its next sample';
 		if (t < tForwarded) return 'inside the Bela · copied to the output one block (16 frames) later';
 		if (t < tBoxOut) return 'through the trigger box, splitter and cable (δ)';
-		if (t < tStamped) return 'at the hyperscanner · waiting for its next 2 kHz tick';
-		return 'stamped · written next to the EEG, between two of its samples';
+		if (t < tStamped) return 'at hyperscanner · waiting on next 2 kHz tick';
+		return 'logged · the event falls between two EEG samples';
 	};
 
 	let t = $derived(playback.t);
@@ -258,8 +285,7 @@
 
 	{#snippet caption()}
 		The game marks moments in the brain recording by sending an electrical pulse down a wire to the
-		EEG amplifiers. Here is one pulse making that trip. Press play to follow it, slowed down about
-		6000 times.
+		EEG amplifiers. Press play to follow one pulse making that trip, slowed down about 6000 times.
 	{/snippet}
 </TimingFigure>
 

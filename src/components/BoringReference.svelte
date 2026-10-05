@@ -8,11 +8,14 @@
 	let {
 		item,
 		items = $bindable([]),
-		highlightClass = 'bg-primary-800/50'
+		highlightClass = 'bg-primary-800/50',
+		onnavigate
 	}: {
 		item: Footnote;
 		items: Footnote[];
 		highlightClass?: string;
+		/** called with the footnote's index instead of scrolling to it, for pages that don't scroll */
+		onnavigate?: (index: number) => void;
 	} = $props();
 
 	// is the item in items? Compare by text instead of reference to avoid proxy issues
@@ -29,6 +32,7 @@
 			if (e.key !== 'Enter') return;
 		}
 		e.preventDefault();
+		if (onnavigate) return onnavigate(index);
 		const id = (e.target as HTMLAnchorElement).href.split('#')[1];
 		const el = document.getElementById(id);
 		if (!el) return;

@@ -22,6 +22,7 @@
 	</button>
 	<input
 		type="range"
+		autocomplete="off"
 		aria-label="Time in the figure"
 		min={playback.start}
 		max={playback.end}

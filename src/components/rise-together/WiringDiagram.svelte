@@ -1,9 +1,7 @@
-<script lang="ts">
-	import TimingFigure from './TimingFigure.svelte';
+<script module lang="ts">
+	export type Signal = 'all' | 'gpio' | 'timer' | 'light' | 'net' | 'bio';
 
-	type Signal = 'all' | 'gpio' | 'timer' | 'light' | 'net' | 'bio';
-
-	const filters: { id: Signal; label: string }[] = [
+	export const filters: { id: Signal; label: string }[] = [
 		{ id: 'all', label: 'Everything' },
 		{ id: 'gpio', label: 'Paradigm trigger' },
 		{ id: 'timer', label: 'Bela timer' },
@@ -12,7 +10,7 @@
 		{ id: 'bio', label: 'Brain & muscle signals' }
 	];
 
-	const notes: Record<Signal, string> = {
+	export const notes: Record<Signal, string> = {
 		all: 'Pick a signal above to follow its path.',
 		gpio: 'The coordinator’s GPIO output goes to Bela pin 11, and the Bela copies it to pin 13 one block (0.33 ms) later. Pin 13 is one of the Bela’s digital output, which goes through the trigger box and a splitter to every hyperscanner, arriving on trig_in1. This is the route from the game to the EEG.',
 		timer:
@@ -22,8 +20,13 @@
 		net: 'The game runs over the network: physics from the coordinator, button presses back, and a clock-sync probe every 5 s that puts each iPad on the coordinator’s clock. The Bela is networked only for access and doesn’t use it for timing.',
 		bio: 'EEG (32 channels across four 500 Hz boards) and EMG (4 channels on one board, at 2 kHz or 500 Hz) go straight into the hyperscanner, which writes them, with its trigger inputs, to its SD card.'
 	};
+</script>
 
-	let show: Signal = $state('all');
+<script lang="ts">
+	import TimingFigure from './TimingFigure.svelte';
+
+	// bindable so a caller can pick the signal from outside
+	let { show = $bindable('all') }: { show?: Signal } = $props();
 </script>
 
 <TimingFigure id="wiring-diagram">
@@ -42,13 +45,13 @@
 		data-show={show}
 		viewBox="0 0 1100 610"
 		role="img"
-		aria-label="Wiring for one participant station and the central desk. The coordinator's GPIO output goes to the Bela. The Bela's digital outputs carry the forwarded trigger and its own timer through one trigger box and a splitter to every hyperscanner's 2.5 mm trigger input, arriving as trig_in1 and trig_in0; the iPad screen's photodiode goes to the Bela; iPads, coordinator, infrastructure Pi and control laptop share a network switch; EEG and EMG electrodes go to the hyperscanner."
+		aria-label="Wiring for one participant station and the central desk. The coordinator's GPIO output goes to the Bela. The Bela's digital outputs carry the forwarded trigger and its own timer through a trigger box and a splitter to every hyperscanner's trigger input, arriving as trig_in1 and trig_in0; the iPad screen's photodiode goes to the Bela; iPads, coordinator, infrastructure Pi and control laptop share a network switch; EEG and EMG electrodes go to the hyperscanner."
 	>
 		<!-- frames -->
 		<rect class="frame" x="16" y="18" width="404" height="576" rx="12" />
-		<text x="34" y="44" class="t2" style="font-weight:600">participant station · one of six</text>
+		<text x="34" y="44" class="t2" style="font-weight:600">a participant station</text>
 		<rect class="frame" x="436" y="18" width="648" height="576" rx="12" />
-		<text x="454" y="44" class="t2" style="font-weight:600">central desk · shared by all six</text>
+		<text x="454" y="44" class="t2" style="font-weight:600">shared central desk</text>
 
 		<!-- network wires -->
 		<g data-sig="net">
@@ -64,13 +67,13 @@
 		<!-- photodiode -->
 		<g data-sig="light">
 			<path class="w s-light" d="M73 84 V 60 H 215 V 290 H 540 V 345 H 560" />
-			<text x="228" y="281" class="t2">photodiode cable · 3.5 mm jack → Bela</text>
+			<text x="228" y="281" class="t2">photodiode → Bela</text>
 		</g>
 
 		<!-- GPIO -->
 		<g data-sig="gpio">
 			<path class="w s-gpio" d="M500 236 V 420 H 560" />
-			<text x="492" y="332" text-anchor="end" class="t2">GPIO line</text>
+			<text x="492" y="332" text-anchor="end" class="t2">GPIO wire</text>
 			<path class="w s-gpio" d="M664 450 V 500" />
 			<path class="w s-gpio" d="M560 524 H 520" />
 			<path class="w s-gpio" d="M490 524 H 390" />
@@ -129,11 +132,11 @@
 		<!-- hyperscanner -->
 		<rect class="box-strong" x="210" y="340" width="180" height="230" rx="8" />
 		<text x="300" y="364" text-anchor="middle" class="tb">Hyperscanner</text>
-		<text x="222" y="390" class="t2">EEG · 4 boards · 500 Hz</text>
-		<text x="222" y="410" class="t2">EMG · 1 board · up to 2 kHz</text>
+		<text x="222" y="390" class="t2">EEG · 500 Hz</text>
+		<text x="222" y="410" class="t2">EMG · 2 kHz</text>
 		<text x="222" y="430" class="t2">IMU · 500 Hz</text>
 		<text x="222" y="456" class="t3">writes to its SD card</text>
-		<text x="382" y="506" text-anchor="end" class="t3">2.5 mm trigger in</text>
+		<text x="382" y="506" text-anchor="end" class="t3">trigger in</text>
 		<text x="382" y="528" text-anchor="end" class="tm">trig_in1</text>
 		<text x="382" y="544" text-anchor="end" class="tm">trig_in0</text>
 		<text x="222" y="562" class="t3">marker button</text>
@@ -154,11 +157,11 @@
 		<!-- Bela -->
 		<rect class="box-strong" x="560" y="310" width="220" height="140" rx="8" />
 		<text x="670" y="334" text-anchor="middle" class="tb">Bela</text>
-		<text x="572" y="352" class="t2">pins 0–5 · photodiode cape</text>
+		<text x="572" y="352" class="t2">digital I/O cape</text>
 		<text x="670" y="385" text-anchor="middle" class="t3">48 kHz · logs every edge</text>
 		<text x="572" y="424" class="t2">pin 11 · GPIO in</text>
-		<text x="670" y="442" text-anchor="middle" class="tm">2 ch out · pins 13 + 12</text>
-		<text x="690" y="480" class="t2">one 3.5 mm stereo cable: forwarded trigger + timer</text>
+		<text x="670" y="442" text-anchor="middle" class="tm">2 ch out</text>
+		<text x="690" y="480" class="t2">forwarded trigger + timer</text>
 
 		<!-- trigger box and splitter -->
 		<rect class="box" x="560" y="500" width="170" height="64" rx="8" />
@@ -190,10 +193,9 @@
 	{/snippet}
 
 	{#snippet caption()}
-		Overview of the game data and communication paths. Each participant has a participant station
-		(left panel), which are all connected via the central desk (right panel). Signals, events and
-		triggers need to all end up being recorded in a way that lets them be used in the EEG
-		recordings.
+		How the devices in the experiment are connected. Each participant has a station (left), and
+		every station connects to the central desk (right), so that everything that happens in the game
+		can be lined up with the EEG recordings.
 	{/snippet}
 </TimingFigure>
 

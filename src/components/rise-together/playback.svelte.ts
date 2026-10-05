@@ -1,6 +1,8 @@
 /**
  * A scrubbable clock for the timing figures: `t` runs from `start` to `end` (in the figure's own
- * units) over `seconds` of real time. It starts paused and never plays on its own.
+ * units) over `seconds` of real time. It starts paused and never plays on its own. Once playing
+ * it loops: it rests at the end for `hold` seconds so the finished picture can be read, then
+ * starts again.
  */
 export class Playback {
 	t = $state(0);
@@ -9,14 +11,31 @@ export class Playback {
 	readonly start: number;
 	readonly end: number;
 	readonly seconds: number;
+	readonly loop: boolean;
+	readonly hold: number;
 
 	#frame = 0;
 	#last = 0;
+	#held = 0;
 
-	constructor({ start, end, seconds }: { start: number; end: number; seconds: number }) {
+	constructor({
+		start,
+		end,
+		seconds,
+		loop = true,
+		hold = 1.5
+	}: {
+		start: number;
+		end: number;
+		seconds: number;
+		loop?: boolean;
+		hold?: number;
+	}) {
 		this.start = start;
 		this.end = end;
 		this.seconds = seconds;
+		this.loop = loop;
+		this.hold = hold;
 		this.t = start;
 	}
 
@@ -24,10 +43,14 @@ export class Playback {
 		// frames stop while the tab is hidden; don't leap ahead when it comes back
 		const elapsed = Math.min(0.1, (now - this.#last) / 1000);
 		this.#last = now;
-		this.t = Math.min(this.end, this.t + (elapsed * (this.end - this.start)) / this.seconds);
-		if (this.t >= this.end) {
+		if (this.t < this.end) {
+			this.t = Math.min(this.end, this.t + (elapsed * (this.end - this.start)) / this.seconds);
+		} else if (!this.loop) {
 			this.playing = false;
 			return;
+		} else if ((this.#held += elapsed) >= this.hold) {
+			this.#held = 0;
+			this.t = this.start;
 		}
 		this.#frame = requestAnimationFrame(this.#tick);
 	};
@@ -35,6 +58,7 @@ export class Playback {
 	play = () => {
 		if (this.playing) return;
 		if (this.t >= this.end) this.t = this.start;
+		this.#held = 0;
 		this.playing = true;
 		this.#last = performance.now();
 		this.#frame = requestAnimationFrame(this.#tick);
