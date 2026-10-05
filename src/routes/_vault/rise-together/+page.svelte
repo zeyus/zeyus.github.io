@@ -864,7 +864,9 @@
 	</section>
 
 	<section>
-		<Heading tag="h2">Time is an illusion. Lunchtime doubly so.</Heading>
+		<Heading tag="h2" id="time-is-an-illusion-lunchtime-doubly-so"
+			>Time is an illusion. Lunchtime doubly so.</Heading
+		>
 		<span class="block text-right text-sm italic">&mdash; Douglas Adams</span>
 
 		<Callout label="TL;DR">
