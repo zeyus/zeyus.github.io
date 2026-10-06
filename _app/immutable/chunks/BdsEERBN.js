@@ -1,0 +1,1 @@
+import{t as e}from"./DK3Fl9T5.js";var t=e({load:()=>n}),n=()=>({props:{title:`ESP32 particle fluid simulation`,date:new Date(`2025-04-10`),excerpt:`A write-up about my project to make a battery-powered ESP32 particle fluid simulation.`,short_title:`ESP32 fluid sim`}});export{n,t};

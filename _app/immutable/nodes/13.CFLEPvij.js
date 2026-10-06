@@ -1,0 +1,1 @@
+import{t as e}from"../chunks/DK3Fl9T5.js";import{t}from"../chunks/DNwXgGvD.js";var n=e({load:()=>r}),r=()=>({props:{title:`violin beginner resources`,excerpt:`Some basics for learning violin.`}});export{t as component,n as universal};
