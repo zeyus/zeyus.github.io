@@ -4,10 +4,10 @@
 	import { Heading } from 'flowbite-svelte';
 	import { imageToSrc } from '#lib/assets.js';
 	import { type Snippet } from 'svelte';
-	import PostSidebar from '$components/PostSidebar.svelte';
+	import PostSidebar from '#components/PostSidebar.svelte';
 
-	import EnhancedImg from '$components/EnhancedImg.svelte';
-	import ImageViewer from '$components/ImageViewer.svelte';
+	import EnhancedImg from '#components/EnhancedImg.svelte';
+	import ImageViewer from '#components/ImageViewer.svelte';
 	import { ImageViewerState, setImageViewer } from '#lib/image-viewer.svelte.js';
 
 	import { getContext, tick } from 'svelte';

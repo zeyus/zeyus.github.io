@@ -2,7 +2,7 @@
 	// vault home page, list of posts
 	// import type { PageData } from './$types';
 	import { sortPosts } from '#lib/utils.ts';
-	import EnhancedImg from '$components/EnhancedImg.svelte';
+	import EnhancedImg from '#components/EnhancedImg.svelte';
 
 	// let { data }: { data: PageData } = $props();
 	import { page } from '$app/state';

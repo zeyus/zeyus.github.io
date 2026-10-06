@@ -3,12 +3,14 @@ import { sortPosts } from '#lib/utils.ts';
 
 const loadAllVaultEntries = async (): Promise<App.VaultEntries[]> => {
 	const vaultEntries: App.VaultEntries[] = [];
-	const vaultPages: Record<string, App.VaultPageModule> = import.meta.glob(
+	// only `load` is imported: pulling in the whole module namespace makes the bundler add an
+	// extra export to each +page.ts chunk, which SvelteKit rejects as an invalid export
+	const vaultLoaders = import.meta.glob<App.VaultPageModule['load']>(
 		'/src/routes/_vault/*/+page.ts',
-		{ eager: true }
+		{ eager: true, import: 'load' }
 	);
-	for (const path in vaultPages) {
-		const entry = await vaultPages[path].load();
+	for (const path in vaultLoaders) {
+		const entry = await vaultLoaders[path]();
 		const name = path.split('/').slice(-2)[0];
 		vaultEntries.push({
 			path: '/_vault/' + name + '/',

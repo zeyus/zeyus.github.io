@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { P } from 'flowbite-svelte';
-	import BoringReference from '$components/BoringReference.svelte';
-	import BoringBibliography from '$components/BoringBibliography.svelte';
-	import { createFootnote } from '$components/BoringReference.svelte';
-	import EnhancedImg from '$components/EnhancedImg.svelte';
+	import BoringReference from '#components/BoringReference.svelte';
+	import BoringBibliography from '#components/BoringBibliography.svelte';
+	import { createFootnote } from '#components/BoringReference.svelte';
+	import EnhancedImg from '#components/EnhancedImg.svelte';
 
 	let images = page.data.props.gallery.images as App.EnhancedImageDef[];
 	let items: Footnote[] = [];

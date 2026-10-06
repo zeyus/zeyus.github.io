@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import type { PreprocessorGroup } from 'svelte/compiler';
 import autoSlug from '@svelte-put/preprocess-auto-slug';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
@@ -9,7 +10,7 @@ import mkcert from 'vite-plugin-mkcert';
 
 // shorthands accepted by <CodeBlock lang="...">; anything else has to be the name of a
 // svelte-highlight language module (node_modules/svelte-highlight/languages/<name>.js)
-const LANG_ALIASES = {
+const LANG_ALIASES: Record<string, string> = {
 	sh: 'bash',
 	shell: 'bash',
 	js: 'javascript',
@@ -31,19 +32,18 @@ const LANG_ALIASES = {
  *    <script>. That way a page only ships the highlight.js grammars it actually uses,
  *    instead of CodeBlock bundling every language it might be asked for.
  *
- * @returns {import('@sveltejs/kit').Config['preprocess'][number]}
  */
-function codeBlockPreprocessor() {
+function codeBlockPreprocessor(): PreprocessorGroup {
 	return {
 		name: 'code-block-preprocessor',
 		markup({ content, filename }) {
 			if (!content.includes('<CodeBlock')) return;
 
-			const languages = new Set();
+			const languages = new Set<string>();
 
 			let transformed = content.replace(
 				/<CodeBlock(\s[^>]*)?(?<!\/)>([^]*?)<\/CodeBlock>/g,
-				(match, attrs = '', rawCode) => {
+				(match: string, attrs = '', rawCode: string) => {
 					if (/\bcode\s*=/.test(attrs)) return match;
 
 					const trimmed = rawCode.trim();
@@ -62,7 +62,7 @@ function codeBlockPreprocessor() {
 			// only the tag's leading attributes are looked at, so a `lang=` inside the code is safe
 			transformed = transformed.replace(
 				/<CodeBlock(?=[\s/>])((?:\s+(?!code\b)[\w:-]+(?:=(?:"[^"]*"|'[^']*'|\{[^{}]*\}))?)*)/g,
-				(match, attrs) => {
+				(match: string, attrs: string) => {
 					// lang={expression} is passed through: the caller supplies the language object
 					if (/\slang=\{/.test(attrs)) return match;
 
@@ -110,13 +110,6 @@ export default defineConfig({
 				vitePreprocess({ script: true }),
 				autoSlug({ anchor: { position: 'append', content: '#' } })
 			],
-			alias: {
-				$components: './src/components',
-				$assets: './src/_assets',
-				$images: './src/_assets/images',
-				$media: './src/_assets/media'
-			},
-
 			adapter: adapter({
 				pages: 'build',
 				assets: 'build',
@@ -125,7 +118,6 @@ export default defineConfig({
 				strict: true
 			}),
 			paths: { base: '' },
-			output: { preloadStrategy: 'preload-mjs' },
 			prerender: {
 				handleHttpError: 'warn',
 				crawl: true,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { P, List, Li } from 'flowbite-svelte';
-	import CodeBlock from '$components/CodeBlock.svelte';
+	import CodeBlock from '#components/CodeBlock.svelte';
 </script>
 
 <P>

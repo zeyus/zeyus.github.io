@@ -9,12 +9,12 @@
 	import 'svelte-highlight/styles/dark-violet.css';
 
 	interface Props {
-		// codeBlockPreprocessor (svelte.config.js) swaps a lang="name" for the imported language
+		// codeBlockPreprocessor (vite.config.ts) swaps a lang="name" for the imported language
 		// object, so only the languages a page uses are bundled; a string only gets here if
 		// that didn't happen, and is shown without highlighting
 		lang?: string | LanguageType<string>;
 		code?: string;
-		// only for type-checking: codeBlockPreprocessor (svelte.config.js) turns children into `code`
+		// only for type-checking: codeBlockPreprocessor (vite.config.ts) turns children into `code`
 		children?: import('svelte').Snippet;
 		langtagColor?: string;
 		langtagTop?: string;

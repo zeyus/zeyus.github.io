@@ -6,7 +6,7 @@
 	import type { MetadataContext } from '#lib/metadata.svelte.js';
 	import { WebGlShader } from 'svader';
 	import storage from '#lib/store.js';
-	import DumbTicker from '$components/DumbTicker.svelte';
+	import DumbTicker from '#components/DumbTicker.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData & { posts: App.VaultEntries[] } } = $props();

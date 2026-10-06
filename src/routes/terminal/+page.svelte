@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Terminal from '$components/Terminal.svelte';
+	import Terminal from '#components/Terminal.svelte';
 	import type { MetadataContext } from '#lib/metadata.svelte.js';
 	import { getContext } from 'svelte';
 

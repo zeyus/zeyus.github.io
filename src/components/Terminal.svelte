@@ -2,9 +2,9 @@
 	import type { Terminal as XTermTerminal } from '@xterm/xterm';
 	import { onMount, tick } from 'svelte';
 	import { get } from 'svelte/store';
-	import TerminalWindow from '$components/terminal/TerminalWindow.svelte';
-	import XTerm from '$components/terminal/XTerm.svelte';
-	import KeyBar from '$components/terminal/KeyBar.svelte';
+	import TerminalWindow from '#components/terminal/TerminalWindow.svelte';
+	import XTerm from '#components/terminal/XTerm.svelte';
+	import KeyBar from '#components/terminal/KeyBar.svelte';
 	import { Shell } from '#lib/terminal/shell.js';
 	import {
 		c,

@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { P, List, Li, A, Heading, Alert, Button } from 'flowbite-svelte';
-	import BoringReference from '$components/BoringReference.svelte';
-	import BoringBibliography from '$components/BoringBibliography.svelte';
-	import { createFootnote } from '$components/BoringReference.svelte';
+	import BoringReference from '#components/BoringReference.svelte';
+	import BoringBibliography from '#components/BoringBibliography.svelte';
+	import { createFootnote } from '#components/BoringReference.svelte';
 	import { resolve } from '$app/paths';
 	import { Toc } from '@svelte-put/toc';
-	import EnhancedImg from '$components/EnhancedImg.svelte';
-	import Callout from '$components/Callout.svelte';
-	import Details from '$components/Details.svelte';
-	import Term from '$components/Term.svelte';
-	import Ref from '$components/Ref.svelte';
-	import WiringDiagram from '$components/rise-together/WiringDiagram.svelte';
-	import TriggerPulseTimeline from '$components/rise-together/TriggerPulseTimeline.svelte';
-	import TouchToPhoton from '$components/rise-together/TouchToPhoton.svelte';
+	import EnhancedImg from '#components/EnhancedImg.svelte';
+	import Callout from '#components/Callout.svelte';
+	import Details from '#components/Details.svelte';
+	import Term from '#components/Term.svelte';
+	import Ref from '#components/Ref.svelte';
+	import WiringDiagram from '#components/rise-together/WiringDiagram.svelte';
+	import TriggerPulseTimeline from '#components/rise-together/TriggerPulseTimeline.svelte';
+	import TouchToPhoton from '#components/rise-together/TouchToPhoton.svelte';
 	import { InfoCircleSolid } from 'flowbite-svelte-icons';
 
 	const toc = new Toc({
@@ -135,26 +135,23 @@
 			if a group is that easy to recognise from the outside, is there also something that the people
 			on the inside share, something we could measure?
 		</P>
-
-		<P>
-			To try and find some answers to this question, I've designed an experiment (
-			<Ref to="feature-image" />
-			) that is run with a group of participants in two teams (groups of four so far, six in the current round, and up to ten planned). They play a videogame made specifically for this experiment in 
-			<Term def={terms.Flutter}>Flutter</Term>
-			, 
-			<Term def={terms.Flame}>Flame</Term>
-			and 
-			<Term def={terms.Dart}>Dart</Term>
-			(
-			<a href="#try-rise-together">[TRY IT]</a>
-			). The experiment setup allows us to collect behavioural data about how participants play the game, how they collaborate with their teammates and their performance. We are also collecting brain data, muscle data, and some movement data!
-		</P>
-
-		<Callout label=""THIS POST IS LONG"">
-			<P>
-				Sure, I understand. I hope there's something for everyone. Each section will have a 
-				<strong>[TL;DR] (too long, didn't read)</strong>
-				summary, and more details are hidden under the optional 
+		<P
+			>To try and find some answers to this question, I've designed an experiment (<Ref
+				to="feature-image"
+			/>) that is run with a group of participants in two teams (groups of four so far, six in the
+			current round, and up to ten planned). They play a videogame made specifically for this
+			experiment in <Term def={terms.Flutter}>Flutter</Term>, <Term def={terms.Flame}>Flame</Term>
+			and <Term def={terms.Dart}>Dart</Term> (<a href="#try-rise-together">[TRY IT]</a>). The
+			experiment setup allows us to collect behavioural data about how participants play the game,
+			how they collaborate with their teammates and their performance. We are also collecting brain
+			data, muscle data, and some movement data!</P
+		>
+		<Callout label="&quot;THIS POST IS LONG&quot;">
+			<P
+				>Sure, I understand. I hope there's something for everyone. Each section will have a <strong
+					>[TL;DR] (too long, didn't read)</strong
+				>
+				summary, and more details are hidden under the optional
 				<span class="text-accent">[CONTEXT]</span> sections for those who are interested.</P
 			>
 		</Callout>
@@ -191,14 +188,16 @@
 			to join groups and go along with the more extreme. Parallel to this, it is equally interesting
 			to try and understand how to reach people, and how minds change.<BoringReference
 				bind:items
-				item={createFootnote('Not for evil, let us assume I mean changing your mind based on solid evidence, maybe just hold in your mind the example of climate change denial, where plenty of evidence exists, yet some people are unable to acknowledge that fact.')}
-			/>
-
-			We're all susceptible to social influence, and that comes from many different sources. Most of the time this is wanted and welcome, like when you ask an experienced friend advice on which tool is best suited for a task (e.g. for aspects of 
-			<A href={resolve('_vault/sauna')}>building a sauna</A>
-			), or a recommendation for some music you might like. This isn't always the case though, there are also negative or unwanted influences from media (social and traditional), advertising, and group pressure from extremist or high control organisations.
-
-			<BoringReference
+				item={createFootnote(
+					'Not for evil, let us assume I mean changing your mind based on solid evidence, maybe just hold in your mind the example of climate change denial, where plenty of evidence exists, yet some people are unable to acknowledge that fact.'
+				)}
+			/> We're all susceptible to social influence, and that comes from many different sources. Most of
+			the time this is wanted and welcome, like when you ask an experienced friend advice on which tool
+			is best suited for a task (e.g. for aspects of <A href={resolve('/_vault/sauna')}
+				>building a sauna</A
+			>), or a recommendation for some music you might like. This isn't always the case though,
+			there are also negative or unwanted influences from media (social and traditional),
+			advertising, and group pressure from extremist or high control organisations.<BoringReference
 				bind:items
 				item={createFootnote(
 					'Hogg, M. A., Kruglanski, A., & van den Bos, K. (2013). Uncertainty and the Roots of Extremism. Journal of Social Issues, 69(3), 407–418. <a href="https://doi.org/10.1111/josi.12021" target="_blank" rel="noopener noreferrer">https://doi.org/10.1111/josi.12021</a>'
@@ -218,39 +217,39 @@
 					'A performance is a great example of different types of identity and synchrony. Both for the audience and the performers.'
 			}}
 		/>
-
-		<P>
-			All of these experiences and influences happen in our brains, individually and collectively, and naturally, as a cognitive scientist, the brain is where I want to look. Yet, the neural underpinnings (meaning, where and which processes happening in the brain) for a lot of group social dynamics are still not understood, in part because it's just plain difficult to do 
-			<Term def={terms.Neuroimaging}>neuroimaging</Term>
-			with groups of people. Portable brain imaging is only now making this possible. It's still early days and there's a lot left to learn, which is exactly what makes this kind of work worth doing. At the end of the day, even if "nothing" is uncovered, that itself will say something interesting and point us in new directions.
-		</P>
-
-		<P>While my experiment is not going to answer the larger social questions I'm interested in, it is a small first step towards understanding how group identity is reflected in the brain. I mention these broader interests to explain some of my motivation, and the experiment is my way of paving the way for future research.</P>
-
-		<Details
-			label="CONTEXT"
-			title="A brief tour of portable brain imaging"
+		<P
+			>All of these experiences and influences happen in our brains, individually and collectively,
+			and naturally, as a cognitive scientist, the brain is where I want to look. Yet, the neural
+			underpinnings (meaning, where and which processes happening in the brain) for a lot of group
+			social dynamics are still not understood, in part because it's just plain difficult to do
+			<Term def={terms.Neuroimaging}>neuroimaging</Term> with groups of people. Portable brain imaging
+			is only now making this possible. It's still early days and there's a lot left to learn, which is
+			exactly what makes this kind of work worth doing. At the end of the day, even if "nothing" is uncovered,
+			that itself will say something interesting and point us in new directions.</P
 		>
-			<P>
-				There are many different ways to measure brain activity, and each has its own strengths and weaknesses. A lot of methods have been difficult to use in group situations or outside of a lab because of the size of the equipment or special environments needed, for example some require a 
-				<Term def={terms.Faraday}>Faraday cage</Term>
-				to prevent electromagnetic noise and interference in recordings. Some examples of neuroimaging techniques that have at least some portability are 
-				<Term def={terms.EEG}>EEG</Term>
-				, which is a direct measure of 
-				<Term def={terms.Cortical}>cortical</Term>
-				activity, and can record at a high frequency (500+ 
-				<Term def={terms.Hz}>Hz</Term>
-				); 
-				<Term def={terms['OPM-MEG']}>OPM-MEG</Term>
-				, a direct measure of cortical and 
-				<Term def={terms.Subcortical}>subcortical</Term>
-				activity, it does require a special environment, and is expensive; and 
-				<Term def={terms.fNIRS}>fNIRS</Term>
-				, an indirect measure of cortical activity, indirect because it measures the 
-				<Term def={terms.BOLD}>BOLD</Term>
-				signal which peaks after about a 5 second delay,
-
-				<BoringReference
+		<P
+			>While my experiment is not going to answer the larger social questions I'm interested in, it
+			is a small first step towards understanding how group identity is reflected in the brain. I
+			mention these broader interests to explain some of my motivation, and the experiment is my way
+			of paving the way for future research.
+		</P>
+		<Details label="CONTEXT" title="A brief tour of portable brain imaging">
+			<P
+				>There are many different ways to measure brain activity, and each has its own strengths and
+				weaknesses. A lot of methods have been difficult to use in group situations or outside of a
+				lab because of the size of the equipment or special environments needed, for example some
+				require a <Term def={terms.Faraday}>Faraday cage</Term> to prevent electromagnetic noise and interference
+				in recordings. Some examples of neuroimaging techniques that have at least some portability are
+				<Term def={terms.EEG}>EEG</Term>, which is a direct measure of <Term def={terms.Cortical}
+					>cortical</Term
+				> activity, and can record at a high frequency (500+
+				<Term def={terms.Hz}>Hz</Term>); <Term def={terms['OPM-MEG']}>OPM-MEG</Term>, a direct
+				measure of cortical and
+				<Term def={terms.Subcortical}>subcortical</Term> activity, it does require a special environment,
+				and is expensive; and
+				<Term def={terms.fNIRS}>fNIRS</Term>, an indirect measure of cortical activity, indirect
+				because it measures the <Term def={terms.BOLD}>BOLD</Term> signal which peaks after about a 5
+				second delay,<BoringReference
 					bind:items
 					item={createFootnote(
 						'Glover, G. H. (1999). Deconvolution of Impulse Response in Event-Related BOLD fMRI. NeuroImage, 9(4), 416–429. <a href="https://doi.org/10.1006/nimg.1998.0419" target="_blank" rel="noopener noreferrer">https://doi.org/10.1006/nimg.1998.0419</a>'
@@ -296,10 +295,10 @@
 			doing different things, or competing against each other (see
 			<Ref to="ins" />).<BoringReference
 				bind:items
-				item={createFootnote('Czeszumski, A., Liang, S. H.-Y., Dikker, S., König, P., Lee, C.-P., Koole, S. L., & Kelsen, B. (2022). Cooperative Behavior Evokes Interbrain Synchrony in the Prefrontal and Temporoparietal Cortex: A Systematic Review and Meta-Analysis of fNIRS Hyperscanning Studies. Eneuro, 9(2), ENEURO.0268-21.2022. <a href="https://doi.org/10.1523/ENEURO.0268-21.2022" target="_blank" rel="noopener noreferrer">https://doi.org/10.1523/ENEURO.0268-21.2022</a>')}
-			/>
-
-			<BoringReference
+				item={createFootnote(
+					'Czeszumski, A., Liang, S. H.-Y., Dikker, S., König, P., Lee, C.-P., Koole, S. L., & Kelsen, B. (2022). Cooperative Behavior Evokes Interbrain Synchrony in the Prefrontal and Temporoparietal Cortex: A Systematic Review and Meta-Analysis of fNIRS Hyperscanning Studies. Eneuro, 9(2), ENEURO.0268-21.2022. <a href="https://doi.org/10.1523/ENEURO.0268-21.2022" target="_blank" rel="noopener noreferrer">https://doi.org/10.1523/ENEURO.0268-21.2022</a>'
+				)}
+			/>&nbsp;<BoringReference
 				bind:items
 				item={createFootnote(
 					'Susnoschi Luca, I., Putri, F. D., Ding, H., & Vuckovič, A. (2021). Brain Synchrony in Competition and Collaboration During Multiuser Neurofeedback-Based Gaming. Frontiers in Neuroergonomics, 2. <a href="https://www.frontiersin.org/articles/10.3389/fnrgo.2021.749009" target="_blank" rel="noopener noreferrer">https://www.frontiersin.org/articles/10.3389/fnrgo.2021.749009</a>'
@@ -350,12 +349,17 @@
 						'Baking noodles (cookies) with The Oracle. From The Matrix © Warner Bros. Entertainment Inc. 1999'
 				}}
 			/>
-
-			<P>
-				Our brains respond to input from the environment, this happens on different levels, including higher levels like how we feel about being where we are, if we like the aesthetics, but also on much lower levels — like our eyes responding to the light in the room. Is there a point, somewhere along the line from pure sensory input to higher level cognition where we can say "this synchrony is because of a shared identity, bond, goal, relationship" and not just from a mutual environment and/or culture? 
-				<Term def={terms.Hyperscanning}>Hyperscanning</Term>
-				, the recording of brain activity from two or more people at the same time, is the tool designed specifically to address these kinds of questions, by looking at people in interaction. 
-
+			<P
+				>Our brains respond to input from the environment, this happens on different levels,
+				including higher levels like how we feel about being where we are, if we like the
+				aesthetics, but also on much lower levels &mdash; like our eyes responding to the light in
+				the room. Is there a point, somewhere along the line from pure sensory input to higher level
+				cognition where we can say "this synchrony is because of a shared identity, bond, goal,
+				relationship" and not just from a mutual environment and/or culture? <Term
+					def={terms.Hyperscanning}>Hyperscanning</Term
+				>, the recording of brain activity from two or more people at the same time, is the tool
+				designed specifically to address these kinds of questions, by looking at people in
+				interaction.
 				<BoringReference
 					bind:items
 					item={createFootnote(
@@ -376,21 +380,21 @@
 			<Term def={terms.Amplifier}>amplifiers</Term> in a space that can record up to 10 people at the
 			same time. All of that is huge, but it's one step towards having a working experiment.
 		</P>
-
-		<P>
-			So I have access to a hi-tech setup to collect the data, and it's 
-			<Term def={terms.EEG}>EEG</Term>
-			, so we can use it for real-time interactions, but how can we have people in groups and compare them? Let's see if we can bring these things together…
-		</P>
-
-		<Details
-			label="CONTEXT"
-			title="Signal, noise, EEG, Experiments"
+		<P
+			>So I have access to a hi-tech setup to collect the data, and it's <Term def={terms.EEG}
+				>EEG</Term
+			>, so we can use it for real-time interactions, but how can we have people in groups and
+			compare them? Let's see if we can bring these things together&hellip;</P
 		>
+		<Details label="CONTEXT" title="Signal, noise, EEG, Experiments">
 			<P>
-				<Term def={terms.EEG}>EEG</Term>
-				can be very sensitive to electromagnetic noise. The noise can be from the environment, like electricity cables too close to the EEG equipment, but even muscle movements, especially around the face can be a source of noise in a recording. So this effectively means that any kind of experiment that would involve a lot of talking (a conversation), or lots of movement (a ball game), would be — even if possible in theory — more difficult to get good, clean data from.
-			</P>
+				<Term def={terms.EEG}>EEG</Term> can be very sensitive to electromagnetic noise. The noise can
+				be from the environment, like electricity cables too close to the EEG equipment, but even muscle
+				movements, especially around the face can be a source of noise in a recording. So this effectively
+				means that any kind of experiment that would involve a lot of talking (a conversation), or lots
+				of movement (a ball game), would be &mdash; even if possible in theory &mdash; more difficult
+				to get good, clean data from.</P
+			>
 
 			<P
 				>All of these requirements make the whole setup more and more specific, and nothing that
@@ -487,7 +491,10 @@
 			></Callout
 		>
 		<P>
-			Not every part of the experiment is a team game. In some trials each participant plays on their own at the same time, which means we can see how they perform by themselves and they get time to practice, and there are other tasks where everyone in the room is doing and seeing the same thing — this is what can be used as a baseline measure of synchrony.
+			Not every part of the experiment is a team game. In some trials each participant plays on
+			their own at the same time, which means we can see how they perform by themselves and they get
+			time to practice, and there are other tasks where everyone in the room is doing and seeing the
+			same thing &mdash; this is what can be used as a baseline measure of synchrony.
 		</P>
 		<P>
 			So, the prediction: if there is such a thing as a "group identity" synchrony for people
@@ -627,7 +634,13 @@
 				results are very different from the original.
 			</P>
 			<P>
-				This can have a huge impact, not just within the field itself, but also to the general public. Often press releases and news articles will report findings ("Scientists find that going to church makes you live forever!") and the people writing the articles — completely understandably — are not researchers themselves, and cannot critically evaluate the way the research was done. If a subsequent study cannot replicate the results, or the paper is retracted, this will get much less media attention and people will still remember the original claim.
+				This can have a huge impact, not just within the field itself, but also to the general
+				public. Often press releases and news articles will report findings ("Scientists find that
+				going to church makes you live forever!") and the people writing the articles &mdash;
+				completely understandably &mdash; are not researchers themselves, and cannot critically
+				evaluate the way the research was done. If a subsequent study cannot replicate the results,
+				or the paper is retracted, this will get much less media attention and people will still
+				remember the original claim.
 			</P>
 			<P>
 				Thankfully, there has been a concerted effort to improve the situation. Things like study
@@ -739,17 +752,22 @@
 			there are for one device to arrive late, or miss a message, which could break the entire experiment.
 		</P>
 		<WiringDiagram />
-		<P>So to that end, I built on top of LSL a coordination library, with the entire goal of abstracting away a lot of the complexities of setting up pairs of streams, and starting and stopping them. I'm not going to go into a lot of detail about it, but this is something that saved me a lot of time, and also helps prevent some bugs that might happen from having to duplicate things everywhere.</P>
-
-		<Details
-			label="CONTEXT"
-			title="Layers of Coordination"
-			id="coordination"
+		<P
+			>So to that end, I built on top of LSL a coordination library, with the entire goal of
+			abstracting away a lot of the complexities of setting up pairs of streams, and starting and
+			stopping them. I'm not going to go into a lot of detail about it, but this is something that
+			saved me a lot of time, and also helps prevent some bugs that might happen from having to
+			duplicate things everywhere.</P
 		>
-			<P>With the amount of data being sent around the network, I figured that it was important to prioritise which information was needed, that's also why I wanted to make sure it was a closed network with no internet traffic or traffic from other devices besides the ones participating in the experiment.</P>
-
-			<P>
-				The end result is that we have the coordination messages running and polling at about 10 
+		<Details label="CONTEXT" title="Layers of Coordination" id="coordination">
+			<P
+				>With the amount of data being sent around the network, I figured that it was important to
+				prioritise which information was needed, that's also why I wanted to make sure it was a
+				closed network with no internet traffic or traffic from other devices besides the ones
+				participating in the experiment.</P
+			>
+			<P
+				>The end result is that we have the coordination messages running and polling at about 10
 				<Term def={terms.Hz}>Hz</Term>
 				throughout the entire experiment. This is to tell all of the iPads to move to the next step in
 				the experiment, and also for the iPads to tell the coordinator that they have finished creating
@@ -846,12 +864,10 @@
 	</section>
 
 	<section>
-		<Heading
-			tag="h2"
-			id="time-is-an-illusion-lunchtime-doubly-so"
-		>Time is an illusion. Lunchtime doubly so.</Heading>
-
-		<span class="block text-right text-sm italic">— Douglas Adams</span>
+		<Heading tag="h2" id="time-is-an-illusion-lunchtime-doubly-so"
+			>Time is an illusion. Lunchtime doubly so.</Heading
+		>
+		<span class="block text-right text-sm italic">&mdash; Douglas Adams</span>
 
 		<Callout label="TL;DR">
 			<P
@@ -892,12 +908,13 @@
 			>
 				<source
 					src="/_assets/images/_vault/rise-together/bttf2.av1.mp4"
-					type="video/mp4; codecs="av01.0.05M.08""
+					type="video/mp4; codecs=&quot;av01.0.05M.08&quot;"
 				/>
 				<source src="/_assets/images/_vault/rise-together/bttf2.h264.mp4" type="video/mp4" />
 			</video>
 			<figcaption class="mt-2 text-center text-sm text-fg-muted">
-				Timing is everything! The clock tower scene from Back to the Future Part II © 1989 Universal City Studios, Inc. All Rights Reserved.
+				Timing is everything! The clock tower scene from Back to the Future Part II &copy; 1989
+				Universal City Studios, Inc. All Rights Reserved.
 			</figcaption>
 		</figure>
 		<P
@@ -917,46 +934,47 @@
 					'Testing the timing on the bench. The round, flat sensor (an FSR: Force Sensitive Resistor) on the blue square feels when a finger touches it, and the black dome (a photodiode to detect light) next to it sees the screen change. The fingerprints and smudges have nothing to do with the experiment.'
 			}}
 		/>
-
-		<P>
-			From a finger landing to the paddle moving on screen takes about 58 ms. Roughly 22 ms of that passes before the game's code hears about the touch, and about 18 ms goes on getting the finished picture onto the screen. The rest is the trip over the network to the coordinator and back, a step of the physics, and waiting for the next 
-			<Term def={terms.Frame}>frame</Term>
-			. A lot of time and effort has gone into reducing that to the minimum possible, and making sure it doesn't jitter.
-		</P>
-
-		<P>The payoff is that a moment in the game can be placed on each EEG recording to within about half a millisecond. That is well inside the few milliseconds I was aiming for, and it means that when two brains appear to do something at the same time, I can trust that they did.</P>
-
-		<Details
-			label="CONTEXT"
-			title="How the game's events get onto the EEG recording"
+		<P
+			>From a finger landing to the paddle moving on screen takes about 58 ms. Roughly 22 ms of that
+			passes before the game's code hears about the touch, and about 18 ms goes on getting the
+			finished picture onto the screen. The rest is the trip over the network to the coordinator and
+			back, a step of the physics, and waiting for the next <Term def={terms.Frame}>frame</Term>. A
+			lot of time and effort has gone into reducing that to the minimum possible, and making sure it
+			doesn't jitter.</P
 		>
-			<P>
-				Every event (the start of a trial, a participant pressing a button, a survey response) needs to get from the iPads and eventually be aligned with the 
-				<Term def={terms.EEG}>EEG</Term>
-				data for analysis. The way this happens is by using regular pulses from the 
-				<Term def={terms.Coordinator}>coordinator</Term>
-				, and from photodiodes (light sensors) on the iPads. Both of these sources go to the 
-				<Term def={terms.Bela}>Bela</Term>
-				, which samples the inputs 48,000 times a second (48 kHz), then it forwards the pulses from the coordinator as well as its own regular pulse to the EEG 
-				<Term def={terms.Amplifier}>amplifiers</Term>
-				. All of these are also logged to the internal storage on the Bela. That way we have a way to align everything to the EEG, and we have additional validation and measurements from 
-				<Term def={terms.LSL}>LSL</Term>
-				on the coordinator and iPads.
-			</P>
-
+		<P
+			>The payoff is that a moment in the game can be placed on each EEG recording to within about
+			half a millisecond. That is well inside the few milliseconds I was aiming for, and it means
+			that when two brains appear to do something at the same time, I can trust that they did.</P
+		>
+		<Details label="CONTEXT" title="How the game's events get onto the EEG recording">
+			<P
+				>Every event (the start of a trial, a participant pressing a button, a survey response)
+				needs to get from the iPads and eventually be aligned with the
+				<Term def={terms.EEG}>EEG</Term> data for analysis. The way this happens is by using regular pulses
+				from the <Term def={terms.Coordinator}>coordinator</Term>, and from photodiodes (light
+				sensors) on the iPads. Both of these sources go to the <Term def={terms.Bela}>Bela</Term>,
+				which samples the inputs 48,000 times a second (48 kHz), then it forwards the pulses from
+				the coordinator as well as its own regular pulse to the EEG
+				<Term def={terms.Amplifier}>amplifiers</Term>. All of these are also logged to the internal
+				storage on the Bela. That way we have a way to align everything to the EEG, and we have
+				additional validation and measurements from <Term def={terms.LSL}>LSL</Term> on the coordinator
+				and iPads.</P
+			>
 			<TriggerPulseTimeline />
 		</Details>
 
-		<Details
-			label="CONTEXT"
-			title="From a touch to a response on the screen"
-		>
-			<P>
-				While interacting with an iPad can feel pretty instantaneous, there's often a bit of a delay. This is not unique to iPads, in fact PC gamers will spend lots of money on getting the lowest latency setup they can, and even in the best of these cases there are still 10s to 100s of milliseconds of 
-				<Term def={terms.Latency}>latency</Term>
-				. The diagram below shows the round trip of one game event — a participant pressing a button to lift the paddle — from the iPad, to the coordinator and back. You might be surprised to find that the largest stretches of time are from the iPad registering the touch and processing it and then later updating the screen.
-			</P>
-
+		<Details label="CONTEXT" title="From a touch to a response on the screen">
+			<P
+				>While interacting with an iPad can feel pretty instantaneous, there's often a bit of a
+				delay. This is not unique to iPads, in fact PC gamers will spend lots of money on getting
+				the lowest latency setup they can, and even in the best of these cases there are still 10s
+				to 100s of milliseconds of <Term def={terms.Latency}>latency</Term>. The diagram below shows
+				the round trip of one game event &mdash; a participant pressing a button to lift the paddle
+				&mdash; from the iPad, to the coordinator and back. You might be surprised to find that the
+				largest stretches of time are from the iPad registering the touch and processing it and then
+				later updating the screen.</P
+			>
 			<TouchToPhoton />
 		</Details>
 	</section>
@@ -1015,40 +1033,38 @@
 				others to use.</P
 			>
 		</Callout>
-
-		<P>Back to the two groups hurrying towards that picnic table. From the outside, you can tell at a glance who belongs with whom. What I want to know is whether the same is true on the inside: whether the brains of people on the same team line up with each other more than with the people on the other team, even when everyone is in the same place doing the same thing. This experiment won't settle what a group is, but it should say whether that is a question brain recordings can help with, and even a clear "no" would be worth knowing.</P>
-
-		<P>
-			Where are things now? I have collected behavioural data with groups of four, and I'm piloting the full setup with 
-			<Term def={terms.EEG}>EEG</Term>
-			, with groups of six in the current round. The main data collection is still ahead, and the setup is built to scale up to ten people. When it's done, the data will be made available in an open format and the code for the experiment as 
-			<Term def={terms.OpenSource}>open source</Term>
-			. Please be patient with me, I have some administrative and writing tasks to do before that will happen.
-		</P>
-
-		<P>
-			In the meantime, you can 
-			<a href="#try-rise-together">play the game in your browser</a>
-			, and if you're in Aarhus, you can come and play it with an EEG cap on. And if you're building something of your own, 
-			<A href="https://pub.dev/packages/liblsl">liblsl</A>
-			and the rest of the packages are there to be used.
-		</P>
-
-		<Details
-			label="CONTEXT"
-			title="Concepts and tools involved"
+		<P
+			>Back to the two groups hurrying towards that picnic table. From the outside, you can tell at
+			a glance who belongs with whom. What I want to know is whether the same is true on the inside:
+			whether the brains of people on the same team line up with each other more than with the
+			people on the other team, even when everyone is in the same place doing the same thing. This
+			experiment won't settle what a group is, but it should say whether that is a question brain
+			recordings can help with, and even a clear "no" would be worth knowing.</P
 		>
-			<P>There are many different areas that are involved in making all this come together, so here's a non-exhaustive list for your perusal.</P>
+		<P
+			>Where are things now? I have collected behavioural data with groups of four, and I'm piloting
+			the full setup with <Term def={terms.EEG}>EEG</Term>, with groups of six in the current round.
+			The main data collection is still ahead, and the setup is built to scale up to ten people.
+			When it's done, the data will be made available in an open format and the code for the
+			experiment as <Term def={terms.OpenSource}>open source</Term>. Please be patient with me, I
+			have some administrative and writing tasks to do before that will happen.</P
+		>
+		<P
+			>In the meantime, you can <a href="#try-rise-together">play the game in your browser</a>, and
+			if you're in Aarhus, you can come and play it with an EEG cap on. And if you're building
+			something of your own, <A href="https://pub.dev/packages/liblsl">liblsl</A> and the rest of the
+			packages are there to be used.</P
+		>
 
-			<div
-				class="my-4 rounded-4xl border-2 border-accent-soft p-4"
+		<Details label="CONTEXT" title="Concepts and tools involved">
+			<P
+				>There are many different areas that are involved in making all this come together, so
+				here's a non-exhaustive list for your perusal.</P
 			>
-				<List
-					class="grid list-none grid-flow-row grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3"
-				>
-					<Li>
-						<Heading tag="h4">Fields & Theories:</Heading>
-
+			<div class="my-4 rounded-4xl border-2 border-accent-soft p-4">
+				<List class="grid list-none grid-flow-row grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+					<Li
+						><Heading tag="h4">Fields & Theories:</Heading>
 						<List>
 							<Li>Cognitive Science</Li>
 							<Li>Electrical Engineering</Li>
