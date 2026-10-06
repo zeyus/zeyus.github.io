@@ -5,7 +5,7 @@
 	import TerminalWindow from '$components/terminal/TerminalWindow.svelte';
 	import XTerm from '$components/terminal/XTerm.svelte';
 	import KeyBar from '$components/terminal/KeyBar.svelte';
-	import { Shell } from '$lib/terminal/shell';
+	import { Shell } from '#lib/terminal/shell.js';
 	import {
 		c,
 		completeLine,
@@ -13,10 +13,10 @@
 		parseLine,
 		pushHistory,
 		type CommandContext
-	} from '$lib/terminal/commands';
-	import { SerialSession } from '$lib/terminal/session.svelte';
-	import { describeConfig, history, lastProfile, prefs } from '$lib/terminal/settings';
-	import { ctrl as ctrlChar, hexDump, NEWLINES } from '$lib/terminal/keys';
+	} from '#lib/terminal/commands.js';
+	import { SerialSession } from '#lib/terminal/session.svelte.js';
+	import { describeConfig, history, lastProfile, prefs } from '#lib/terminal/settings.js';
+	import { ctrl as ctrlChar, hexDump, NEWLINES } from '#lib/terminal/keys.js';
 
 	const PROMPT = '\x1b[32manon@zeyus>\x1b[0m ';
 	const BANNER = `     .------------.

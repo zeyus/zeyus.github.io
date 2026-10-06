@@ -5,9 +5,9 @@
 	 * without an entry in the manifest are served as-is.
 	 * */
 	import { page } from '$app/state';
-	import { imageToSrc } from '$lib/assets';
-	import manifest from '$lib/image-manifest.json';
-	import { getImageViewer } from '$lib/image-viewer.svelte';
+	import { imageToSrc } from '#lib/assets.js';
+	import manifest from '#lib/image-manifest.json';
+	import { getImageViewer } from '#lib/image-viewer.svelte.js';
 	import { onMount, untrack } from 'svelte';
 
 	let {

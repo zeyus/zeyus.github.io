@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import storage from '$lib/store';
+	import storage from '#lib/store.js';
 
 	type Theme = 'auto' | 'light' | 'dark';
 	const order: Theme[] = ['auto', 'light', 'dark'];

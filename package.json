@@ -21,10 +21,11 @@
 		"@material/typography": "^14.0.0",
 		"@svelte-put/preprocess-auto-slug": "^2.0.0",
 		"@svelte-put/toc": "^6.0.2",
-		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/adapter-static": "^3.0.10",
+		"@sveltejs/adapter-auto": "^8.0.0",
+		"@sveltejs/adapter-static": "^4.0.0",
 		"@sveltejs/enhanced-img": "^0.11.0",
-		"@sveltejs/kit": "^2.70.3",
+		"@sveltejs/kit": "^3.0.0",
+		"@sveltejs/load-config": "^0.2.2",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@tailwindcss/forms": "^0.5.11",
 		"@tailwindcss/postcss": "^4.3.3",
@@ -73,5 +74,9 @@
 	"engines": {
 		"pnpm": ">=10",
 		"node": ">=24"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
 	}
 }

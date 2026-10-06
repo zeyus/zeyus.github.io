@@ -1,5 +1,5 @@
-import { dev } from '$app/environment';
-import { sortPosts } from '$lib/utils.ts';
+import { dev } from '$app/env';
+import { sortPosts } from '#lib/utils.ts';
 
 const loadAllVaultEntries = async (): Promise<App.VaultEntries[]> => {
 	const vaultEntries: App.VaultEntries[] = [];

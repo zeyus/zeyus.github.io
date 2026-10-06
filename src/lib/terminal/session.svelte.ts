@@ -1,4 +1,4 @@
-import { createSerial, getPorts, usedSerialPorts, WebSerial } from '$lib/serial2';
+import { createSerial, getPorts, usedSerialPorts, WebSerial } from '#lib/serial2.js';
 import type { Profile, SerialConfig } from './settings';
 
 type WebSerialInstance = InstanceType<typeof WebSerial>;

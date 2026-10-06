@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { page } from '$app/state';
-	import { dev } from '$app/environment';
+	import { dev } from '$app/env';
 	import NavMenu from '$components/NavMenu.svelte';
 
 	import {
@@ -22,11 +22,11 @@
 	} from 'flowbite-svelte-icons';
 
 	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
-	import { createMetadataContext, type MetadataContext } from '$lib/metadata.svelte';
+	import { createMetadataContext, type MetadataContext } from '#lib/metadata.svelte.js';
 	import { setContext, type Snippet } from 'svelte';
-	import { createFootnotesContext, type FootnotesContext } from '$lib/footnotes.svelte';
+	import { createFootnotesContext, type FootnotesContext } from '#lib/footnotes.svelte.js';
 	import ScrollToTop from '$components/ScrollToTop.svelte';
-	import { imageToSrc } from '$lib/assets';
+	import { imageToSrc } from '#lib/assets.js';
 
 	// can this be less reactive or somehow work with pre-rendering?
 	let items = new SvelteSet<Footnote>();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MetadataContext } from '$lib/metadata.svelte';
+	import type { MetadataContext } from '#lib/metadata.svelte.js';
 	import { getContext } from 'svelte';
 
 	// explicit ids, otherwise auto-slug gives every card the same id ("project-name")

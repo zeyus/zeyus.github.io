@@ -3,7 +3,7 @@
 	 * A ticker for showing a rotating list of the latest blog/_vault posts
 	 * Accepts posts in the same format as the blog/_vault post list for the sidebar
 	 */
-	import { sortPosts } from '$lib/utils.ts';
+	import { sortPosts } from '#lib/utils.ts';
 	import { A } from 'flowbite-svelte';
 
 	let {

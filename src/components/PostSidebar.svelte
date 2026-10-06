@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { sortPosts } from '$lib/utils.ts';
+	import { sortPosts } from '#lib/utils.ts';
 	import { onMount } from 'svelte';
 	import { BREAKPOINTS, uiHelpers, CloseButton, Sidebar, Button } from 'flowbite-svelte';
 	import { ChevronRightOutline } from 'flowbite-svelte-icons';

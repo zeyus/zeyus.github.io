@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { loadVaultEntries } from '$lib/vault.ts';
+import { loadVaultEntries } from '#lib/vault.ts';
 
 export const load: PageLoad = async () => {
 	return {

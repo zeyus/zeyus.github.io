@@ -3,9 +3,9 @@
 	import { P, A, Range, Label, Button } from 'flowbite-svelte';
 	import { UndoOutline, EyeOutline } from 'flowbite-svelte-icons';
 	import { getContext, onMount } from 'svelte';
-	import type { MetadataContext } from '$lib/metadata.svelte';
+	import type { MetadataContext } from '#lib/metadata.svelte.js';
 	import { WebGlShader } from 'svader';
-	import storage from '$lib/store';
+	import storage from '#lib/store.js';
 	import DumbTicker from '$components/DumbTicker.svelte';
 	import type { PageData } from './$types';
 

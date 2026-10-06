@@ -1,22 +1,13 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
+	"extends": "$app/tsconfig",
 	"compilerOptions": {
-		"allowJs": true,
-		"allowImportingTsExtensions": true,
 		"alwaysStrict": true,
-		"checkJs": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		// TS 6 no longer auto-includes @types/*; list the ambient ones we rely on
-		"types": ["node", "w3c-web-serial", "w3c-web-usb"],
-		"noEmit": true,
+		"types": ["$app/types", "node", "w3c-web-serial", "w3c-web-usb"],
 		"target": "ESNext",
 		"module": "ESNext",
-		"isolatedModules": true,
 		"lib": ["ES2024", "ESNext", "DOM", "DOM.Iterable"]
-	}
+	},
+	"include": ["src", "vite.config.ts"]
 }

@@ -2,17 +2,17 @@
 	import { page } from '$app/state';
 	import type { LayoutData } from './$types';
 	import { Heading } from 'flowbite-svelte';
-	import { imageToSrc } from '$lib/assets';
+	import { imageToSrc } from '#lib/assets.js';
 	import { type Snippet } from 'svelte';
 	import PostSidebar from '$components/PostSidebar.svelte';
 
 	import EnhancedImg from '$components/EnhancedImg.svelte';
 	import ImageViewer from '$components/ImageViewer.svelte';
-	import { ImageViewerState, setImageViewer } from '$lib/image-viewer.svelte';
+	import { ImageViewerState, setImageViewer } from '#lib/image-viewer.svelte.js';
 
 	import { getContext, tick } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
-	import type { MetadataContext } from '$lib/metadata.svelte';
+	import type { MetadataContext } from '#lib/metadata.svelte.js';
 
 	let metaCtx = getContext<MetadataContext>('metadata');
 
@@ -35,7 +35,10 @@
 	// rough reading time from the rendered post body (~230 wpm)
 	let postBody: HTMLElement | undefined = $state();
 	let readMinutes: number | null = $state(null);
-	afterNavigate(async () => {
+
+	afterNavigate(async ({ shallow }) => {
+		if (shallow) return;
+
 		await tick();
 		const words = postBody?.innerText.trim().split(/\s+/).length ?? 0;
 		readMinutes = words ? Math.max(1, Math.round(words / 230)) : null;
@@ -88,12 +91,17 @@
 				class="post-title mb-0 max-w-max text-3xl/tight! wrap-anywhere sm:text-4xl/tight! md:text-5xl/tight!"
 				>{page.data.props.title}</Heading
 			>
-			<span class="post-meta self-end font-mono text-xs text-fg-subtle"
-				><span class="text-accent">$</span> stat {slug} → {new Date(
-					page.data.props.date
-				).toLocaleDateString(undefined, dateOptions)}{#if readMinutes && !isIndex}
-					· ~{readMinutes} min read{/if}</span
-			>
+
+			<span class="post-meta self-end font-mono text-xs text-fg-subtle">
+				<span class="text-accent">$</span>
+
+				stat {slug} → {new Date(page.data.props.date).toLocaleDateString(
+					undefined,
+					dateOptions
+				)}{#if readMinutes && !isIndex}
+					· ~{readMinutes} min read
+				{/if}
+			</span>
 		</div>
 		{#if page.data.props.feature_image && page.data.props.feature_image?.src && page.data.props.feature_image?.alt}
 			<EnhancedImg

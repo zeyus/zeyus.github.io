@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
 	import { get } from 'svelte/store';
-	import { WINDOW_DEFAULT, windowState, type WindowState } from '$lib/terminal/settings';
+	import { WINDOW_DEFAULT, windowState, type WindowState } from '#lib/terminal/settings.js';
 
 	let {
 		title,

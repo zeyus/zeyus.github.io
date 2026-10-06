@@ -1,4 +1,4 @@
-import storage from '$lib/store';
+import storage from '#lib/store.js';
 import type { Newline } from './keys';
 
 export type SerialConfig = {

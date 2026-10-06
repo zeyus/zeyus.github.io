@@ -5,7 +5,7 @@
 	 * */
 	import { tick, untrack } from 'svelte';
 	import { ChevronLeftOutline, ChevronRightOutline, CloseOutline } from 'flowbite-svelte-icons';
-	import { getImageViewer, type ViewerImage } from '$lib/image-viewer.svelte';
+	import { getImageViewer, type ViewerImage } from '#lib/image-viewer.svelte.js';
 
 	const viewer = getImageViewer()!;
 
