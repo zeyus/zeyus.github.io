@@ -148,10 +148,10 @@
 		>
 		<Callout label="&quot;THIS POST IS LONG&quot;">
 			<P
-				>Sure, I understand. I hope there's something for everyone. Each section will have a <strong
-					>[TL;DR] (too long, didn't read)</strong
+				>Sure, I understand. I hope there's something for everyone. Each section will have a <span
+					class="text-accent">[TL;DR]</span
 				>
-				summary, and more details are hidden under the optional
+				(too long, didn't read) summary, and more details are hidden under the optional
 				<span class="text-accent">[CONTEXT]</span> sections for those who are interested.</P
 			>
 		</Callout>
@@ -691,7 +691,7 @@
 			Pi (for routing and device discovery). One thing about this setup that has been a little bit
 			annoying is that iPads require constantly connecting to the internet to verify developer
 			certificates, which added some extra work with routing, and added an extra step during the
-			experiment setup - I have to always disable WiFi.
+			experiment setup &mdash; I have to always disable WiFi.
 		</P>
 
 		<Heading tag="h3" class="block w-full">Dart, Flutter and Flame</Heading>
@@ -776,9 +776,9 @@
 				<em>physics updates</em>
 				which are sent from the coordinator and all iPads subscribe to them, and
 				<em>game events</em> which are sent by each iPad, and the coordinator listens to each of them,
-				and polls them for new messages - the polling is at 120 Hz, but messages are sent only if there's
-				a need. In the end the physics stream is the most busy, because the ball or paddle is usually
-				moving.</P
+				and polls them for new messages &mdash; the polling is at 120 Hz, but messages are sent only if
+				there's a need. In the end the physics stream is the most busy, because the ball or paddle is
+				usually moving.</P
 			>
 			<P>
 				The heavy lifting of the network communication is done with LSL, but because LSL was never
