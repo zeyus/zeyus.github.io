@@ -13,7 +13,10 @@
 	} from 'flowbite-svelte';
 
 	import {
+		ChevronDoubleLeftOutline,
+		ChevronDoubleRightOutline,
 		GithubSolid,
+		RocketOutline,
 		YoutubeSolid,
 		HeadphonesOutline,
 		CodeOutline,
@@ -108,6 +111,38 @@
 				{year}
 				copyrightMessage="(MIT license)"
 			/>
+			<div class="my-0 mt-1 flex items-center text-sm">
+				<a
+					href="https://netdir.org/nav/8/prev"
+					title="previous website in the netdir.org webring"
+					aria-label="previous website in the netdir.org webring"
+					><ChevronDoubleLeftOutline class="h-6 w-6 text-primary-600" /></a
+				>
+				<a
+					href="https://netdir.org/"
+					title="netdir.org webring homepage"
+					aria-label="netdir.org webring homepage"
+					><img
+						src="https://netdir.org/netdir.svg"
+						width="88"
+						height="31"
+						alt="netdir.org webring logo"
+						id="netdir-logo"
+					/></a
+				>
+				<a
+					href="https://netdir.org/nav/8/next"
+					title="next website in the netdir.org webring"
+					aria-label="next website in the netdir.org webring"
+					><ChevronDoubleRightOutline class="h-6 w-6 text-primary-600" /></a
+				>
+				<a
+					href="https://netdir.org/nav/8/random"
+					title="random website from the netdir.org webring"
+					aria-label="random website from the netdir.org webring"
+					><RocketOutline class="h-6 w-6 fill-mauve-900 text-primary-600" strokeWidth="1" /></a
+				>
+			</div>
 			<FooterLinkGroup class="my-0 mt-1 flex flex-wrap items-center text-sm">
 				<FooterLink href="https://github.com/zeyus/zeyus.github.io">
 					<FooterIcon>
@@ -138,3 +173,9 @@
 		</div>
 	</div>
 </Footer>
+
+<style>
+	#netdir-logo {
+		filter: hue-rotate(90deg) saturate(400%) brightness(0.72);
+	}
+</style>
