@@ -1,0 +1,1 @@
+import"../chunks/BlxtBjMW.js";import"../chunks/CNvNBOXK.js";import{t as e}from"../chunks/BOKTA7fn.js";function t(e){}export{t as component,e as universal};
